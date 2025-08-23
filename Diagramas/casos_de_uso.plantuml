@@ -1,0 +1,18 @@
+
+@startuml
+left to right direction
+actor "Cliente" as cliente
+rectangle Aplicação {
+  usecase "Acesso as cat. navbar" as categorias_produtos
+  usecase "Redes sociais" as redes
+
+
+
+}
+
+cliente --> categorias_produtos
+cliente --> redes
+
+@enduml
+
+

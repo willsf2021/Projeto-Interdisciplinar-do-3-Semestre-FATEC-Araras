@@ -1,0 +1,2465 @@
+[
+    {
+        "grupo": "Cereais e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 1,
+                "Descrição dos alimentos": "Arroz, integral, cozido"
+            },
+            {
+                "Número do Alimento": 2,
+                "Descrição dos alimentos": "Arroz, integral, cru"
+            },
+            {
+                "Número do Alimento": 3,
+                "Descrição dos alimentos": "Arroz, tipo 1, cozido"
+            },
+            {
+                "Número do Alimento": 4,
+                "Descrição dos alimentos": "Arroz, tipo 1, cru"
+            },
+            {
+                "Número do Alimento": 5,
+                "Descrição dos alimentos": "Arroz, tipo 2, cozido"
+            },
+            {
+                "Número do Alimento": 6,
+                "Descrição dos alimentos": "Arroz, tipo 2, cru"
+            },
+            {
+                "Número do Alimento": 7,
+                "Descrição dos alimentos": "Aveia, flocos, crua"
+            },
+            {
+                "Número do Alimento": 8,
+                "Descrição dos alimentos": "Biscoito, doce, maisena"
+            },
+            {
+                "Número do Alimento": 9,
+                "Descrição dos alimentos": "Biscoito, doce, recheado com chocolate"
+            },
+            {
+                "Número do Alimento": 10,
+                "Descrição dos alimentos": "Biscoito, doce, recheado com morango"
+            },
+            {
+                "Número do Alimento": 11,
+                "Descrição dos alimentos": "Biscoito, doce, wafer, recheado de chocolate"
+            },
+            {
+                "Número do Alimento": 12,
+                "Descrição dos alimentos": "Biscoito, doce, wafer, recheado de morango"
+            },
+            {
+                "Número do Alimento": 13,
+                "Descrição dos alimentos": "Biscoito, salgado, cream cracker"
+            },
+            {
+                "Número do Alimento": 14,
+                "Descrição dos alimentos": "Bolo, mistura para"
+            },
+            {
+                "Número do Alimento": 15,
+                "Descrição dos alimentos": "Bolo, pronto, aipim"
+            },
+            {
+                "Número do Alimento": 16,
+                "Descrição dos alimentos": "Bolo, pronto, chocolate"
+            },
+            {
+                "Número do Alimento": 17,
+                "Descrição dos alimentos": "Bolo, pronto, coco"
+            },
+            {
+                "Número do Alimento": 18,
+                "Descrição dos alimentos": "Bolo, pronto, milho"
+            },
+            {
+                "Número do Alimento": 19,
+                "Descrição dos alimentos": "Canjica, branca, crua"
+            },
+            {
+                "Número do Alimento": 20,
+                "Descrição dos alimentos": "Canjica, com leite integral"
+            },
+            {
+                "Número do Alimento": 21,
+                "Descrição dos alimentos": "Cereais, milho, flocos, com sal"
+            },
+            {
+                "Número do Alimento": 22,
+                "Descrição dos alimentos": "Cereais, milho, flocos, sem sal"
+            },
+            {
+                "Número do Alimento": 23,
+                "Descrição dos alimentos": "Cereais, mingau, milho, infantil"
+            },
+            {
+                "Número do Alimento": 24,
+                "Descrição dos alimentos": "Cereais, mistura para vitamina, trigo, cevada e aveia"
+            },
+            {
+                "Número do Alimento": 25,
+                "Descrição dos alimentos": "Cereal matinal, milho"
+            },
+            {
+                "Número do Alimento": 26,
+                "Descrição dos alimentos": "Cereal matinal, milho, açúcar"
+            },
+            {
+                "Número do Alimento": 27,
+                "Descrição dos alimentos": "Creme de arroz, pó"
+            },
+            {
+                "Número do Alimento": 28,
+                "Descrição dos alimentos": "Creme de milho, pó"
+            },
+            {
+                "Número do Alimento": 29,
+                "Descrição dos alimentos": "Curau, milho verde"
+            },
+            {
+                "Número do Alimento": 30,
+                "Descrição dos alimentos": "Curau, milho verde, mistura para"
+            },
+            {
+                "Número do Alimento": 31,
+                "Descrição dos alimentos": "Farinha, de arroz, enriquecida"
+            },
+            {
+                "Número do Alimento": 32,
+                "Descrição dos alimentos": "Farinha, de centeio, integral"
+            },
+            {
+                "Número do Alimento": 33,
+                "Descrição dos alimentos": "Farinha, de milho, amarela"
+            },
+            {
+                "Número do Alimento": 34,
+                "Descrição dos alimentos": "Farinha, de rosca"
+            },
+            {
+                "Número do Alimento": 35,
+                "Descrição dos alimentos": "Farinha, de trigo"
+            },
+            {
+                "Número do Alimento": 36,
+                "Descrição dos alimentos": "Farinha, láctea, de cereais"
+            },
+            {
+                "Número do Alimento": 37,
+                "Descrição dos alimentos": "Lasanha, massa fresca, cozida"
+            },
+            {
+                "Número do Alimento": 38,
+                "Descrição dos alimentos": "Lasanha, massa fresca, crua"
+            },
+            {
+                "Número do Alimento": 39,
+                "Descrição dos alimentos": "Macarrão, instantâneo"
+            },
+            {
+                "Número do Alimento": 40,
+                "Descrição dos alimentos": "Macarrão, trigo, cru"
+            },
+            {
+                "Número do Alimento": 41,
+                "Descrição dos alimentos": "Macarrão, trigo, cru, com ovos"
+            },
+            {
+                "Número do Alimento": 42,
+                "Descrição dos alimentos": "Milho, amido, cru"
+            },
+            {
+                "Número do Alimento": 43,
+                "Descrição dos alimentos": "Milho, fubá, cru"
+            },
+            {
+                "Número do Alimento": 44,
+                "Descrição dos alimentos": "Milho, verde, cru"
+            },
+            {
+                "Número do Alimento": 45,
+                "Descrição dos alimentos": "Milho, verde, enlatado, drenado"
+            },
+            {
+                "Número do Alimento": 46,
+                "Descrição dos alimentos": "Mingau tradicional, pó"
+            },
+            {
+                "Número do Alimento": 47,
+                "Descrição dos alimentos": "Pamonha, barra para cozimento, pré-cozida"
+            },
+            {
+                "Número do Alimento": 48,
+                "Descrição dos alimentos": "Pão, aveia, forma"
+            },
+            {
+                "Número do Alimento": 49,
+                "Descrição dos alimentos": "Pão, de soja"
+            },
+            {
+                "Número do Alimento": 50,
+                "Descrição dos alimentos": "Pão, glúten, forma"
+            },
+            {
+                "Número do Alimento": 51,
+                "Descrição dos alimentos": "Pão, milho, forma"
+            },
+            {
+                "Número do Alimento": 52,
+                "Descrição dos alimentos": "Pão, trigo, forma, integral"
+            },
+            {
+                "Número do Alimento": 53,
+                "Descrição dos alimentos": "Pão, trigo, francês"
+            },
+            {
+                "Número do Alimento": 54,
+                "Descrição dos alimentos": "Pão, trigo, sovado"
+            },
+            {
+                "Número do Alimento": 55,
+                "Descrição dos alimentos": "Pastel, de carne, cru"
+            },
+            {
+                "Número do Alimento": 56,
+                "Descrição dos alimentos": "Pastel, de carne, frito"
+            },
+            {
+                "Número do Alimento": 57,
+                "Descrição dos alimentos": "Pastel, de queijo, cru"
+            },
+            {
+                "Número do Alimento": 58,
+                "Descrição dos alimentos": "Pastel, de queijo, frito"
+            },
+            {
+                "Número do Alimento": 59,
+                "Descrição dos alimentos": "Pastel, massa, crua"
+            },
+            {
+                "Número do Alimento": 60,
+                "Descrição dos alimentos": "Pastel, massa, frita"
+            },
+            {
+                "Número do Alimento": 61,
+                "Descrição dos alimentos": "Pipoca, com óleo de soja, sem sal"
+            },
+            {
+                "Número do Alimento": 62,
+                "Descrição dos alimentos": "Polenta, pré-cozida"
+            },
+            {
+                "Número do Alimento": 63,
+                "Descrição dos alimentos": "Torrada, pão francês"
+            }
+        ]
+    },
+    {
+        "grupo": "Verduras, Hortaliças e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 64,
+                "Descrição dos alimentos": "Abóbora, cabotian, cozida"
+            },
+            {
+                "Número do Alimento": 65,
+                "Descrição dos alimentos": "Abóbora, cabotian, crua"
+            },
+            {
+                "Número do Alimento": 66,
+                "Descrição dos alimentos": "Abóbora, menina brasileira, crua"
+            },
+            {
+                "Número do Alimento": 67,
+                "Descrição dos alimentos": "Abóbora, moranga, crua"
+            },
+            {
+                "Número do Alimento": 68,
+                "Descrição dos alimentos": "Abóbora, moranga, refogada"
+            },
+            {
+                "Número do Alimento": 69,
+                "Descrição dos alimentos": "Abóbora, pescoço, crua"
+            },
+            {
+                "Número do Alimento": 70,
+                "Descrição dos alimentos": "Abobrinha, italiana, cozida"
+            },
+            {
+                "Número do Alimento": 71,
+                "Descrição dos alimentos": "Abobrinha, italiana, crua"
+            },
+            {
+                "Número do Alimento": 72,
+                "Descrição dos alimentos": "Abobrinha, italiana, refogada"
+            },
+            {
+                "Número do Alimento": 73,
+                "Descrição dos alimentos": "Abobrinha, paulista, crua"
+            },
+            {
+                "Número do Alimento": 74,
+                "Descrição dos alimentos": "Acelga, crua"
+            },
+            {
+                "Número do Alimento": 75,
+                "Descrição dos alimentos": "Agrião, cru"
+            },
+            {
+                "Número do Alimento": 76,
+                "Descrição dos alimentos": "Aipo, cru"
+            },
+            {
+                "Número do Alimento": 77,
+                "Descrição dos alimentos": "Alface, americana, crua"
+            },
+            {
+                "Número do Alimento": 78,
+                "Descrição dos alimentos": "Alface, crespa, crua"
+            },
+            {
+                "Número do Alimento": 79,
+                "Descrição dos alimentos": "Alface, lisa, crua"
+            },
+            {
+                "Número do Alimento": 80,
+                "Descrição dos alimentos": "Alface, roxa, crua"
+            },
+            {
+                "Número do Alimento": 81,
+                "Descrição dos alimentos": "Alfavaca, crua"
+            },
+            {
+                "Número do Alimento": 82,
+                "Descrição dos alimentos": "Alho, cru"
+            },
+            {
+                "Número do Alimento": 83,
+                "Descrição dos alimentos": "Alho-poró, cru"
+            },
+            {
+                "Número do Alimento": 84,
+                "Descrição dos alimentos": "Almeirão, cru"
+            },
+            {
+                "Número do Alimento": 85,
+                "Descrição dos alimentos": "Almeirão, refogado"
+            },
+            {
+                "Número do Alimento": 86,
+                "Descrição dos alimentos": "Batata, baroa, cozida"
+            },
+            {
+                "Número do Alimento": 87,
+                "Descrição dos alimentos": "Batata, baroa, crua"
+            },
+            {
+                "Número do Alimento": 88,
+                "Descrição dos alimentos": "Batata, doce, cozida"
+            },
+            {
+                "Número do Alimento": 89,
+                "Descrição dos alimentos": "Batata, doce, crua"
+            },
+            {
+                "Número do Alimento": 90,
+                "Descrição dos alimentos": "Batata, frita, tipo chips, industrializada"
+            },
+            {
+                "Número do Alimento": 91,
+                "Descrição dos alimentos": "Batata, inglesa, cozida"
+            },
+            {
+                "Número do Alimento": 92,
+                "Descrição dos alimentos": "Batata, inglesa, crua"
+            },
+            {
+                "Número do Alimento": 93,
+                "Descrição dos alimentos": "Batata, inglesa, frita"
+            },
+            {
+                "Número do Alimento": 94,
+                "Descrição dos alimentos": "Batata, inglesa, sauté"
+            },
+            {
+                "Número do Alimento": 95,
+                "Descrição dos alimentos": "Berinjela, cozida"
+            },
+            {
+                "Número do Alimento": 96,
+                "Descrição dos alimentos": "Berinjela, crua"
+            },
+            {
+                "Número do Alimento": 97,
+                "Descrição dos alimentos": "Beterraba, cozida"
+            },
+            {
+                "Número do Alimento": 98,
+                "Descrição dos alimentos": "Beterraba, crua"
+            },
+            {
+                "Número do Alimento": 99,
+                "Descrição dos alimentos": "Biscoito, polvilho doce"
+            },
+            {
+                "Número do Alimento": 100,
+                "Descrição dos alimentos": "Brócolis, cozido"
+            },
+            {
+                "Número do Alimento": 101,
+                "Descrição dos alimentos": "Brócolis, cru"
+            },
+            {
+                "Número do Alimento": 102,
+                "Descrição dos alimentos": "Cará, cozido"
+            },
+            {
+                "Número do Alimento": 103,
+                "Descrição dos alimentos": "Cará, cru"
+            },
+            {
+                "Número do Alimento": 104,
+                "Descrição dos alimentos": "Caruru, cru"
+            },
+            {
+                "Número do Alimento": 105,
+                "Descrição dos alimentos": "Catalonha, crua"
+            },
+            {
+                "Número do Alimento": 106,
+                "Descrição dos alimentos": "Catalonha, refogada"
+            },
+            {
+                "Número do Alimento": 107,
+                "Descrição dos alimentos": "Cebola, crua"
+            },
+            {
+                "Número do Alimento": 108,
+                "Descrição dos alimentos": "Cebolinha, crua"
+            },
+            {
+                "Número do Alimento": 109,
+                "Descrição dos alimentos": "Cenoura, cozida"
+            },
+            {
+                "Número do Alimento": 110,
+                "Descrição dos alimentos": "Cenoura, crua"
+            },
+            {
+                "Número do Alimento": 111,
+                "Descrição dos alimentos": "Chicória, crua"
+            },
+            {
+                "Número do Alimento": 112,
+                "Descrição dos alimentos": "Chuchu, cozido"
+            },
+            {
+                "Número do Alimento": 113,
+                "Descrição dos alimentos": "Chuchu, cru"
+            },
+            {
+                "Número do Alimento": 114,
+                "Descrição dos alimentos": "Coentro, folhas desidratadas"
+            },
+            {
+                "Número do Alimento": 115,
+                "Descrição dos alimentos": "Couve, manteiga, crua"
+            },
+            {
+                "Número do Alimento": 116,
+                "Descrição dos alimentos": "Couve, manteiga, refogada "
+            },
+            {
+                "Número do Alimento": 117,
+                "Descrição dos alimentos": "Couve-flor, crua"
+            },
+            {
+                "Número do Alimento": 118,
+                "Descrição dos alimentos": "Couve-flor, cozida"
+            },
+            {
+                "Número do Alimento": 119,
+                "Descrição dos alimentos": "Espinafre, Nova Zelândia, cru"
+            },
+            {
+                "Número do Alimento": 120,
+                "Descrição dos alimentos": "Espinafre, Nova Zelândia, refogado"
+            },
+            {
+                "Número do Alimento": 121,
+                "Descrição dos alimentos": "Farinha, de mandioca, crua"
+            },
+            {
+                "Número do Alimento": 122,
+                "Descrição dos alimentos": "Farinha, de mandioca, torrada"
+            },
+            {
+                "Número do Alimento": 123,
+                "Descrição dos alimentos": "Farinha, de puba"
+            },
+            {
+                "Número do Alimento": 124,
+                "Descrição dos alimentos": "Fécula, de mandioca"
+            },
+            {
+                "Número do Alimento": 125,
+                "Descrição dos alimentos": "Feijão, broto, cru"
+            },
+            {
+                "Número do Alimento": 126,
+                "Descrição dos alimentos": "Inhame, cru"
+            },
+            {
+                "Número do Alimento": 127,
+                "Descrição dos alimentos": "Jiló, cru"
+            },
+            {
+                "Número do Alimento": 128,
+                "Descrição dos alimentos": "Jurubeba, crua"
+            },
+            {
+                "Número do Alimento": 129,
+                "Descrição dos alimentos": "Mandioca, cozida"
+            },
+            {
+                "Número do Alimento": 130,
+                "Descrição dos alimentos": "Mandioca, crua"
+            },
+            {
+                "Número do Alimento": 131,
+                "Descrição dos alimentos": "Mandioca, farofa, temperada"
+            },
+            {
+                "Número do Alimento": 132,
+                "Descrição dos alimentos": "Mandioca, frita"
+            },
+            {
+                "Número do Alimento": 133,
+                "Descrição dos alimentos": "Manjericão, cru"
+            },
+            {
+                "Número do Alimento": 134,
+                "Descrição dos alimentos": "Maxixe, cru"
+            },
+            {
+                "Número do Alimento": 135,
+                "Descrição dos alimentos": "Mostarda, folha, crua"
+            },
+            {
+                "Número do Alimento": 136,
+                "Descrição dos alimentos": "Nhoque, batata, cozido"
+            },
+            {
+                "Número do Alimento": 137,
+                "Descrição dos alimentos": "Nabo, cru"
+            },
+            {
+                "Número do Alimento": 138,
+                "Descrição dos alimentos": "Palmito, juçara, em conserva"
+            },
+            {
+                "Número do Alimento": 139,
+                "Descrição dos alimentos": "Palmito, pupunha, em conserva"
+            },
+            {
+                "Número do Alimento": 140,
+                "Descrição dos alimentos": "Pão, de queijo, assado"
+            },
+            {
+                "Número do Alimento": 141,
+                "Descrição dos alimentos": "Pão, de queijo, cru"
+            },
+            {
+                "Número do Alimento": 142,
+                "Descrição dos alimentos": "Pepino, cru"
+            },
+            {
+                "Número do Alimento": 143,
+                "Descrição dos alimentos": "Pimentão, amarelo, cru"
+            },
+            {
+                "Número do Alimento": 144,
+                "Descrição dos alimentos": "Pimentão, verde, cru"
+            },
+            {
+                "Número do Alimento": 145,
+                "Descrição dos alimentos": "Pimentão, vermelho, cru"
+            },
+            {
+                "Número do Alimento": 146,
+                "Descrição dos alimentos": "Polvilho, doce"
+            },
+            {
+                "Número do Alimento": 147,
+                "Descrição dos alimentos": "Quiabo, cru"
+            },
+            {
+                "Número do Alimento": 148,
+                "Descrição dos alimentos": "Rabanete, cru"
+            },
+            {
+                "Número do Alimento": 149,
+                "Descrição dos alimentos": "Repolho, branco, cru"
+            },
+            {
+                "Número do Alimento": 150,
+                "Descrição dos alimentos": "Repolho, roxo, cru"
+            },
+            {
+                "Número do Alimento": 151,
+                "Descrição dos alimentos": "Repolho, roxo, refogado"
+            },
+            {
+                "Número do Alimento": 152,
+                "Descrição dos alimentos": "Rúcula, crua"
+            },
+            {
+                "Número do Alimento": 153,
+                "Descrição dos alimentos": "Salsa, crua"
+            },
+            {
+                "Número do Alimento": 154,
+                "Descrição dos alimentos": "Seleta de legumes, enlatada"
+            },
+            {
+                "Número do Alimento": 155,
+                "Descrição dos alimentos": "Serralha, crua"
+            },
+            {
+                "Número do Alimento": 156,
+                "Descrição dos alimentos": "Taioba, crua"
+            },
+            {
+                "Número do Alimento": 157,
+                "Descrição dos alimentos": "Tomate, com semente, cru"
+            },
+            {
+                "Número do Alimento": 158,
+                "Descrição dos alimentos": "Tomate, extrato"
+            },
+            {
+                "Número do Alimento": 159,
+                "Descrição dos alimentos": "Tomate, molho industrializado"
+            },
+            {
+                "Número do Alimento": 160,
+                "Descrição dos alimentos": "Tomate, purê"
+            },
+            {
+                "Número do Alimento": 161,
+                "Descrição dos alimentos": "Tomate, salada"
+            },
+            {
+                "Número do Alimento": 162,
+                "Descrição dos alimentos": "Vagem, crua"
+            }
+        ]
+    },
+    {
+        "grupo": "Frutas e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 163,
+                "Descrição dos alimentos": "Abacate, cru"
+            },
+            {
+                "Número do Alimento": 164,
+                "Descrição dos alimentos": "Abacaxi, cru"
+            },
+            {
+                "Número do Alimento": 165,
+                "Descrição dos alimentos": "Abacaxi, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 166,
+                "Descrição dos alimentos": "Abiu, cru"
+            },
+            {
+                "Número do Alimento": 167,
+                "Descrição dos alimentos": "Açaí, polpa, com xarope de guaraná e glucose"
+            },
+            {
+                "Número do Alimento": 168,
+                "Descrição dos alimentos": "Açaí, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 169,
+                "Descrição dos alimentos": "Acerola, crua"
+            },
+            {
+                "Número do Alimento": 170,
+                "Descrição dos alimentos": "Acerola, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 171,
+                "Descrição dos alimentos": "Ameixa, calda, enlatada "
+            },
+            {
+                "Número do Alimento": 172,
+                "Descrição dos alimentos": "Ameixa, crua"
+            },
+            {
+                "Número do Alimento": 173,
+                "Descrição dos alimentos": "Ameixa, em calda, enlatada, drenada "
+            },
+            {
+                "Número do Alimento": 174,
+                "Descrição dos alimentos": "Atemóia, crua"
+            },
+            {
+                "Número do Alimento": 175,
+                "Descrição dos alimentos": "Banana, da terra, crua"
+            },
+            {
+                "Número do Alimento": 176,
+                "Descrição dos alimentos": "Banana, doce em barra"
+            },
+            {
+                "Número do Alimento": 177,
+                "Descrição dos alimentos": "Banana, figo, crua"
+            },
+            {
+                "Número do Alimento": 178,
+                "Descrição dos alimentos": "Banana, maçã, crua"
+            },
+            {
+                "Número do Alimento": 179,
+                "Descrição dos alimentos": "Banana, nanica, crua"
+            },
+            {
+                "Número do Alimento": 180,
+                "Descrição dos alimentos": "Banana, ouro, crua"
+            },
+            {
+                "Número do Alimento": 181,
+                "Descrição dos alimentos": "Banana, pacova, crua"
+            },
+            {
+                "Número do Alimento": 182,
+                "Descrição dos alimentos": "Banana, prata, crua"
+            },
+            {
+                "Número do Alimento": 183,
+                "Descrição dos alimentos": "Cacau, cru"
+            },
+            {
+                "Número do Alimento": 184,
+                "Descrição dos alimentos": "Cajá-Manga, cru"
+            },
+            {
+                "Número do Alimento": 185,
+                "Descrição dos alimentos": "Cajá, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 186,
+                "Descrição dos alimentos": "Caju, cru"
+            },
+            {
+                "Número do Alimento": 187,
+                "Descrição dos alimentos": "Caju, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 188,
+                "Descrição dos alimentos": "Caju, suco concentrado, envasado"
+            },
+            {
+                "Número do Alimento": 189,
+                "Descrição dos alimentos": "Caqui, chocolate, cru"
+            },
+            {
+                "Número do Alimento": 190,
+                "Descrição dos alimentos": "Carambola, crua"
+            },
+            {
+                "Número do Alimento": 191,
+                "Descrição dos alimentos": "Ciriguela, crua"
+            },
+            {
+                "Número do Alimento": 192,
+                "Descrição dos alimentos": "Cupuaçu, cru"
+            },
+            {
+                "Número do Alimento": 193,
+                "Descrição dos alimentos": "Cupuaçu, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 194,
+                "Descrição dos alimentos": "Figo, cru"
+            },
+            {
+                "Número do Alimento": 195,
+                "Descrição dos alimentos": "Figo, enlatado, em calda"
+            },
+            {
+                "Número do Alimento": 196,
+                "Descrição dos alimentos": "Fruta-pão, crua"
+            },
+            {
+                "Número do Alimento": 197,
+                "Descrição dos alimentos": "Goiaba, branca, com casca, crua"
+            },
+            {
+                "Número do Alimento": 198,
+                "Descrição dos alimentos": "Goiaba, doce em pasta"
+            },
+            {
+                "Número do Alimento": 199,
+                "Descrição dos alimentos": "Goiaba, doce, cascão"
+            },
+            {
+                "Número do Alimento": 200,
+                "Descrição dos alimentos": "Goiaba, vermelha, com casca, crua"
+            },
+            {
+                "Número do Alimento": 201,
+                "Descrição dos alimentos": "Graviola, crua"
+            },
+            {
+                "Número do Alimento": 202,
+                "Descrição dos alimentos": "Graviola, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 203,
+                "Descrição dos alimentos": "Jabuticaba, crua"
+            },
+            {
+                "Número do Alimento": 204,
+                "Descrição dos alimentos": "Jaca, crua"
+            },
+            {
+                "Número do Alimento": 205,
+                "Descrição dos alimentos": "Jambo, cru"
+            },
+            {
+                "Número do Alimento": 206,
+                "Descrição dos alimentos": "Jamelão, cru"
+            },
+            {
+                "Número do Alimento": 207,
+                "Descrição dos alimentos": "Kiwi, cru"
+            },
+            {
+                "Número do Alimento": 208,
+                "Descrição dos alimentos": "Laranja, baía, crua"
+            },
+            {
+                "Número do Alimento": 209,
+                "Descrição dos alimentos": "Laranja, baía, suco"
+            },
+            {
+                "Número do Alimento": 210,
+                "Descrição dos alimentos": "Laranja, da terra, crua"
+            },
+            {
+                "Número do Alimento": 211,
+                "Descrição dos alimentos": "Laranja, da terra, suco"
+            },
+            {
+                "Número do Alimento": 212,
+                "Descrição dos alimentos": "Laranja, lima, crua"
+            },
+            {
+                "Número do Alimento": 213,
+                "Descrição dos alimentos": "Laranja, lima, suco"
+            },
+            {
+                "Número do Alimento": 214,
+                "Descrição dos alimentos": "Laranja, pêra, crua"
+            },
+            {
+                "Número do Alimento": 215,
+                "Descrição dos alimentos": "Laranja, pêra, suco"
+            },
+            {
+                "Número do Alimento": 216,
+                "Descrição dos alimentos": "Laranja, valência, crua"
+            },
+            {
+                "Número do Alimento": 217,
+                "Descrição dos alimentos": "Laranja, valência, suco"
+            },
+            {
+                "Número do Alimento": 218,
+                "Descrição dos alimentos": "Limão, cravo, suco"
+            },
+            {
+                "Número do Alimento": 219,
+                "Descrição dos alimentos": "Limão, galego, suco"
+            },
+            {
+                "Número do Alimento": 220,
+                "Descrição dos alimentos": "Limão, tahiti, cru"
+            },
+            {
+                "Número do Alimento": 221,
+                "Descrição dos alimentos": "Maçã, Argentina, com casca, crua"
+            },
+            {
+                "Número do Alimento": 222,
+                "Descrição dos alimentos": "Maçã, Fuji, com casca, crua"
+            },
+            {
+                "Número do Alimento": 223,
+                "Descrição dos alimentos": "Macaúba, crua"
+            },
+            {
+                "Número do Alimento": 224,
+                "Descrição dos alimentos": " Mamão, doce em calda, drenado"
+            },
+            {
+                "Número do Alimento": 225,
+                "Descrição dos alimentos": "Mamão, Formosa, cru"
+            },
+            {
+                "Número do Alimento": 226,
+                "Descrição dos alimentos": "Mamão, Papaia, cru"
+            },
+            {
+                "Número do Alimento": 227,
+                "Descrição dos alimentos": " Mamão verde, doce em calda, drenado"
+            },
+            {
+                "Número do Alimento": 228,
+                "Descrição dos alimentos": "Manga, Haden, crua"
+            },
+            {
+                "Número do Alimento": 229,
+                "Descrição dos alimentos": "Manga, Palmer, crua"
+            },
+            {
+                "Número do Alimento": 230,
+                "Descrição dos alimentos": "Manga, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 231,
+                "Descrição dos alimentos": "Manga, Tommy Atkins, crua"
+            },
+            {
+                "Número do Alimento": 232,
+                "Descrição dos alimentos": "Maracujá, cru"
+            },
+            {
+                "Número do Alimento": 233,
+                "Descrição dos alimentos": "Maracujá, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 234,
+                "Descrição dos alimentos": "Maracujá, suco concentrado, envasado"
+            },
+            {
+                "Número do Alimento": 235,
+                "Descrição dos alimentos": "Melancia, crua"
+            },
+            {
+                "Número do Alimento": 236,
+                "Descrição dos alimentos": "Melão, cru"
+            },
+            {
+                "Número do Alimento": 237,
+                "Descrição dos alimentos": "Mexerica, Murcote, crua"
+            },
+            {
+                "Número do Alimento": 238,
+                "Descrição dos alimentos": "Mexerica, Rio, crua"
+            },
+            {
+                "Número do Alimento": 239,
+                "Descrição dos alimentos": "Morango, cru"
+            },
+            {
+                "Número do Alimento": 240,
+                "Descrição dos alimentos": "Nêspera, crua"
+            },
+            {
+                "Número do Alimento": 241,
+                "Descrição dos alimentos": "Pequi, cru"
+            },
+            {
+                "Número do Alimento": 242,
+                "Descrição dos alimentos": "Pêra, Park, crua"
+            },
+            {
+                "Número do Alimento": 243,
+                "Descrição dos alimentos": "Pêra, Williams, crua"
+            },
+            {
+                "Número do Alimento": 244,
+                "Descrição dos alimentos": "Pêssego, Aurora, cru"
+            },
+            {
+                "Número do Alimento": 245,
+                "Descrição dos alimentos": "Pêssego, enlatado, em calda"
+            },
+            {
+                "Número do Alimento": 246,
+                "Descrição dos alimentos": "Pinha, crua"
+            },
+            {
+                "Número do Alimento": 247,
+                "Descrição dos alimentos": "Pitanga, crua"
+            },
+            {
+                "Número do Alimento": 248,
+                "Descrição dos alimentos": "Pitanga, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 249,
+                "Descrição dos alimentos": "Romã, crua"
+            },
+            {
+                "Número do Alimento": 250,
+                "Descrição dos alimentos": "Tamarindo, cru"
+            },
+            {
+                "Número do Alimento": 251,
+                "Descrição dos alimentos": "Tangerina, Poncã, crua"
+            },
+            {
+                "Número do Alimento": 252,
+                "Descrição dos alimentos": "Tangerina, Poncã, suco"
+            },
+            {
+                "Número do Alimento": 253,
+                "Descrição dos alimentos": "Tucumã, cru"
+            },
+            {
+                "Número do Alimento": 254,
+                "Descrição dos alimentos": "Umbu, cru"
+            },
+            {
+                "Número do Alimento": 255,
+                "Descrição dos alimentos": "Umbu, polpa, congelada"
+            },
+            {
+                "Número do Alimento": 256,
+                "Descrição dos alimentos": "Uva, Itália, crua"
+            },
+            {
+                "Número do Alimento": 257,
+                "Descrição dos alimentos": "Uva, Rubi, crua"
+            },
+            {
+                "Número do Alimento": 258,
+                "Descrição dos alimentos": "Uva, suco concentrado, envasado"
+            }
+        ]
+    },
+    {
+        "grupo": "Gorduras e Óleos",
+        "alimentos": [
+            {
+                "Número do Alimento": 259,
+                "Descrição dos alimentos": "Azeite, de dendê"
+            },
+            {
+                "Número do Alimento": 260,
+                "Descrição dos alimentos": "Azeite, de oliva, extra virgem"
+            },
+            {
+                "Número do Alimento": 261,
+                "Descrição dos alimentos": "Manteiga, com sal"
+            },
+            {
+                "Número do Alimento": 262,
+                "Descrição dos alimentos": "Manteiga, sem sal"
+            },
+            {
+                "Número do Alimento": 263,
+                "Descrição dos alimentos": "Margarina, com óleo hidrogenado, com sal (65% de lipídeos)"
+            },
+            {
+                "Número do Alimento": 264,
+                "Descrição dos alimentos": "Margarina, com óleo hidrogenado, sem sal (80% de lipídeos)"
+            },
+            {
+                "Número do Alimento": 265,
+                "Descrição dos alimentos": "Margarina, com óleo interesterificado, com sal (65%de lipídeos)"
+            },
+            {
+                "Número do Alimento": 266,
+                "Descrição dos alimentos": "Margarina, com óleo interesterificado, sem sal (65% de lipídeos)"
+            },
+            {
+                "Número do Alimento": 267,
+                "Descrição dos alimentos": "Óleo, de babaçu"
+            },
+            {
+                "Número do Alimento": 268,
+                "Descrição dos alimentos": "Óleo, de canola"
+            },
+            {
+                "Número do Alimento": 269,
+                "Descrição dos alimentos": "Óleo, de girassol"
+            },
+            {
+                "Número do Alimento": 270,
+                "Descrição dos alimentos": "Óleo, de milho"
+            },
+            {
+                "Número do Alimento": 271,
+                "Descrição dos alimentos": "Óleo, de pequi"
+            },
+            {
+                "Número do Alimento": 272,
+                "Descrição dos alimentos": "Óleo, de soja"
+            }
+        ]
+    },
+    {
+        "grupo": "Pescados e Frutos do Mar",
+        "alimentos": [
+            {
+                "Número do Alimento": 273,
+                "Descrição dos alimentos": "Abadejo, filé, congelado, assado"
+            },
+            {
+                "Número do Alimento": 274,
+                "Descrição dos alimentos": "Abadejo, filé, congelado,cozido"
+            },
+            {
+                "Número do Alimento": 275,
+                "Descrição dos alimentos": "Abadejo, filé, congelado, cru"
+            },
+            {
+                "Número do Alimento": 276,
+                "Descrição dos alimentos": "Abadejo, filé, congelado, grelhado"
+            },
+            {
+                "Número do Alimento": 277,
+                "Descrição dos alimentos": "Atum, conserva em óleo"
+            },
+            {
+                "Número do Alimento": 278,
+                "Descrição dos alimentos": "Atum, fresco, cru"
+            },
+            {
+                "Número do Alimento": 279,
+                "Descrição dos alimentos": "Bacalhau, salgado, cru"
+            },
+            {
+                "Número do Alimento": 280,
+                "Descrição dos alimentos": "Bacalhau, salgado, refogado"
+            },
+            {
+                "Número do Alimento": 281,
+                "Descrição dos alimentos": "Cação, posta, com farinha de trigo, frita"
+            },
+            {
+                "Número do Alimento": 282,
+                "Descrição dos alimentos": "Cação, posta, cozida"
+            },
+            {
+                "Número do Alimento": 283,
+                "Descrição dos alimentos": "Cação, posta, crua"
+            },
+            {
+                "Número do Alimento": 284,
+                "Descrição dos alimentos": "Camarão, Rio Grande, grande, cozido"
+            },
+            {
+                "Número do Alimento": 285,
+                "Descrição dos alimentos": "Camarão, Rio Grande, grande, cru"
+            },
+            {
+                "Número do Alimento": 286,
+                "Descrição dos alimentos": "Camarão, Sete Barbas, sem cabeça, com casca, frito"
+            },
+            {
+                "Número do Alimento": 287,
+                "Descrição dos alimentos": "Caranguejo, cozido"
+            },
+            {
+                "Número do Alimento": 288,
+                "Descrição dos alimentos": "Corimba, cru"
+            },
+            {
+                "Número do Alimento": 289,
+                "Descrição dos alimentos": "Corimbatá, assado"
+            },
+            {
+                "Número do Alimento": 290,
+                "Descrição dos alimentos": "Corimbatá, cozido"
+            },
+            {
+                "Número do Alimento": 291,
+                "Descrição dos alimentos": "Corvina de água doce, crua"
+            },
+            {
+                "Número do Alimento": 292,
+                "Descrição dos alimentos": "Corvina do mar, crua"
+            },
+            {
+                "Número do Alimento": 293,
+                "Descrição dos alimentos": "Corvina grande, assada"
+            },
+            {
+                "Número do Alimento": 294,
+                "Descrição dos alimentos": "Corvina grande, cozida"
+            },
+            {
+                "Número do Alimento": 295,
+                "Descrição dos alimentos": "Dourada de água doce, fresca"
+            },
+            {
+                "Número do Alimento": 296,
+                "Descrição dos alimentos": "Lambari, congelado, cru"
+            },
+            {
+                "Número do Alimento": 297,
+                "Descrição dos alimentos": "Lambari, congelado, frito"
+            },
+            {
+                "Número do Alimento": 298,
+                "Descrição dos alimentos": "Lambari, fresco, cru"
+            },
+            {
+                "Número do Alimento": 299,
+                "Descrição dos alimentos": "Manjuba, com farinha de trigo, frita"
+            },
+            {
+                "Número do Alimento": 300,
+                "Descrição dos alimentos": "Manjuba, frita"
+            },
+            {
+                "Número do Alimento": 301,
+                "Descrição dos alimentos": "Merluza, filé, assado"
+            },
+            {
+                "Número do Alimento": 302,
+                "Descrição dos alimentos": "Merluza, filé, cru"
+            },
+            {
+                "Número do Alimento": 303,
+                "Descrição dos alimentos": "Merluza, filé, frito"
+            },
+            {
+                "Número do Alimento": 304,
+                "Descrição dos alimentos": "Pescada, branca, crua"
+            },
+            {
+                "Número do Alimento": 305,
+                "Descrição dos alimentos": "Pescada, branca, frita"
+            },
+            {
+                "Número do Alimento": 306,
+                "Descrição dos alimentos": "Pescada, filé, com farinha de trigo, frito"
+            },
+            {
+                "Número do Alimento": 307,
+                "Descrição dos alimentos": "Pescada, filé, cru"
+            },
+            {
+                "Número do Alimento": 308,
+                "Descrição dos alimentos": "Pescada, filé, frito"
+            },
+            {
+                "Número do Alimento": 309,
+                "Descrição dos alimentos": "Pescada, filé, molho escabeche"
+            },
+            {
+                "Número do Alimento": 310,
+                "Descrição dos alimentos": "Pescadinha, crua"
+            },
+            {
+                "Número do Alimento": 311,
+                "Descrição dos alimentos": "Pintado, assado"
+            },
+            {
+                "Número do Alimento": 312,
+                "Descrição dos alimentos": "Pintado, cru"
+            },
+            {
+                "Número do Alimento": 313,
+                "Descrição dos alimentos": "Pintado, grelhado"
+            },
+            {
+                "Número do Alimento": 314,
+                "Descrição dos alimentos": "Porquinho, cru"
+            },
+            {
+                "Número do Alimento": 315,
+                "Descrição dos alimentos": "Salmão, filé, com pele, fresco,  grelhado"
+            },
+            {
+                "Número do Alimento": 316,
+                "Descrição dos alimentos": "Salmão, sem pele, fresco, cru"
+            },
+            {
+                "Número do Alimento": 317,
+                "Descrição dos alimentos": "Salmão, sem pele, fresco, grelhado"
+            },
+            {
+                "Número do Alimento": 318,
+                "Descrição dos alimentos": "Sardinha, assada"
+            },
+            {
+                "Número do Alimento": 319,
+                "Descrição dos alimentos": "Sardinha, conserva em óleo"
+            },
+            {
+                "Número do Alimento": 320,
+                "Descrição dos alimentos": "Sardinha, frita"
+            },
+            {
+                "Número do Alimento": 321,
+                "Descrição dos alimentos": "Sardinha, inteira, crua"
+            },
+            {
+                "Número do Alimento": 322,
+                "Descrição dos alimentos": "Tucunaré, filé, congelado, cru"
+            }
+        ]
+    },
+    {
+        "grupo": "Carnes e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 323,
+                "Descrição dos alimentos": "Apresuntado"
+            },
+            {
+                "Número do Alimento": 324,
+                "Descrição dos alimentos": "Caldo de carne, tablete"
+            },
+            {
+                "Número do Alimento": 325,
+                "Descrição dos alimentos": "Caldo de galinha, tablete"
+            },
+            {
+                "Número do Alimento": 326,
+                "Descrição dos alimentos": "Carne, bovina, acém, moído, cozido"
+            },
+            {
+                "Número do Alimento": 327,
+                "Descrição dos alimentos": "Carne, bovina, acém, moído, cru"
+            },
+            {
+                "Número do Alimento": 328,
+                "Descrição dos alimentos": "Carne, bovina, acém, sem gordura, cozido"
+            },
+            {
+                "Número do Alimento": 329,
+                "Descrição dos alimentos": "Carne, bovina, acém, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 330,
+                "Descrição dos alimentos": "Carne, bovina, almôndegas, cruas"
+            },
+            {
+                "Número do Alimento": 331,
+                "Descrição dos alimentos": "Carne, bovina, almôndegas, fritas"
+            },
+            {
+                "Número do Alimento": 332,
+                "Descrição dos alimentos": "Carne, bovina, bucho, cozido"
+            },
+            {
+                "Número do Alimento": 333,
+                "Descrição dos alimentos": "Carne, bovina, bucho, cru"
+            },
+            {
+                "Número do Alimento": 334,
+                "Descrição dos alimentos": "Carne, bovina, capa de contra-filé, com gordura, crua"
+            },
+            {
+                "Número do Alimento": 335,
+                "Descrição dos alimentos": "Carne, bovina, capa de contra-filé, com gordura, grelhada"
+            },
+            {
+                "Número do Alimento": 336,
+                "Descrição dos alimentos": "Carne, bovina, capa de contra-filé, sem gordura, crua"
+            },
+            {
+                "Número do Alimento": 337,
+                "Descrição dos alimentos": "Carne, bovina, capa de contra-filé, sem gordura, grelhada"
+            },
+            {
+                "Número do Alimento": 338,
+                "Descrição dos alimentos": "Carne, bovina, charque, cozido"
+            },
+            {
+                "Número do Alimento": 339,
+                "Descrição dos alimentos": "Carne, bovina, charque, cru"
+            },
+            {
+                "Número do Alimento": 340,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé, à milanesa"
+            },
+            {
+                "Número do Alimento": 341,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé de costela, cru"
+            },
+            {
+                "Número do Alimento": 342,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé de costela, grelhado"
+            },
+            {
+                "Número do Alimento": 343,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé, com gordura, cru"
+            },
+            {
+                "Número do Alimento": 344,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé, com gordura, grelhado"
+            },
+            {
+                "Número do Alimento": 345,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 346,
+                "Descrição dos alimentos": "Carne, bovina, contra-filé, sem gordura, grelhado"
+            },
+            {
+                "Número do Alimento": 347,
+                "Descrição dos alimentos": "Carne, bovina, costela, assada"
+            },
+            {
+                "Número do Alimento": 348,
+                "Descrição dos alimentos": "Carne, bovina, costela, crua"
+            },
+            {
+                "Número do Alimento": 349,
+                "Descrição dos alimentos": "Carne, bovina, coxão duro, sem gordura, cozido"
+            },
+            {
+                "Número do Alimento": 350,
+                "Descrição dos alimentos": "Carne, bovina, coxão duro, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 351,
+                "Descrição dos alimentos": "Carne, bovina, coxão mole, sem gordura, cozido"
+            },
+            {
+                "Número do Alimento": 352,
+                "Descrição dos alimentos": "Carne, bovina, coxão mole, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 353,
+                "Descrição dos alimentos": "Carne, bovina, cupim, assado"
+            },
+            {
+                "Número do Alimento": 354,
+                "Descrição dos alimentos": "Carne, bovina, cupim, cru"
+            },
+            {
+                "Número do Alimento": 355,
+                "Descrição dos alimentos": "Carne, bovina, fígado, cru"
+            },
+            {
+                "Número do Alimento": 356,
+                "Descrição dos alimentos": "Carne, bovina, fígado, grelhado"
+            },
+            {
+                "Número do Alimento": 357,
+                "Descrição dos alimentos": "Carne, bovina, filé mingnon, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 358,
+                "Descrição dos alimentos": "Carne, bovina, filé mingnon, sem gordura, grelhado"
+            },
+            {
+                "Número do Alimento": 359,
+                "Descrição dos alimentos": "Carne, bovina, flanco, sem gordura, cozido"
+            },
+            {
+                "Número do Alimento": 360,
+                "Descrição dos alimentos": "Carne, bovina, flanco, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 361,
+                "Descrição dos alimentos": "Carne, bovina, fraldinha, com gordura, cozida"
+            },
+            {
+                "Número do Alimento": 362,
+                "Descrição dos alimentos": "Carne, bovina, fraldinha, com gordura, crua"
+            },
+            {
+                "Número do Alimento": 363,
+                "Descrição dos alimentos": "Carne, bovina, lagarto, cozido"
+            },
+            {
+                "Número do Alimento": 364,
+                "Descrição dos alimentos": "Carne, bovina, lagarto, cru"
+            },
+            {
+                "Número do Alimento": 365,
+                "Descrição dos alimentos": "Carne, bovina, língua, cozida"
+            },
+            {
+                "Número do Alimento": 366,
+                "Descrição dos alimentos": "Carne, bovina, língua, crua"
+            },
+            {
+                "Número do Alimento": 367,
+                "Descrição dos alimentos": "Carne, bovina, maminha, crua"
+            },
+            {
+                "Número do Alimento": 368,
+                "Descrição dos alimentos": "Carne, bovina, maminha, grelhada"
+            },
+            {
+                "Número do Alimento": 369,
+                "Descrição dos alimentos": "Carne, bovina, miolo de alcatra, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 370,
+                "Descrição dos alimentos": "Carne, bovina, miolo de alcatra, sem gordura, grelhado"
+            },
+            {
+                "Número do Alimento": 371,
+                "Descrição dos alimentos": "Carne, bovina, músculo, sem gordura, cozido"
+            },
+            {
+                "Número do Alimento": 372,
+                "Descrição dos alimentos": "Carne, bovina, músculo, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 373,
+                "Descrição dos alimentos": "Carne, bovina, paleta, com gordura, crua"
+            },
+            {
+                "Número do Alimento": 374,
+                "Descrição dos alimentos": "Carne, bovina, paleta, sem gordura, cozida"
+            },
+            {
+                "Número do Alimento": 375,
+                "Descrição dos alimentos": "Carne, bovina, paleta, sem gordura, crua"
+            },
+            {
+                "Número do Alimento": 376,
+                "Descrição dos alimentos": "Carne, bovina, patinho, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 377,
+                "Descrição dos alimentos": "Carne, bovina, patinho, sem gordura, grelhado"
+            },
+            {
+                "Número do Alimento": 378,
+                "Descrição dos alimentos": "Carne, bovina, peito, sem gordura, cozido"
+            },
+            {
+                "Número do Alimento": 379,
+                "Descrição dos alimentos": "Carne, bovina, peito, sem gordura, cru"
+            },
+            {
+                "Número do Alimento": 380,
+                "Descrição dos alimentos": "Carne, bovina, picanha, com gordura, crua"
+            },
+            {
+                "Número do Alimento": 381,
+                "Descrição dos alimentos": "Carne, bovina, picanha, com gordura, grelhada"
+            },
+            {
+                "Número do Alimento": 382,
+                "Descrição dos alimentos": "Carne, bovina, picanha, sem gordura, crua"
+            },
+            {
+                "Número do Alimento": 383,
+                "Descrição dos alimentos": "Carne, bovina, picanha, sem gordura, grelhada"
+            },
+            {
+                "Número do Alimento": 384,
+                "Descrição dos alimentos": "Carne, bovina, seca, cozida"
+            },
+            {
+                "Número do Alimento": 385,
+                "Descrição dos alimentos": "Carne, bovina, seca, crua"
+            },
+            {
+                "Número do Alimento": 386,
+                "Descrição dos alimentos": "Coxinha de frango, frita"
+            },
+            {
+                "Número do Alimento": 387,
+                "Descrição dos alimentos": "Croquete, de carne, cru"
+            },
+            {
+                "Número do Alimento": 388,
+                "Descrição dos alimentos": "Croquete, de carne, frito"
+            },
+            {
+                "Número do Alimento": 389,
+                "Descrição dos alimentos": "Empada de frango, pré-cozida, assada"
+            },
+            {
+                "Número do Alimento": 390,
+                "Descrição dos alimentos": "Empada, de frango, pré-cozida"
+            },
+            {
+                "Número do Alimento": 391,
+                "Descrição dos alimentos": "Frango, asa, com pele, crua"
+            },
+            {
+                "Número do Alimento": 392,
+                "Descrição dos alimentos": "Frango, caipira, inteiro, com pele, cozido"
+            },
+            {
+                "Número do Alimento": 393,
+                "Descrição dos alimentos": "Frango, caipira, inteiro, sem pele, cozido"
+            },
+            {
+                "Número do Alimento": 394,
+                "Descrição dos alimentos": "Frango, coração, cru"
+            },
+            {
+                "Número do Alimento": 395,
+                "Descrição dos alimentos": "Frango, coração, grelhado"
+            },
+            {
+                "Número do Alimento": 396,
+                "Descrição dos alimentos": "Frango, coxa, com pele, assada"
+            },
+            {
+                "Número do Alimento": 397,
+                "Descrição dos alimentos": "Frango, coxa, com pele, crua"
+            },
+            {
+                "Número do Alimento": 398,
+                "Descrição dos alimentos": "Frango, coxa, sem pele, cozida"
+            },
+            {
+                "Número do Alimento": 399,
+                "Descrição dos alimentos": "Frango, coxa, sem pele, crua"
+            },
+            {
+                "Número do Alimento": 400,
+                "Descrição dos alimentos": "Frango, fígado, cru"
+            },
+            {
+                "Número do Alimento": 401,
+                "Descrição dos alimentos": "Frango, filé, à milanesa"
+            },
+            {
+                "Número do Alimento": 402,
+                "Descrição dos alimentos": "Frango, inteiro, com pele, cru"
+            },
+            {
+                "Número do Alimento": 403,
+                "Descrição dos alimentos": "Frango, inteiro, sem pele, assado"
+            },
+            {
+                "Número do Alimento": 404,
+                "Descrição dos alimentos": "Frango, inteiro, sem pele, cozido"
+            },
+            {
+                "Número do Alimento": 405,
+                "Descrição dos alimentos": "Frango, inteiro, sem pele, cru"
+            },
+            {
+                "Número do Alimento": 406,
+                "Descrição dos alimentos": "Frango, peito, com pele, assado"
+            },
+            {
+                "Número do Alimento": 407,
+                "Descrição dos alimentos": "Frango, peito, com pele, cru"
+            },
+            {
+                "Número do Alimento": 408,
+                "Descrição dos alimentos": "Frango, peito, sem pele, cozido"
+            },
+            {
+                "Número do Alimento": 409,
+                "Descrição dos alimentos": "Frango, peito, sem pele, cru"
+            },
+            {
+                "Número do Alimento": 410,
+                "Descrição dos alimentos": "Frango, peito, sem pele, grelhado"
+            },
+            {
+                "Número do Alimento": 411,
+                "Descrição dos alimentos": "Frango, sobrecoxa, com pele, assada"
+            },
+            {
+                "Número do Alimento": 412,
+                "Descrição dos alimentos": "Frango, sobrecoxa, com pele, crua"
+            },
+            {
+                "Número do Alimento": 413,
+                "Descrição dos alimentos": "Frango, sobrecoxa, sem pele, assada"
+            },
+            {
+                "Número do Alimento": 414,
+                "Descrição dos alimentos": "Frango, sobrecoxa, sem pele, crua"
+            },
+            {
+                "Número do Alimento": 415,
+                "Descrição dos alimentos": "Hambúrguer, bovino, cru"
+            },
+            {
+                "Número do Alimento": 416,
+                "Descrição dos alimentos": "Hambúrguer, bovino, frito"
+            },
+            {
+                "Número do Alimento": 417,
+                "Descrição dos alimentos": "Hambúrguer, bovino, grelhado"
+            },
+            {
+                "Número do Alimento": 418,
+                "Descrição dos alimentos": "Lingüiça, frango, crua"
+            },
+            {
+                "Número do Alimento": 419,
+                "Descrição dos alimentos": "Lingüiça, frango, frita"
+            },
+            {
+                "Número do Alimento": 420,
+                "Descrição dos alimentos": "Lingüiça, frango, grelhada"
+            },
+            {
+                "Número do Alimento": 421,
+                "Descrição dos alimentos": "Lingüiça, porco, crua"
+            },
+            {
+                "Número do Alimento": 422,
+                "Descrição dos alimentos": "Lingüiça, porco, frita"
+            },
+            {
+                "Número do Alimento": 423,
+                "Descrição dos alimentos": "Lingüiça, porco, grelhada"
+            },
+            {
+                "Número do Alimento": 424,
+                "Descrição dos alimentos": "Mortadela"
+            },
+            {
+                "Número do Alimento": 425,
+                "Descrição dos alimentos": "Peru, congelado, assado"
+            },
+            {
+                "Número do Alimento": 426,
+                "Descrição dos alimentos": "Peru, congelado, cru"
+            },
+            {
+                "Número do Alimento": 427,
+                "Descrição dos alimentos": "Porco, bisteca, crua"
+            },
+            {
+                "Número do Alimento": 428,
+                "Descrição dos alimentos": "Porco, bisteca, frita"
+            },
+            {
+                "Número do Alimento": 429,
+                "Descrição dos alimentos": "Porco, bisteca, grelhada"
+            },
+            {
+                "Número do Alimento": 430,
+                "Descrição dos alimentos": "Porco, costela, assada"
+            },
+            {
+                "Número do Alimento": 431,
+                "Descrição dos alimentos": "Porco, costela, crua"
+            },
+            {
+                "Número do Alimento": 432,
+                "Descrição dos alimentos": "Porco, lombo, assado"
+            },
+            {
+                "Número do Alimento": 433,
+                "Descrição dos alimentos": "Porco, lombo, cru"
+            },
+            {
+                "Número do Alimento": 434,
+                "Descrição dos alimentos": "Porco, orelha, salgada, crua"
+            },
+            {
+                "Número do Alimento": 435,
+                "Descrição dos alimentos": "Porco, pernil, assado"
+            },
+            {
+                "Número do Alimento": 436,
+                "Descrição dos alimentos": "Porco, pernil, cru"
+            },
+            {
+                "Número do Alimento": 437,
+                "Descrição dos alimentos": "Porco, rabo, salgado, cru"
+            },
+            {
+                "Número do Alimento": 438,
+                "Descrição dos alimentos": "Presunto, com capa de gordura"
+            },
+            {
+                "Número do Alimento": 439,
+                "Descrição dos alimentos": "Presunto, sem capa de gordura"
+            },
+            {
+                "Número do Alimento": 440,
+                "Descrição dos alimentos": "Quibe, assado"
+            },
+            {
+                "Número do Alimento": 441,
+                "Descrição dos alimentos": "Quibe, cru"
+            },
+            {
+                "Número do Alimento": 442,
+                "Descrição dos alimentos": "Quibe, frito"
+            },
+            {
+                "Número do Alimento": 443,
+                "Descrição dos alimentos": "Salame"
+            },
+            {
+                "Número do Alimento": 444,
+                "Descrição dos alimentos": "Toucinho, cru"
+            },
+            {
+                "Número do Alimento": 445,
+                "Descrição dos alimentos": "Toucinho, frito"
+            }
+        ]
+    },
+    {
+        "grupo": "Leite e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 446,
+                "Descrição dos alimentos": "Bebida láctea, pêssego"
+            },
+            {
+                "Número do Alimento": 447,
+                "Descrição dos alimentos": "Creme de Leite"
+            },
+            {
+                "Número do Alimento": 448,
+                "Descrição dos alimentos": "Iogurte, natural"
+            },
+            {
+                "Número do Alimento": 449,
+                "Descrição dos alimentos": "Iogurte, natural, desnatado"
+            },
+            {
+                "Número do Alimento": 450,
+                "Descrição dos alimentos": "Iogurte, sabor abacaxi"
+            },
+            {
+                "Número do Alimento": 451,
+                "Descrição dos alimentos": "Iogurte, sabor morango"
+            },
+            {
+                "Número do Alimento": 452,
+                "Descrição dos alimentos": "Iogurte, sabor pêssego"
+            },
+            {
+                "Número do Alimento": 453,
+                "Descrição dos alimentos": "Leite, condensado"
+            },
+            {
+                "Número do Alimento": 454,
+                "Descrição dos alimentos": "Leite, de cabra"
+            },
+            {
+                "Número do Alimento": 455,
+                "Descrição dos alimentos": "Leite, de vaca, achocolatado"
+            },
+            {
+                "Número do Alimento": 456,
+                "Descrição dos alimentos": "Leite, de vaca, desnatado, pó"
+            },
+            {
+                "Número do Alimento": 457,
+                "Descrição dos alimentos": "Leite, de vaca, desnatado, UHT"
+            },
+            {
+                "Número do Alimento": 458,
+                "Descrição dos alimentos": "Leite, de vaca, integral"
+            },
+            {
+                "Número do Alimento": 459,
+                "Descrição dos alimentos": "Leite, de vaca, integral, pó"
+            },
+            {
+                "Número do Alimento": 460,
+                "Descrição dos alimentos": "Leite, fermentado"
+            },
+            {
+                "Número do Alimento": 461,
+                "Descrição dos alimentos": "Queijo, minas, frescal"
+            },
+            {
+                "Número do Alimento": 462,
+                "Descrição dos alimentos": "Queijo, minas, meia cura"
+            },
+            {
+                "Número do Alimento": 463,
+                "Descrição dos alimentos": "Queijo, mozarela"
+            },
+            {
+                "Número do Alimento": 464,
+                "Descrição dos alimentos": "Queijo, parmesão"
+            },
+            {
+                "Número do Alimento": 465,
+                "Descrição dos alimentos": "Queijo, pasteurizado"
+            },
+            {
+                "Número do Alimento": 466,
+                "Descrição dos alimentos": "Queijo, petit suisse, morango"
+            },
+            {
+                "Número do Alimento": 467,
+                "Descrição dos alimentos": "Queijo, prato"
+            },
+            {
+                "Número do Alimento": 468,
+                "Descrição dos alimentos": "Queijo, requeijão, cremoso"
+            },
+            {
+                "Número do Alimento": 469,
+                "Descrição dos alimentos": "Queijo, ricota"
+            }
+        ]
+    },
+    {
+        "grupo": "Bebidas Alcoólicas e Não Alcoólicas",
+        "alimentos": [
+            {
+                "Número do Alimento": 470,
+                "Descrição dos alimentos": "Bebida isotônica, sabores variados"
+            },
+            {
+                "Número do Alimento": 471,
+                "Descrição dos alimentos": "Café, infusão 10%"
+            },
+            {
+                "Número do Alimento": 472,
+                "Descrição dos alimentos": "Cana, aguardente 1"
+            },
+            {
+                "Número do Alimento": 473,
+                "Descrição dos alimentos": "Cana, caldo de"
+            },
+            {
+                "Número do Alimento": 474,
+                "Descrição dos alimentos": "Cerveja, pilsen 2"
+            },
+            {
+                "Número do Alimento": 475,
+                "Descrição dos alimentos": "Chá, erva-doce, infusão 5%"
+            },
+            {
+                "Número do Alimento": 476,
+                "Descrição dos alimentos": "Chá, mate, infusão 5%"
+            },
+            {
+                "Número do Alimento": 477,
+                "Descrição dos alimentos": "Chá, preto, infusão 5%"
+            },
+            {
+                "Número do Alimento": 478,
+                "Descrição dos alimentos": "Coco, água de"
+            },
+            {
+                "Número do Alimento": 479,
+                "Descrição dos alimentos": "Refrigerante, tipo água tônica"
+            },
+            {
+                "Número do Alimento": 480,
+                "Descrição dos alimentos": "Refrigerante, tipo cola"
+            },
+            {
+                "Número do Alimento": 481,
+                "Descrição dos alimentos": "Refrigerante, tipo guaraná"
+            },
+            {
+                "Número do Alimento": 482,
+                "Descrição dos alimentos": "Refrigerante, tipo laranja"
+            },
+            {
+                "Número do Alimento": 483,
+                "Descrição dos alimentos": "Refrigerante, tipo limão"
+            }
+        ]
+    },
+    {
+        "grupo": "Ovos e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 484,
+                "Descrição dos alimentos": "Omelete, de queijo"
+            },
+            {
+                "Número do Alimento": 485,
+                "Descrição dos alimentos": "Ovo, de codorna, inteiro, cru"
+            },
+            {
+                "Número do Alimento": 486,
+                "Descrição dos alimentos": "Ovo, de galinha, clara, cozida/10minutos"
+            },
+            {
+                "Número do Alimento": 487,
+                "Descrição dos alimentos": "Ovo, de galinha, gema, cozida/10minutos"
+            },
+            {
+                "Número do Alimento": 488,
+                "Descrição dos alimentos": "Ovo, de galinha, inteiro, cozido/10minutos"
+            },
+            {
+                "Número do Alimento": 489,
+                "Descrição dos alimentos": "Ovo, de galinha, inteiro, cru"
+            },
+            {
+                "Número do Alimento": 490,
+                "Descrição dos alimentos": "Ovo, de galinha, inteiro, frito"
+            }
+        ]
+    },
+    {
+        "grupo": "Produtos Açucarados",
+        "alimentos": [
+            {
+                "Número do Alimento": 491,
+                "Descrição dos alimentos": "Achocolatado, pó"
+            },
+            {
+                "Número do Alimento": 492,
+                "Descrição dos alimentos": "Açúcar, cristal"
+            },
+            {
+                "Número do Alimento": 493,
+                "Descrição dos alimentos": "Açúcar, mascavo"
+            },
+            {
+                "Número do Alimento": 494,
+                "Descrição dos alimentos": "Açúcar, refinado"
+            },
+            {
+                "Número do Alimento": 495,
+                "Descrição dos alimentos": "Chocolate, ao leite"
+            },
+            {
+                "Número do Alimento": 496,
+                "Descrição dos alimentos": "Chocolate, ao leite, com castanha do Pará"
+            },
+            {
+                "Número do Alimento": 497,
+                "Descrição dos alimentos": "Chocolate, ao leite, dietético"
+            },
+            {
+                "Número do Alimento": 498,
+                "Descrição dos alimentos": "Chocolate, meio amargo"
+            },
+            {
+                "Número do Alimento": 499,
+                "Descrição dos alimentos": "Cocada branca"
+            },
+            {
+                "Número do Alimento": 500,
+                "Descrição dos alimentos": "Doce, de abóbora, cremoso"
+            },
+            {
+                "Número do Alimento": 501,
+                "Descrição dos alimentos": "Doce, de leite, cremoso"
+            },
+            {
+                "Número do Alimento": 502,
+                "Descrição dos alimentos": "Geléia, mocotó, natural"
+            },
+            {
+                "Número do Alimento": 503,
+                "Descrição dos alimentos": "Glicose de milho"
+            },
+            {
+                "Número do Alimento": 504,
+                "Descrição dos alimentos": "Maria mole"
+            },
+            {
+                "Número do Alimento": 505,
+                "Descrição dos alimentos": "Maria mole, coco queimado"
+            },
+            {
+                "Número do Alimento": 506,
+                "Descrição dos alimentos": "Marmelada"
+            },
+            {
+                "Número do Alimento": 507,
+                "Descrição dos alimentos": "Mel, de abelha"
+            },
+            {
+                "Número do Alimento": 508,
+                "Descrição dos alimentos": "Melado"
+            },
+            {
+                "Número do Alimento": 509,
+                "Descrição dos alimentos": "Quindim"
+            },
+            {
+                "Número do Alimento": 510,
+                "Descrição dos alimentos": "Rapadura"
+            }
+        ]
+    },
+    {
+        "grupo": "Miscelâneas",
+        "alimentos": [
+            {
+                "Número do Alimento": 511,
+                "Descrição dos alimentos": "Café, pó, torrado"
+            },
+            {
+                "Número do Alimento": 512,
+                "Descrição dos alimentos": "Capuccino, pó"
+            },
+            {
+                "Número do Alimento": 513,
+                "Descrição dos alimentos": "Fermento em pó, químico"
+            },
+            {
+                "Número do Alimento": 514,
+                "Descrição dos alimentos": "Fermento, biológico, levedura, tablete"
+            },
+            {
+                "Número do Alimento": 515,
+                "Descrição dos alimentos": "Gelatina, sabores variados, pó"
+            },
+            {
+                "Número do Alimento": 516,
+                "Descrição dos alimentos": "Sal, dietético"
+            },
+            {
+                "Número do Alimento": 517,
+                "Descrição dos alimentos": "Sal, grosso"
+            },
+            {
+                "Número do Alimento": 518,
+                "Descrição dos alimentos": "Shoyu"
+            },
+            {
+                "Número do Alimento": 519,
+                "Descrição dos alimentos": "Tempero a base de sal"
+            }
+        ]
+    },
+    {
+        "grupo": "Outros Alimentos Industrializados",
+        "alimentos": [
+            {
+                "Número do Alimento": 520,
+                "Descrição dos alimentos": "Azeitona, preta, conserva"
+            },
+            {
+                "Número do Alimento": 521,
+                "Descrição dos alimentos": "Azeitona, verde, conserva"
+            },
+            {
+                "Número do Alimento": 522,
+                "Descrição dos alimentos": "Chantilly, spray, com gordura vegetal"
+            },
+            {
+                "Número do Alimento": 523,
+                "Descrição dos alimentos": "Leite, de coco"
+            },
+            {
+                "Número do Alimento": 524,
+                "Descrição dos alimentos": "Maionese, tradicional com ovos"
+            }
+        ]
+    },
+    {
+        "grupo": "Alimentos Preparados",
+        "alimentos": [
+            {
+                "Número do Alimento": 525,
+                "Descrição dos alimentos": "Acarajé"
+            },
+            {
+                "Número do Alimento": 526,
+                "Descrição dos alimentos": "Arroz carreteiro"
+            },
+            {
+                "Número do Alimento": 527,
+                "Descrição dos alimentos": "Baião de dois, arroz e feijão-de-corda"
+            },
+            {
+                "Número do Alimento": 528,
+                "Descrição dos alimentos": "Barreado"
+            },
+            {
+                "Número do Alimento": 529,
+                "Descrição dos alimentos": "Bife à cavalo, com contra filé"
+            },
+            {
+                "Número do Alimento": 530,
+                "Descrição dos alimentos": "Bolinho de arroz"
+            },
+            {
+                "Número do Alimento": 531,
+                "Descrição dos alimentos": "Camarão à baiana"
+            },
+            {
+                "Número do Alimento": 532,
+                "Descrição dos alimentos": "Charuto, de repolho"
+            },
+            {
+                "Número do Alimento": 533,
+                "Descrição dos alimentos": "Cuscuz, de milho, cozido com sal"
+            },
+            {
+                "Número do Alimento": 534,
+                "Descrição dos alimentos": "Cuscuz, paulista"
+            },
+            {
+                "Número do Alimento": 535,
+                "Descrição dos alimentos": "Cuxá, molho"
+            },
+            {
+                "Número do Alimento": 536,
+                "Descrição dos alimentos": "Dobradinha"
+            },
+            {
+                "Número do Alimento": 537,
+                "Descrição dos alimentos": "Estrogonofe de carne"
+            },
+            {
+                "Número do Alimento": 538,
+                "Descrição dos alimentos": "Estrogonofe de frango"
+            },
+            {
+                "Número do Alimento": 539,
+                "Descrição dos alimentos": "Feijão tropeiro mineiro"
+            },
+            {
+                "Número do Alimento": 540,
+                "Descrição dos alimentos": "L"
+            },
+            {
+                "Número do Alimento": 541,
+                "Descrição dos alimentos": "Frango, com açafrão"
+            },
+            {
+                "Número do Alimento": 542,
+                "Descrição dos alimentos": "Macarrão, molho bolognesa"
+            },
+            {
+                "Número do Alimento": 543,
+                "Descrição dos alimentos": "Maniçoba"
+            },
+            {
+                "Número do Alimento": 544,
+                "Descrição dos alimentos": "Quibebe"
+            },
+            {
+                "Número do Alimento": 545,
+                "Descrição dos alimentos": "Salada, de legumes, com maionese"
+            },
+            {
+                "Número do Alimento": 546,
+                "Descrição dos alimentos": "Salada, de legumes, cozida no vapor"
+            },
+            {
+                "Número do Alimento": 547,
+                "Descrição dos alimentos": "Salpicão, de frango"
+            },
+            {
+                "Número do Alimento": 548,
+                "Descrição dos alimentos": "Sarapatel"
+            },
+            {
+                "Número do Alimento": 549,
+                "Descrição dos alimentos": "Tabule"
+            },
+            {
+                "Número do Alimento": 550,
+                "Descrição dos alimentos": "Tacacá"
+            },
+            {
+                "Número do Alimento": 551,
+                "Descrição dos alimentos": "Tapioca, com manteiga"
+            },
+            {
+                "Número do Alimento": 552,
+                "Descrição dos alimentos": "Tucupi, com pimenta-de-cheiro"
+            },
+            {
+                "Número do Alimento": 553,
+                "Descrição dos alimentos": "Vaca atolada"
+            },
+            {
+                "Número do Alimento": 554,
+                "Descrição dos alimentos": "Vatapá"
+            },
+            {
+                "Número do Alimento": 555,
+                "Descrição dos alimentos": "Virado à paulista"
+            },
+            {
+                "Número do Alimento": 556,
+                "Descrição dos alimentos": "Yakisoba"
+            }
+        ]
+    },
+    {
+        "grupo": "Leguminosas e Derivados",
+        "alimentos": [
+            {
+                "Número do Alimento": 557,
+                "Descrição dos alimentos": "Amendoim, grão, cru"
+            },
+            {
+                "Número do Alimento": 558,
+                "Descrição dos alimentos": "Amendoim, torrado, salgado"
+            },
+            {
+                "Número do Alimento": 559,
+                "Descrição dos alimentos": "Ervilha, em vagem"
+            },
+            {
+                "Número do Alimento": 560,
+                "Descrição dos alimentos": "Ervilha, enlatada, drenada"
+            },
+            {
+                "Número do Alimento": 561,
+                "Descrição dos alimentos": "Feijão, carioca, cozido"
+            },
+            {
+                "Número do Alimento": 562,
+                "Descrição dos alimentos": "Feijão, carioca, cru"
+            },
+            {
+                "Número do Alimento": 563,
+                "Descrição dos alimentos": "Feijão, fradinho, cozido"
+            },
+            {
+                "Número do Alimento": 564,
+                "Descrição dos alimentos": "Feijão, fradinho, cru"
+            },
+            {
+                "Número do Alimento": 565,
+                "Descrição dos alimentos": "Feijão, jalo, cozido"
+            },
+            {
+                "Número do Alimento": 566,
+                "Descrição dos alimentos": "Feijão, jalo, cru"
+            },
+            {
+                "Número do Alimento": 567,
+                "Descrição dos alimentos": "Feijão, preto, cozido"
+            },
+            {
+                "Número do Alimento": 568,
+                "Descrição dos alimentos": "Feijão, preto, cru"
+            },
+            {
+                "Número do Alimento": 569,
+                "Descrição dos alimentos": "Feijão, rajado, cozido"
+            },
+            {
+                "Número do Alimento": 570,
+                "Descrição dos alimentos": "Feijão, rajado, cru"
+            },
+            {
+                "Número do Alimento": 571,
+                "Descrição dos alimentos": "Feijão, rosinha, cozido"
+            },
+            {
+                "Número do Alimento": 572,
+                "Descrição dos alimentos": "Feijão, rosinha, cru"
+            },
+            {
+                "Número do Alimento": 573,
+                "Descrição dos alimentos": "Feijão, roxo, cozido"
+            },
+            {
+                "Número do Alimento": 574,
+                "Descrição dos alimentos": "Feijão, roxo, cru"
+            },
+            {
+                "Número do Alimento": 575,
+                "Descrição dos alimentos": "Grão-de-bico, cru"
+            },
+            {
+                "Número do Alimento": 576,
+                "Descrição dos alimentos": "Guandu, cru"
+            },
+            {
+                "Número do Alimento": 577,
+                "Descrição dos alimentos": "Lentilha, cozida"
+            },
+            {
+                "Número do Alimento": 578,
+                "Descrição dos alimentos": "Lentilha, crua"
+            },
+            {
+                "Número do Alimento": 579,
+                "Descrição dos alimentos": "Paçoca, amendoim"
+            },
+            {
+                "Número do Alimento": 580,
+                "Descrição dos alimentos": "Pé-de-moleque, amendoim"
+            },
+            {
+                "Número do Alimento": 581,
+                "Descrição dos alimentos": "Soja, farinha"
+            },
+            {
+                "Número do Alimento": 582,
+                "Descrição dos alimentos": "Soja, extrato solúvel, natural, fluido"
+            },
+            {
+                "Número do Alimento": 583,
+                "Descrição dos alimentos": "Soja, extrato solúvel, pó"
+            },
+            {
+                "Número do Alimento": 584,
+                "Descrição dos alimentos": "Soja, queijo (tofu)"
+            },
+            {
+                "Número do Alimento": 585,
+                "Descrição dos alimentos": "Tremoço, cru"
+            },
+            {
+                "Número do Alimento": 586,
+                "Descrição dos alimentos": "Tremoço, em conserva"
+            }
+        ]
+    },
+    {
+        "grupo": "Nozes e Sementes",
+        "alimentos": [
+            {
+                "Número do Alimento": 587,
+                "Descrição dos alimentos": "Amêndoa, torrada, salgada"
+            },
+            {
+                "Número do Alimento": 588,
+                "Descrição dos alimentos": "Castanha-de-caju, torrada, salgada"
+            },
+            {
+                "Número do Alimento": 589,
+                "Descrição dos alimentos": "Castanha-do-Brasil, crua"
+            },
+            {
+                "Número do Alimento": 590,
+                "Descrição dos alimentos": "Coco, cru"
+            },
+            {
+                "Número do Alimento": 591,
+                "Descrição dos alimentos": "Coco,  verde, cru"
+            },
+            {
+                "Número do Alimento": 592,
+                "Descrição dos alimentos": "Farinha, de mesocarpo de babaçu, crua"
+            },
+            {
+                "Número do Alimento": 593,
+                "Descrição dos alimentos": "Gergelim, semente"
+            },
+            {
+                "Número do Alimento": 594,
+                "Descrição dos alimentos": "Linhaça, semente"
+            },
+            {
+                "Número do Alimento": 595,
+                "Descrição dos alimentos": "Pinhão, cozido"
+            },
+            {
+                "Número do Alimento": 596,
+                "Descrição dos alimentos": "Pupunha, cozida"
+            },
+            {
+                "Número do Alimento": 597,
+                "Descrição dos alimentos": "Noz, crua"
+            }
+        ]
+    }
+]

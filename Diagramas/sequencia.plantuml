@@ -1,0 +1,14 @@
+@startuml
+actor Cliente
+participant "Sistema" as Sistema
+participant "Pagamento" as Pagamento
+participant "Banco" as Banco
+
+Cliente -> Sistema : realizarPedido()
+Sistema -> Sistema : validarDados()
+Sistema -> Pagamento : processarPagamento(valor)
+Pagamento -> Banco : solicitarTransacao(valor)
+Banco --> Pagamento : confirmarTransacao(ok)
+Pagamento --> Sistema : retornoProcessamento(ok)
+Sistema --> Cliente : confirmarPedido()
+@enduml

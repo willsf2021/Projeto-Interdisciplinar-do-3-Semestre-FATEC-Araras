@@ -33,8 +33,13 @@ O repositório será atualizado continuamente, conforme o andamento do curso e d
 - A definir...
 ---
 
+ ## 💻 Layout do Projeto
 
-**Fatec Araras - Desenvolvimento de Software Multiplataforma - 3º Semestre**
+<!-- ![](/img/gif_apresentacao.gif) -->
+
+Veja o layout completo  [aqui.](https://www.figma.com/design/oR2lK6DuMUX3lG1kJorqv2/PI3---Rotus?node-id=0-1&t=YHsYPGZzJs9h8P9D-1)
+
+
 
 ## 👨🏼‍🎓 Autores
 <table>
@@ -93,6 +98,18 @@ O repositório será atualizado continuamente, conforme o andamento do curso e d
         <br />
         <sub>
           <b>Rafael Rita</b>
+        </sub>
+       </a>
+       <br />
+       <a href="https://www.instagram.com" title="instagram"></a>
+       <br />
+    </td>
+    <td align="center">
+      <a href="https://github.com/TiagoBertoline ">
+        <img src="https://avatars.githubusercontent.com/u/183771495?v=4" width="100px;" alt="Tiago"/>
+        <br />
+        <sub>
+          <b>Tiago Bertoline</b>
         </sub>
        </a>
        <br />

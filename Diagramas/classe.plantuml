@@ -1,0 +1,40 @@
+@startuml
+class Usuario {
+  - id: int
+  - nome: String
+  - email: String
+  + autenticar(): boolean
+}
+
+class Administrador {
+  + gerenciarUsuarios(): void
+}
+
+class Cliente {
+  + realizarPedido(): void
+}
+
+class Pedido {
+  - id: int
+  - data: Date
+  + calcularTotal(): double
+}
+
+class Produto {
+  - id: int
+  - nome: String
+  - preco: double
+}
+
+class Pagamento {
+  - id: int
+  - valor: double
+  + processar(): boolean
+}
+
+Usuario <|-- Administrador
+Usuario <|-- Cliente
+Cliente "1" --> "*" Pedido
+Pedido "*" --> "*" Produto
+Pedido "1" --> "1" Pagamento
+@enduml

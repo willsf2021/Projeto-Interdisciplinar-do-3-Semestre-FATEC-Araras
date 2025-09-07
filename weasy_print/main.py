@@ -4,7 +4,7 @@ BASE_PATH = 'C:/Users/wills/OneDrive/Documentos/projetoIntegrador3sem/weasy_prin
 
 
 
-css_styles1 = """
+vertical = """
     @page {
         margin: 2cm;
         size: A4;
@@ -97,7 +97,7 @@ css_styles1 = """
         text-align: center;
       }
     """
-css_styles2 = """
+horizontal = """
     @page {
         margin: 2cm;
         size: A4;
@@ -201,8 +201,8 @@ css_styles2 = """
       }
     """
     
-css_doc1 = CSS(string=css_styles1)
-css_doc2 = CSS(string=css_styles2)
+css_doc1 = CSS(string=vertical)
+css_doc2 = CSS(string=horizontal)
 
 HTML(f"{BASE_PATH}rotulo.html").write_pdf(f"{BASE_PATH}vertical.pdf", stylesheets=[css_doc1])
 HTML(f"{BASE_PATH}rotulo.html").write_pdf(f"{BASE_PATH}horizontal.pdf", stylesheets=[css_doc2])

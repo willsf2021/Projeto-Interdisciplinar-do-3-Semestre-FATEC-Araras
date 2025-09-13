@@ -1,18 +1,80 @@
-
 @startuml
-left to right direction
-actor "Cliente" as cliente
-rectangle Aplicação {
-  usecase "Acesso as cat. navbar" as categorias_produtos
-  usecase "Redes sociais" as redes
-
-
-
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam actor {
+  BackgroundColor #E6F3FF
+  BorderColor #0066CC
+}
+skinparam usecase {
+  BackgroundColor #F0F8FF
+  BorderColor #4682B4
+}
+skinparam package {
+  BackgroundColor #F8F8FF
+  BorderColor #8A8A8A
 }
 
-cliente --> categorias_produtos
-cliente --> redes
+title Diagrama de Casos de Uso - Sistema Rótus
+
+left to right direction
+
+actor "Usuário" as User
+
+package "Autenticação" {
+  usecase "Cadastrar Conta" as UC001
+  usecase "Realizar Login" as UC003
+  usecase "Excluir Conta" as UC002
+}
+
+package "Gestão de Dados" {
+  usecase "Cadastrar Cliente" as UC005
+  usecase "Visualizar Cliente" as UC004
+  usecase "Gerenciar Documentos" as UC006
+}
+
+package "Análise Nutricional" {
+  usecase "Definir Porção" as UC007
+  usecase "Consultar Tabelas Nutricionais" as UC009
+  usecase "Calcular Nutrientes" as UC008
+  usecase "Precificar Receita" as UC_PRICE
+  package "Documentos" {
+    usecase "Baixar PDF" as UC010
+    usecase "Gerar PDF" as UC011
+  }
+}
+
+
+' Relacionamentos principais
+User --> UC001
+User --> UC003
+User --> UC002
+User --> UC005
+User --> UC004
+User --> UC006
+User --> UC007
+User --> UC009
+User --> UC008
+User --> UC_PRICE
+User --> UC010
+User --> UC011
+
+
+' Dependências funcionais
+UC006 ..> UC005 : <<include>>
+UC008 ..> UC007 : <<include>>
+UC008 ..> UC009 : <<include>>
+UC010 ..> UC008 : <<include>>
+UC011 ..> UC010 : <<include>>
+UC_PRICE ..> UC008 : <<extend>>
+
+note right of UC009
+  Tabelas: TACO, IBGE,
+  USDA, TBCA, Tucunduva
+end note
+
+note right of UC010
+  Padrão Anvisa com rótulo
+  nutricional e pontos de corte
+end note
 
 @enduml
-
-

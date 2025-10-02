@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Cadastro</title>
+  </head>
+  <body>
+    <button id="btn-cadastrar">Cadastrar</button>
+    <button id="btn-login">Login</button>
+  </body>
+  <script>
+    document.getElementById("btn-cadastrar").addEventListener("click", async () => {
+      try {
+        let response = await fetch("http://localhost:8000/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: "testeUser",
+            password: "senha123",
+            email: "teste@example.com",
+          }),
+        });
+
+        let data = await response.json();
+        console.log("Resposta do servidor:", data);
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      }
+    });
+
+    document.getElementById("btn-login").addEventListener("click", async () => {
+      try {
+        let response = await fetch("http://localhost:8000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: "testeUser",
+            password: "senha123",
+          }),
+        });
+
+        let data = await response.json();
+        console.log("Resposta do servidor:", data);
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      }
+    });
+  </script>
+</html>

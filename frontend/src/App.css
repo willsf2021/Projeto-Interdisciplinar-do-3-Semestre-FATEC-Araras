@@ -13,12 +13,3 @@ body {
   overflow: hidden;
   height: 100dvh;
 }
-
-main {
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-
-main.visible {
-  opacity: 1;
-}

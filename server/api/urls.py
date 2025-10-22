@@ -1,9 +1,20 @@
-from django.contrib import admin
-from django.urls import re_path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    get_csrf, signup, login_view, logout_view,
+    NutricionistaViewSet, ClienteViewSet, ReceitaViewSet, IngredienteViewSet
+)
+
+router = DefaultRouter()
+router.register(r'nutricionistas', NutricionistaViewSet, basename='nutricionista')
+router.register(r'clientes', ClienteViewSet, basename='cliente')
+router.register(r'receitas', ReceitaViewSet, basename='receita')
+router.register(r'ingredientes', IngredienteViewSet, basename='ingrediente')
 
 urlpatterns = [
-    re_path('login', views.login),
-    re_path('signup', views.signup),
-    re_path('test_token', views.test_token),
+    path('auth/csrf/', get_csrf),
+    path('auth/signup/', signup),
+    path('auth/login/', login_view),
+    path('auth/logout/', logout_view),
+    path('', include(router.urls)),
 ]

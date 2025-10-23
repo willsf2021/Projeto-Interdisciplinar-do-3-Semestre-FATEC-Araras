@@ -1,4 +1,4 @@
-from .Usuario import Usuario
+from .Usuario import Usuario, UsuarioManager
 from .Cliente import Cliente
 from .AlimentoTaco import AlimentoTaco
 from .Receita import Receita

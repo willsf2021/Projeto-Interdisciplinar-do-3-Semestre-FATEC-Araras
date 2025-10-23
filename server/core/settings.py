@@ -30,7 +30,7 @@ os.getenv("SECRET_KEY", "dev")
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'api.Usuario' 
 
 # Application definition
 

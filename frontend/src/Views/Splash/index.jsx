@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo_splash.svg";
 
 export const Splash = () => {
   const splashRef = useRef(null);

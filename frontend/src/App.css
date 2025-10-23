@@ -1,5 +1,7 @@
 :root {
   --primaryColor: #3ea896;
+  --white: #fff;
+  --borderColor: #aaa;
 }
 
 * {
@@ -12,4 +14,11 @@ body {
   font-family: "Montserrat", sans-serif;
   overflow: hidden;
   height: 100dvh;
+}
+
+input:not([type="checkbox"]) {
+  all: unset;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }

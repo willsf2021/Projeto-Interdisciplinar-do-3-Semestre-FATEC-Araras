@@ -10,6 +10,7 @@ class AlimentoTacoModelTest(TestCase):
             'codigo_taco': 'TACO001',
             'nome': 'Maçã Fuji',
             'categoria': 'Frutas',
+            'valor_energetico': 0.5,
             'proteinas': 0.3,
             'carboidratos': 13.8,
             'acucares_totais': 10.4,
@@ -29,6 +30,7 @@ class AlimentoTacoModelTest(TestCase):
         self.assertEqual(alimento.nome, 'Maçã Fuji')
         self.assertEqual(alimento.categoria, 'Frutas')
         self.assertEqual(alimento.proteinas, 0.3)
+        self.assertEqual(alimento.valor_energetico, 0.5)
         self.assertEqual(alimento.carboidratos, 13.8)
         self.assertEqual(alimento.acucares_totais, 10.4)
         self.assertEqual(alimento.acucares_adicionados, 0.0)
@@ -50,6 +52,7 @@ class AlimentoTacoModelTest(TestCase):
                 codigo_taco='TACO001',
                 nome='Banana',
                 categoria='Frutas',
+                valor_energetico=1.2,
                 proteinas=1.1,
                 carboidratos=22.8,
                 acucares_totais=12.2,
@@ -129,6 +132,7 @@ class AlimentoTacoModelTest(TestCase):
             'codigo_taco': 'Código TACO',
             'nome': 'Nome do Alimento',
             'categoria': 'Categoria',
+            'valor_energetico': 'Valor Energético (kcal)',
             'proteinas': 'Proteínas (g)',
             'carboidratos': 'Carboidratos (g)',
             'acucares_totais': 'Açúcares Totais (g)',
@@ -157,6 +161,7 @@ class AlimentoTacoQueryTest(TestCase):
             codigo_taco='TACO001',
             nome='Maçã',
             categoria='Frutas',
+            valor_energetico=1.2,
             proteinas=0.3,
             carboidratos=13.8,
             acucares_totais=10.4,
@@ -172,6 +177,7 @@ class AlimentoTacoQueryTest(TestCase):
             codigo_taco='TACO002',
             nome='Banana',
             categoria='Frutas',
+            valor_energetico=1.2,
             proteinas=1.1,
             carboidratos=22.8,
             acucares_totais=12.2,
@@ -187,6 +193,7 @@ class AlimentoTacoQueryTest(TestCase):
             codigo_taco='TACO003',
             nome='Peito de Frango',
             categoria='Carnes',
+            valor_energetico=1.2,
             proteinas=31.0,
             carboidratos=0.0,
             acucares_totais=0.0,
@@ -241,6 +248,7 @@ class AlimentoTacoEdgeCasesTest(TestCase):
             codigo_taco='T' * 10,
             nome='Teste',
             categoria='Teste',
+            valor_energetico=1.2,
             proteinas=1.0,
             carboidratos=1.0,
             acucares_totais=1.0,
@@ -261,6 +269,7 @@ class AlimentoTacoEdgeCasesTest(TestCase):
             codigo_taco='TACO999',
             nome=nome_longo,
             categoria='Teste',
+            valor_energetico=1.2,
             proteinas=1.0,
             carboidratos=1.0,
             acucares_totais=1.0,
@@ -279,6 +288,7 @@ class AlimentoTacoEdgeCasesTest(TestCase):
             codigo_taco='TACO100',
             nome='Alimento Extremo',
             categoria='Teste',
+            valor_energetico=9999.99,
             proteinas=9999.99,  # Valor máximo suportado
             carboidratos=9999.99,
             acucares_totais=9999.99,
@@ -303,6 +313,7 @@ class AlimentoTacoIntegrationTest(TestCase):
                 'codigo_taco': f'TACO{i:03d}',
                 'nome': f'Alimento Teste {i}',
                 'categoria': 'Teste',
+                'valor_energetico': float(i),
                 'proteinas': float(i),
                 'carboidratos': float(i * 2),
                 'acucares_totais': float(i * 0.5),
@@ -331,6 +342,7 @@ class AlimentoTacoIntegrationTest(TestCase):
             codigo_taco='TACO888',
             nome='Alimento Original',
             categoria='Original',
+            valor_energetico=1.2,
             proteinas=1.0,
             carboidratos=1.0,
             acucares_totais=1.0,

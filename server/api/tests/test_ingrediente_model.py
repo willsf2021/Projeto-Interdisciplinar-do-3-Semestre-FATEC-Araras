@@ -28,6 +28,7 @@ class IngredienteModelTest(TestCase):
         self.alimento = AlimentoTaco.objects.create(
             codigo_taco='001',
             nome='Açúcar',
+            valor_energetico=Decimal('10'),
             proteinas=Decimal('10'),
             carboidratos=Decimal('75'),
             fibra_alimentar=Decimal('2.5'),
@@ -109,6 +110,7 @@ class IngredienteModelTest(TestCase):
             alimento=AlimentoTaco.objects.create(
                 codigo_taco='002',
                 nome='Açúcar',
+                valor_energetico=Decimal('10'),
                 proteinas=Decimal('10'),
                 carboidratos=Decimal('75'),
                 fibra_alimentar=Decimal('2.5'),
@@ -192,6 +194,7 @@ class IngredienteModelTest(TestCase):
             alimento=AlimentoTaco.objects.create(
                 codigo_taco='003',
                 nome='Açúcar',
+                valor_energetico=Decimal('10'),
                 proteinas=Decimal('10'),
                 carboidratos=Decimal('75'),
                 fibra_alimentar=Decimal('2.5'),
@@ -259,6 +262,7 @@ class IngredienteModelTest(TestCase):
                 alimento=AlimentoTaco.objects.create(
                 codigo_taco='004',
                 nome='Açúcar',
+                valor_energetico=Decimal('10'),
                 proteinas=Decimal('10'),
                 carboidratos=Decimal('75'),
                 fibra_alimentar=Decimal('2.5'),
@@ -331,6 +335,7 @@ class IngredienteModelTest(TestCase):
         alimento2 = AlimentoTaco.objects.create(
             codigo_taco='005',
             nome='Açúcar',
+            valor_energetico=Decimal('10'),
             proteinas=Decimal('10'),
             carboidratos=Decimal('75'),
             fibra_alimentar=Decimal('2.5'),

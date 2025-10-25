@@ -7,7 +7,17 @@ class AlimentoTaco(models.Model):
     nome = models.CharField(max_length=255, verbose_name='Nome do Alimento', blank= False)
     categoria = models.CharField(max_length=100, verbose_name='Categoria')
     
-    # Valores nutricionais por 100g
+    
+    # Valor energético (kcal por 100g)
+    valor_energetico = models.DecimalField(
+        validators=[MinValueValidator(0)],
+        max_digits=8,
+        decimal_places=2,
+        verbose_name='Valor Energético (kcal)',
+        help_text='Valor energético por 100g',
+        blank=False,
+    )
+    
     proteinas = models.DecimalField(
         validators=[MinValueValidator(0)],
         max_digits=8, 

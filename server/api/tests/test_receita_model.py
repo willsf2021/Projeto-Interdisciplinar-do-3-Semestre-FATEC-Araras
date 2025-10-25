@@ -31,6 +31,7 @@ class ReceitaModelTest(TestCase):
         self.farinha = AlimentoTaco.objects.create(
             codigo_taco='001',
             nome='Farinha de trigo',
+            valor_energetico=Decimal('10'),
             proteinas=Decimal('10'),
             carboidratos=Decimal('75'),
             fibra_alimentar=Decimal('2.5'),
@@ -45,6 +46,7 @@ class ReceitaModelTest(TestCase):
         self.acucar = AlimentoTaco.objects.create(
             codigo_taco='002',
             nome='Açúcar',
+            valor_energetico=Decimal('10'),
             proteinas=Decimal('10'),
             carboidratos=Decimal('75'),
             fibra_alimentar=Decimal('2.5'),

@@ -4,7 +4,7 @@ from rest_framework import status
 from api.models import Usuario
 from rest_framework.authtoken.models import Token
 
-class UsuarioViewsTestCase(TestCase):
+class UsuarioViewsTest(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = Usuario.objects.create_user(

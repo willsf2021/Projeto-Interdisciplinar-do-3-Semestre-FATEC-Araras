@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from api.models import AlimentoTaco
+from decimal import Decimal
 
 
 class AlimentoTacoModelTest(TestCase):
@@ -96,7 +97,6 @@ class AlimentoTacoModelTest(TestCase):
                 alimento = AlimentoTaco(**data_invalido)
                 with self.assertRaises(Exception):
                     alimento.full_clean()
-                    alimento.save()
 
     def test_valores_nutricionais_decimais(self):
         """Testa campos decimais com valores válidos"""
@@ -116,7 +116,6 @@ class AlimentoTacoModelTest(TestCase):
 
         with self.assertRaises(ValidationError):
             alimento.full_clean()
-            alimento.save()
 
     def test_help_text_fields(self):
         """Testa que help_text está presente nos campos"""

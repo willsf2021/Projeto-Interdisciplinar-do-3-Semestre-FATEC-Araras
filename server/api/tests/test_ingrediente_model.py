@@ -217,19 +217,6 @@ class IngredienteModelTest(TestCase):
         # Custo unitário = (5 / 1000) * 40 = 0.20
         self.assertEqual(ingrediente.custo_unitario, Decimal('0.20'))
 
-    def test_custo_unitario_quantidade_embalagem_zero(self):
-        """Testa custo unitário quando quantidade_embalagem é zero"""
-        ingrediente = Ingrediente.objects.create(
-            receita=self.receita,
-            alimento=self.alimento,
-            peso_bruto=Decimal('300.00'),
-            peso_liquido=Decimal('300.00'),
-            custo_embalagem=Decimal('10.00'),
-            quantidade_embalagem=Decimal('0')
-        )
-        
-        self.assertEqual(ingrediente.custo_unitario, 0)
-
     def test_custo_total_sem_precificacao(self):
         """Testa custo total quando precificação está desabilitada"""
         self.receita.habilitar_precificacao = False
@@ -296,6 +283,19 @@ class IngredienteModelTest(TestCase):
         
         self.assertEqual(ingrediente.receita, self.receita)
         self.assertIn(ingrediente, self.receita.ingredientes.all())
+
+    def test_custo_unitario_quantidade_embalagem_zero(self):
+        """Testa custo_unitario retorna 0 quando quantidade_embalagem é zero"""
+        ingrediente = Ingrediente.objects.create(
+            receita=self.receita,
+            alimento=self.alimento,
+            peso_bruto=Decimal('300.00'),
+            peso_liquido=Decimal('300.00'),
+            custo_embalagem=Decimal('10.00'),
+            quantidade_embalagem=Decimal('0')
+        )
+    
+        self.assertEqual(ingrediente.custo_unitario, 0)
 
     def test_relacionamento_com_alimento(self):
         """Testa o relacionamento ForeignKey com AlimentoTaco"""

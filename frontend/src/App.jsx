@@ -1,13 +1,16 @@
-import { Routes, Route } from "react-router-dom";
-import { Splash } from "./Views/Splash";
-import { Login } from "./Views/Login";
-import "./App.css";
+import { GlobalStyle } from "./styles/GlobalStyles";
+import { ThemeProvider } from "styled-components";
+import AppRoutes from "./routes/AppRoutes";
 
-export default function App() {
+import { theme } from "./styles/theme";
+
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Splash />} />
-      <Route path="/login" element={<Login />} />
-    </Routes>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      <AppRoutes />
+    </ThemeProvider>
   );
 }
+
+export default App;

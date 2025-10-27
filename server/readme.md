@@ -1,4 +1,4 @@
-Rotas:
+Rotas necesárias para o funcionamento da API:
  _________________________________________________________________
 | Método | Endpoint               | Descrição                     |
 | ------ | ---------------------- | ----------------------------- |
@@ -14,4 +14,24 @@ Rotas:
 | POST   | `/api/receitas/`       | Cria receita                  |
 | GET    | `/api/ingredientes/`   | Lista ingredientes            |
 | POST   | `/api/ingredientes/`   | Cria ingrediente              |
+| POST   | `/api/rotulos/id`      | Cria rótulo                   |
+| GET    | `/api/rotulos/`        | Lista rótulos                 |
+|_________________________________________________________________|
+
+Rotas em desenvolvimento:
+ _________________________________________________________________
+| Método | Endpoint               | Descrição                     |
+| ------ | ---------------------- | ----------------------------- |
+| GET    | `/api/alimentos/`      | Lista todos os alimentos      |
+| POST   | `/api/login/`          | Faz login                     |
+| POST   | `/api/registro/`       | Registra novo usuário         |
+| POST   | `/api/google-auth/`    | Faz login e regi. com Google  |
+| GET    | ``                     |                               |
+| POST   | ``                     |                               | 
+| GET    | ``                     |                               |      
+| POST   | ``                     |                               |
+| GET    | ``                     |                               | 
+| POST   | ``                     |                               | 
+| GET    | ``                     |                               | 
+| POST   | ``                     |                               | 
 |_________________________________________________________________|

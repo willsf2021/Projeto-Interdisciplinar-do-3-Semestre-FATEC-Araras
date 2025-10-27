@@ -1,14 +1,16 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
 
-
 class UsuarioManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('O email é obrigatório')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        user.set_password(password)
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
         user.save(using=self._db)
         return user
 
@@ -32,7 +34,16 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado a')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 
-    # 👇 Sobrescreve para evitar conflito com auth.User
+    # campos para login social
+    LOGIN_SOCIAL_CHOICES = [
+        ('manual', 'Manual'),
+        ('google', 'Google'),
+    ]
+    login_social = models.CharField(max_length=20, choices=LOGIN_SOCIAL_CHOICES, default='manual', verbose_name='Login Social')
+    google_id = models.CharField(max_length=255, blank=True, null=True, verbose_name='Google ID')
+    avatar = models.URLField(blank=True, null=True, verbose_name='Avatar')
+
+    #  Sobrescreve para evitar conflito com auth.User
     groups = models.ManyToManyField(
         Group,
         related_name='usuario_groups',

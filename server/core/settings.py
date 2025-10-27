@@ -26,6 +26,8 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-for-local")
 #SECRET_KEY = ''
 
+# Google OAuth2 Client ID
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
@@ -35,16 +37,37 @@ AUTH_USER_MODEL = 'api.Usuario'
 # Application definition
 
 INSTALLED_APPS = [
+    # Apps padrão do Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Django REST Framework
     'rest_framework.authtoken',
     'rest_framework',
+    
+    # extensão de show_urls
+    'django_extensions',
+
+    # Autenticação Social
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
+    # Apps do projeto
     'api',
 ]
+# Configuração do site para django-allauth
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+ROOT_URLCONF = 'core.urls' # especifica o módulo de URLs correto.
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,9 +77,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Middleware do allauth
+    'allauth.account.middleware.AccountMiddleware',
 ]
-
-ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {

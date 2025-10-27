@@ -9,4 +9,3 @@ class UsuarioUrlsTest(TestCase):
     def test_registro_url_reverse(self):
         url = reverse('usuario-registro')
         self.assertEqual(url, '/api/registro/') 
-

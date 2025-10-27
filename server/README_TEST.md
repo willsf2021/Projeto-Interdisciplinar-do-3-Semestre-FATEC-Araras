@@ -26,6 +26,9 @@ Para gerar um relatório de cobertura:
 ```bash
 coverage run manage.py test
 coverage report
+coverage html
+
+start htmlcov/index.html
 ```
 
 Isso mostrará quais partes do código foram cobertas pelos testes.
@@ -42,3 +45,13 @@ python manage.py import_taco_json api/management/commands/taco.json
 
 * Este comando lê o arquivo `taco.json` e insere os dados diretamente no banco de dados.
 * Certifique-se de que o banco esteja configurado corretamente no arquivo `.mnd` antes de executar o comando.
+
+# visualizar as URLs da aplicação
+pip install django-extensions
+
+em apps do core:
+    # extensão
+    'django_extensions',
+
+Ver todas as rotas:
+python manage.py show_urls

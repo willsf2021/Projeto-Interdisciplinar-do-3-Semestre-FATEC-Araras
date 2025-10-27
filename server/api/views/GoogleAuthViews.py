@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny
 @permission_classes([AllowAny])
 def google_auth(request):
     token = request.data.get("token")
-    user_type = request.data.get("type")  # precisa vir do frontend (ex: 'estudante')
+    user_type = request.data.get("type")
 
     if not token:
         return Response(
@@ -28,7 +28,7 @@ def google_auth(request):
         )
 
     try:
-        # Verifica o token com o Google
+
         id_info = id_token.verify_oauth2_token(
             token,
             google_requests.Request(),
@@ -48,7 +48,6 @@ def google_auth(request):
 
         full_name = f"{given_name} {family_name}".strip()
 
-        # Cria ou busca o usuário
         user, created = Usuario.objects.get_or_create(
             email=email,
             defaults={
@@ -59,7 +58,7 @@ def google_auth(request):
         )
 
         if not created:
-            # Atualiza informações do perfil, caso venham atualizadas do Google
+
             updated = False
             if not user.avatar_url and avatar_url:
                 user.avatar_url = avatar_url

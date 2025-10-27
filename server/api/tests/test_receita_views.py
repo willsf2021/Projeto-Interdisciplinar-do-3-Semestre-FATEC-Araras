@@ -48,8 +48,8 @@ class ReceitaViewsTest(TestCase):
         )
 
         # URLs de teste - REMOVA as barras finais se suas URLs não as tiverem
-        self.url_criar = "/api/criar-receita"
-        self.url_listar = "/api/listar-receita"
+        self.url_criar = "/api/criar-receita/"
+        self.url_listar = "/api/listar-receitas/"
         self.url_atualizar = f"/api/atualizar-receita/{self.receita_user1.id}"
         self.url_deletar = f"/api/excluir-receita/{self.receita_user1.id}"
 

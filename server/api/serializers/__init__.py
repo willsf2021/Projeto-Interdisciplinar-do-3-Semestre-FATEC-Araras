@@ -1,1 +1,2 @@
 from .AlimentoTacoSerializers import AlimentoTacoSerializer
+from .DocumentoSerializers import DocumentoSerializer

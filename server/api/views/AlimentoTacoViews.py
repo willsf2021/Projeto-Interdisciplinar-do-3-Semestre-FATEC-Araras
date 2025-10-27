@@ -4,13 +4,14 @@ from rest_framework import status
 from django.contrib.auth import authenticate, login
 from django.utils.decorators import method_decorator
 from api.models import AlimentoTaco
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
 from api.serializers import AlimentoTacoSerializer
-from rest_framework.authtoken.models import Token
 
 class AlimentoTacoView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     def get(self, request):
 

@@ -26,6 +26,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-for-local")
 #SECRET_KEY = ''
 
+GOOGLE_OAUTH_CLIENT_ID = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
+GOOGLE_OAUTH_CLIENT_SECET = os.getenv('GOOGLE_OAUTH_CLIENT_SECET')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'rest_framework',
     'api',
 ]
@@ -99,7 +103,7 @@ else:
 # Autenticação e DRF
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",  # uses CSRF + session
+        "rest_framework_simplejwt.authentication.JWTAuthentication",  # uses CSRF + session
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",

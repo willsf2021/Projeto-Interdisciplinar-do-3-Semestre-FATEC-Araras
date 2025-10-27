@@ -1,13 +1,10 @@
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate, login
-from django.utils.decorators import method_decorator
-from api.models import Usuario
+from django.contrib.auth import authenticate
 from rest_framework.permissions import AllowAny
-
-
-from rest_framework.authtoken.models import Token
+from api.models import Usuario
 
 class RegistroView(APIView):
     permission_classes = [AllowAny]
@@ -16,22 +13,24 @@ class RegistroView(APIView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
-        tipo = request.data.get('tipo')
+        type = request.data.get('type')
 
-        if not email or not password or not tipo:
-            return Response({"erro": "Campos obrigatórios: email, password e tipo."}, status=400)
+        if not email or not password or not type:
+            return Response({"erro": "Campos obrigatórios: email, password e type."}, status=400)
 
         if Usuario.objects.filter(email=email).exists():
             return Response({"erro": "Usuário já existe."}, status=400)
 
-        user = Usuario.objects.create_user(email=email, password=password, tipo=tipo)
-        token, _ = Token.objects.get_or_create(user=user)
+        user = Usuario.objects.create_user(email=email, password=password, type=type)
+
+        refresh = RefreshToken.for_user(user)
 
         return Response({
             "mensagem": "Usuário registrado com sucesso.",
             "email": user.email,
-            "tipo": user.tipo,
-            "token": token.key
+            "type": user.type,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
         }, status=201)
 
 
@@ -47,11 +46,12 @@ class LoginView(APIView):
         if user is None:
             return Response({"erro": "Credenciais inválidas."}, status=401)
 
-        token, _ = Token.objects.get_or_create(user=user)
+        refresh = RefreshToken.for_user(user)
 
         return Response({
             "mensagem": "Login bem-sucedido.",
             "email": user.email,
-            "tipo": user.tipo,
-            "token": token.key
+            "type": user.type,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
         })

@@ -1,4 +1,4 @@
- python manage.py test api.tests.teste_usuario_model.UsuarioIntegrationTest   
+ python manage.py test api.tests.test_usuario_model.UsuarioIntegrationTest   
 
  coverage report
 
@@ -7,3 +7,6 @@
  um arquivo de teste por model, test_nome_model_model
 
  python manage.py test -v 2
+
+
+ python manage.py import_taco_json api/management/commands/taco.json

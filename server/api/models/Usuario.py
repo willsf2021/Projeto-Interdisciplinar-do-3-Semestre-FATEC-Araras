@@ -19,14 +19,16 @@ class UsuarioManager(BaseUserManager):
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    TIPO_CHOICES = [
+    TYPE_CHOICES = [
         ('estudante', 'Estudante'),
         ('profissional', 'Profissional'),
         ('professor', 'Professor'),
     ]
-
+    
+    name = models.CharField(max_length=20, verbose_name='Nome do Usuário')
     email = models.EmailField(unique=True, verbose_name='Email')
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, verbose_name='Tipo de Usuário')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, verbose_name='Tipo de Usuário')
+    avatar_url = models.URLField(null=True, blank=True, verbose_name='URL do Avatar')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado a')
@@ -51,7 +53,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['tipo']
+    REQUIRED_FIELDS = ['type']
 
     class Meta:
         db_table = 'usuarios'
@@ -59,4 +61,4 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Usuários'
 
     def __str__(self):
-        return f"{self.email} ({self.get_tipo_display()})"
+        return f"{self.email} ({self.get_type_display()})"

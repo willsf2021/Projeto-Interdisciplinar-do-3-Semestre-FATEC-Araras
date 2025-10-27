@@ -1,3 +1,5 @@
 venv/
 server/venv
 **/.env
+
+**/documentos

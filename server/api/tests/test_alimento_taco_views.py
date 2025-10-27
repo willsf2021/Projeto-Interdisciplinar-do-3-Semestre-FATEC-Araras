@@ -2,11 +2,19 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 from api.models import AlimentoTaco
+from django.contrib.auth import get_user_model
 
 class AlimentoTacoViewsTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.url="/api/alimentos/"
+        self.url = "/api/alimentos/"
+        
+        # Cria usuário e faz login
+        self.user = get_user_model().objects.create_user(
+            email='teste@example.com',
+            password='senha123'
+        )
+        self.client.force_authenticate(user=self.user)
         
         self.alimento = AlimentoTaco.objects.create(
             codigo_taco='TACO888',

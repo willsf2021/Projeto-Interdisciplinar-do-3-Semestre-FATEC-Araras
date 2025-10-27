@@ -11,9 +11,10 @@ class ClienteModelTest(TestCase):
     def setUp(self):
         # Crie o usuário usando o modelo Usuario
         self.usuario = Usuario.objects.create_user(
+            name="Teste da Silva",
             email='user@example.com',
             password='testpass123',
-            tipo='profissional'
+            type='profissional'
         )
         
         self.cliente_data = {
@@ -40,7 +41,7 @@ class ClienteModelTest(TestCase):
         
         # Testa o relacionamento direto
         self.assertEqual(cliente.usuario.email, 'user@example.com')
-        self.assertEqual(cliente.usuario.tipo, 'profissional')
+        self.assertEqual(cliente.usuario.type, 'profissional')
         
         # Testa o related_name
         self.assertIn(cliente, self.usuario.clientes.all())
@@ -135,13 +136,13 @@ class ClienteIntegrationTest(TestCase):
         self.usuario1 = Usuario.objects.create_user(
             email='user1@example.com',
             password='pass123',
-            tipo='profissional'
+            type='profissional'
         )
         
         self.usuario2 = Usuario.objects.create_user(
             email='user2@example.com',
             password='pass123',
-            tipo='estudante'
+            type='estudante'
         )
 
     def test_multiple_clientes_per_usuario(self):
@@ -244,7 +245,7 @@ class ClienteBasicTest(TestCase):
         usuario = Usuario.objects.create_user(
             email='test@example.com',
             password='pass123',
-            tipo='profissional'
+            type='profissional'
         )
         
         cliente = Cliente.objects.create(
@@ -262,7 +263,7 @@ class ClienteBasicTest(TestCase):
         usuario = Usuario.objects.create_user(
             email='test@example.com',
             password='pass123',
-            tipo='profissional'
+            type='profissional'
         )
         
         cliente = Cliente.objects.create(

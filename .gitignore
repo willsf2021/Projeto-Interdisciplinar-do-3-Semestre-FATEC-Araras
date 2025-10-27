@@ -2,4 +2,4 @@ venv/
 server/venv
 **/.env
 
-**/documentos
+server/documentos

@@ -9,9 +9,10 @@ class ReceitaModelTest(TestCase):
     def setUp(self):
         """Configuração inicial para cada teste"""
         self.usuario = Usuario.objects.create_user(
+            name="Teste da Silva",
             email='teste@example.com',
             password='senha123',
-            tipo='profissional'
+            type='profissional'
         )
         
         self.receita = Receita.objects.create(

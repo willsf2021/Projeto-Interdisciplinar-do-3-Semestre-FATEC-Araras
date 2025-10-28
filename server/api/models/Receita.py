@@ -169,12 +169,12 @@ class Receita(models.Model):
         # ✅ CORREÇÃO: Use nutrientes por 100g e ajuste para o peso da porção
         nutrientes_por_100g = self.calcular_nutrientes_por_100g()
         nutrientes_porcao = {}
-        
+
         fator_porcao = self.porcao_individual / Decimal('100.00')
-        
+
         for nutriente, valor in nutrientes_por_100g.items():
             nutrientes_porcao[nutriente] = valor * fator_porcao
-        
+
         return nutrientes_porcao
 
     def calcular_valores_diarios(self, nutrientes_porcao):
@@ -182,11 +182,11 @@ class Receita(models.Model):
         vd_referencia = {
             'valor_energetico': Decimal('2000.00'),  # kcal
             'carboidratos': Decimal('300.00'),       # g
-            'proteinas': Decimal('50.00'),           # g (na planilha é 50g, não 75g)
-            'gorduras_totais': Decimal('65.00'),     # g (na planilha é 65g)
-            'gorduras_saturadas': Decimal('20.00'),  # g (na planilha é 20g)
+            'proteinas': Decimal('50.00'),           # g
+            'gorduras_totais': Decimal('65.00'),     # g 
+            'gorduras_saturadas': Decimal('20.00'),  # g 
             'fibra_alimentar': Decimal('25.00'),     # g
-            'sodio': Decimal('2000.00'),             # mg (na planilha é 2000mg)
+            'sodio': Decimal('2000.00'),             # mg 
         }
         
         vd_calculado = {}

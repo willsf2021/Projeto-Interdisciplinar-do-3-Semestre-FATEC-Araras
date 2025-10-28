@@ -630,23 +630,25 @@ class RotuloPdfView(APIView):
         """Prepara dados específicos para o rótulo nutricional"""
         try:
             nutrientes_totais = receita.calcular_nutrientes_totais()
+            nutrientes_por_100g = receita.calcular_nutrientes_por_100g()  # ✅ NOVO MÉTODO
             nutrientes_porcao = receita.calcular_nutrientes_por_porcao()
             valores_diarios = receita.calcular_valores_diarios(nutrientes_porcao)
             
             print(f"DEBUG - Nutrientes totais: {nutrientes_totais}")
+            print(f"DEBUG - Nutrientes por 100g: {nutrientes_por_100g}")
             print(f"DEBUG - Rendimento: {receita.rendimento}")
             
             return {
                 'porcoes_embalagem': int(receita.rendimento),
                 'porcao': f"{receita.porcao_individual}{receita.medida}",
-                'valores_100g': nutrientes_totais,
+                'valores_100g': nutrientes_por_100g,  # ✅ CORRIGIDO
                 'valores_porcao': nutrientes_porcao,
                 'valores_diarios': valores_diarios,
             }
         except Exception as e:
             print(f"DEBUG - Erro ao preparar dados do rótulo: {str(e)}")
             return None
-
+  
 class DocumentoCreateView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]

@@ -115,6 +115,21 @@ class Receita(models.Model):
         if not self.habilitar_precificacao:
             return Decimal('0.00')
         return self.custo_total + self.lucro
+    
+    
+    def calcular_nutrientes_por_100g(self):
+        """Calcula nutrientes por 100g da preparação completa"""
+        nutrientes_totais = self.calcular_nutrientes_totais()
+        nutrientes_100g = {}
+        
+        if self.peso_liquido_total > 0:
+            for nutriente, valor in nutrientes_totais.items():
+                nutrientes_100g[nutriente] = (valor / self.peso_liquido_total) * Decimal('100.00')
+        else:
+            for nutriente in nutrientes_totais:
+                nutrientes_100g[nutriente] = Decimal('0.00')
+        
+        return nutrientes_100g
 
     def calcular_nutrientes_totais(self):
         """Calcula os nutrientes totais da receita baseado nos ingredientes"""
@@ -133,8 +148,8 @@ class Receita(models.Model):
         
         for ingrediente in self.ingredientes.all():
             alimento = ingrediente.alimento
-            # Converter para base 100g e multiplicar pelo peso processado do ingrediente
-            fator = ingrediente.peso_processado / Decimal('100.00')
+            # Converter para base 100g e multiplicar pelo peso líquido do ingrediente
+            fator = ingrediente.peso_liquido  / Decimal('100.00')
             
             nutrientes['valor_energetico'] += alimento.valor_energetico * fator
             nutrientes['proteinas'] += alimento.proteinas * fator
@@ -151,29 +166,27 @@ class Receita(models.Model):
 
     def calcular_nutrientes_por_porcao(self):
         """Calcula nutrientes por porção individual"""
-        nutrientes_totais = self.calcular_nutrientes_totais()
+        # ✅ CORREÇÃO: Use nutrientes por 100g e ajuste para o peso da porção
+        nutrientes_por_100g = self.calcular_nutrientes_por_100g()
         nutrientes_porcao = {}
         
-        rendimento_decimal = Decimal(str(self.rendimento))
-        if rendimento_decimal > 0:
-            for nutriente, valor in nutrientes_totais.items():
-                nutrientes_porcao[nutriente] = valor / rendimento_decimal
-        else:
-            for nutriente in nutrientes_totais:
-                nutrientes_porcao[nutriente] = Decimal('0.00')
+        fator_porcao = self.porcao_individual / Decimal('100.00')
+        
+        for nutriente, valor in nutrientes_por_100g.items():
+            nutrientes_porcao[nutriente] = valor * fator_porcao
         
         return nutrientes_porcao
 
     def calcular_valores_diarios(self, nutrientes_porcao):
-        """Calcula % Valores Diários baseado em dieta de 2000kcal"""
+        """Calcula % Valores Diários baseado em dieta de 2000kcal (conforme planilha)"""
         vd_referencia = {
             'valor_energetico': Decimal('2000.00'),  # kcal
             'carboidratos': Decimal('300.00'),       # g
-            'proteinas': Decimal('75.00'),           # g
-            'gorduras_totais': Decimal('55.00'),     # g
-            'gorduras_saturadas': Decimal('22.00'),  # g
+            'proteinas': Decimal('50.00'),           # g (na planilha é 50g, não 75g)
+            'gorduras_totais': Decimal('65.00'),     # g (na planilha é 65g)
+            'gorduras_saturadas': Decimal('20.00'),  # g (na planilha é 20g)
             'fibra_alimentar': Decimal('25.00'),     # g
-            'sodio': Decimal('2400.00'),             # mg
+            'sodio': Decimal('2000.00'),             # mg (na planilha é 2000mg)
         }
         
         vd_calculado = {}

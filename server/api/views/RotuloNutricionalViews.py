@@ -22,6 +22,7 @@ class RotuloNutricionalView(APIView):
         
         # Calcular todos os dados do rótulo
         nutrientes_totais = receita.calcular_nutrientes_totais()
+        nutrientes_por_100g = receita.calcular_nutrientes_por_100g()  # ✅ NOVO
         nutrientes_porcao = receita.calcular_nutrientes_por_porcao()
         valores_diarios = receita.calcular_valores_diarios(nutrientes_porcao)
         
@@ -31,19 +32,19 @@ class RotuloNutricionalView(APIView):
             'porcao': receita.porcao_individual,
             'medida_caseira': f"{receita.porcao_individual}{receita.medida}",
             
-            # Valores por 100g
-            'valor_energetico_100g': nutrientes_totais['valor_energetico'],
-            'proteinas_100g': nutrientes_totais['proteinas'],
-            'carboidratos_100g': nutrientes_totais['carboidratos'],
-            'acucares_totais_100g': nutrientes_totais['acucares_totais'],
-            'acucares_adicionados_100g': nutrientes_totais['acucares_adicionados'],
-            'gorduras_totais_100g': nutrientes_totais['gorduras_totais'],
-            'gorduras_saturadas_100g': nutrientes_totais['gorduras_saturadas'],
-            'gorduras_trans_100g': nutrientes_totais['gorduras_trans'],
-            'fibra_alimentar_100g': nutrientes_totais['fibra_alimentar'],
-            'sodio_100g': nutrientes_totais['sodio'],
+            # ✅ CORRIGIDO: Usar nutrientes_por_100g em vez de nutrientes_totais
+            'valor_energetico_100g': nutrientes_por_100g['valor_energetico'],
+            'proteinas_100g': nutrientes_por_100g['proteinas'],
+            'carboidratos_100g': nutrientes_por_100g['carboidratos'],
+            'acucares_totais_100g': nutrientes_por_100g['acucares_totais'],
+            'acucares_adicionados_100g': nutrientes_por_100g['acucares_adicionados'],
+            'gorduras_totais_100g': nutrientes_por_100g['gorduras_totais'],
+            'gorduras_saturadas_100g': nutrientes_por_100g['gorduras_saturadas'],
+            'gorduras_trans_100g': nutrientes_por_100g['gorduras_trans'],
+            'fibra_alimentar_100g': nutrientes_por_100g['fibra_alimentar'],
+            'sodio_100g': nutrientes_por_100g['sodio'],
             
-            # Valores por porção
+            # Valores por porção (mantém igual)
             'valor_energetico_porcao': nutrientes_porcao['valor_energetico'],
             'proteinas_porcao': nutrientes_porcao['proteinas'],
             'carboidratos_porcao': nutrientes_porcao['carboidratos'],

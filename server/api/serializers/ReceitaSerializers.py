@@ -2,7 +2,6 @@
 from rest_framework import serializers
 from api.models import Receita
 
-
 class ReceitaSerializer(serializers.ModelSerializer):
     # Campos somente leitura (calculados)
     peso_liquido_total = serializers.DecimalField(
@@ -44,6 +43,8 @@ class ReceitaSerializer(serializers.ModelSerializer):
             'modo_preparo',
             'habilitar_precificacao',
             'markup',
+            'habilitar_rotulo_nutricional',
+            'formato_rotulo',
             'peso_liquido_total',
             'rendimento',
             'custo_total',
@@ -92,10 +93,15 @@ class ReceitaSerializer(serializers.ModelSerializer):
     
     def validate(self, data):
         """Validação cruzada de campos"""
-        if data.get('habilitar_precificacao') and not data.get('markup'):
-            data['markup'] = None
-
+        # Se a precificação não estiver habilitada, zera markup
         if not data.get('habilitar_precificacao', False):
             data['markup'] = None
+        # Se habilitada mas markup não informado, define None (ou você pode setar 0)
+        elif data.get('habilitar_precificacao') and data.get('markup') is None:
+            data['markup'] = None
         
+        # Garantir formato de rótulo apenas se rótulo nutricional habilitado
+        if not data.get('habilitar_rotulo_nutricional', False):
+            data['formato_rotulo'] = 'vertical'  # default
+
         return data

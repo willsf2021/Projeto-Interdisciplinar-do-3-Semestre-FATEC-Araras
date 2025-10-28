@@ -1,4 +1,5 @@
 from .AlimentoTacoSerializers import AlimentoTacoSerializer
-# from .DocumentoSerializers import DocumentoSerializer
+from .RotuloNutricionalSerializers import RotuloNutricionalSerializer
 from .ReceitaSerializers import ReceitaSerializer
 from .IngredienteSerializers import IngredienteSerializer, IngredienteListSerializer
+from .RotuloNutricionalSerializers import RotuloNutricionalSerializer, DocumentoCreateSerializer

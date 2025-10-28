@@ -3,8 +3,13 @@ from django.conf import settings
 from .Cliente import Cliente
 from .Receita import Receita
 
-
 class Documento(models.Model):
+    FORMATO_DOCUMENTO_CHOICES = [
+        ('completo', 'Completo (Receita + Rótulo)'),
+        ('rotulo_apenas', 'Apenas Rótulo Nutricional'),
+        ('receita_apenas', 'Apenas Receita'),
+    ]
+
     usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -32,9 +37,20 @@ class Documento(models.Model):
     )
     arquivo_pdf = models.FileField(
         upload_to='documentos/%Y/%m/',
+        null=True,
+        blank=True,
         verbose_name='Arquivo PDF',
         help_text='PDF contendo ficha técnica, rótulos e precificação'
     )
+    formato_documento = models.CharField(
+        max_length=20,
+        choices=FORMATO_DOCUMENTO_CHOICES,
+        default='completo',
+        verbose_name='Formato do Documento'
+    )
+    pdf_gerado = models.BooleanField(default=False, verbose_name='PDF Gerado')
+    data_geracao_pdf = models.DateTimeField(null=True, blank=True, verbose_name='Data de Geração do PDF')
+    
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 

@@ -1,11 +1,18 @@
 from django.db import models
 from django.conf import settings
-
+from decimal import Decimal
 
 class Receita(models.Model):
     MEDIDA_CHOICES = [
         ('g', 'Gramas (g)'),
         ('ml', 'Mililitros (ml)'),
+    ]
+    
+    FORMATO_ROTULO_CHOICES = [
+        ('vertical', 'Vertical'),
+        ('horizontal', 'Horizontal'),
+        ('quebrado_vertical', 'Quebrado Vertical'),
+        ('quebrado_horizontal', 'Quebrado Horizontal'),
     ]
 
     usuario = models.ForeignKey(
@@ -41,6 +48,18 @@ class Receita(models.Model):
         help_text='Percentual de markup sobre o custo total'
     )
     
+    # Rótulo Nutricional
+    habilitar_rotulo_nutricional = models.BooleanField(
+        default=False, 
+        verbose_name='Habilitar Rótulo Nutricional'
+    )
+    formato_rotulo = models.CharField(
+        max_length=20,
+        choices=FORMATO_ROTULO_CHOICES,
+        default='vertical',
+        verbose_name='Formato do Rótulo'
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 
@@ -61,6 +80,13 @@ class Receita(models.Model):
         )
 
     @property
+    def peso_total_processado(self):
+        """Soma dos pesos processados de todos os ingredientes"""
+        return sum(
+            ing.peso_processado for ing in self.ingredientes.all()
+        )
+
+    @property
     def rendimento(self):
         """Número de porções: peso líquido total ÷ porção individual"""
         if self.porcao_individual > 0:
@@ -71,7 +97,7 @@ class Receita(models.Model):
     def custo_total(self):
         """Soma dos custos totais de todos os ingredientes"""
         if not self.habilitar_precificacao:
-            return 0
+            return Decimal('0.00')
         return sum(
             ing.custo_total for ing in self.ingredientes.all()
         )
@@ -80,12 +106,81 @@ class Receita(models.Model):
     def lucro(self):
         """Lucro: custo total × (markup ÷ 100)"""
         if not self.habilitar_precificacao or not self.markup:
-            return 0
-        return self.custo_total * (self.markup / 100)
+            return Decimal('0.00')
+        return self.custo_total * (self.markup / Decimal('100.00'))
 
     @property
     def preco_sugerido(self):
         """Preço sugerido: custo total + lucro"""
         if not self.habilitar_precificacao:
-            return 0
+            return Decimal('0.00')
         return self.custo_total + self.lucro
+
+    def calcular_nutrientes_totais(self):
+        """Calcula os nutrientes totais da receita baseado nos ingredientes"""
+        nutrientes = {
+            'valor_energetico': Decimal('0.00'),
+            'proteinas': Decimal('0.00'),
+            'carboidratos': Decimal('0.00'),
+            'acucares_totais': Decimal('0.00'),
+            'acucares_adicionados': Decimal('0.00'),
+            'gorduras_totais': Decimal('0.00'),
+            'gorduras_saturadas': Decimal('0.00'),
+            'gorduras_trans': Decimal('0.00'),
+            'fibra_alimentar': Decimal('0.00'),
+            'sodio': Decimal('0.00'),
+        }
+        
+        for ingrediente in self.ingredientes.all():
+            alimento = ingrediente.alimento
+            # Converter para base 100g e multiplicar pelo peso processado do ingrediente
+            fator = ingrediente.peso_processado / Decimal('100.00')
+            
+            nutrientes['valor_energetico'] += alimento.valor_energetico * fator
+            nutrientes['proteinas'] += alimento.proteinas * fator
+            nutrientes['carboidratos'] += alimento.carboidratos * fator
+            nutrientes['acucares_totais'] += alimento.acucares_totais * fator
+            nutrientes['acucares_adicionados'] += alimento.acucares_adicionados * fator
+            nutrientes['gorduras_totais'] += alimento.gorduras_totais * fator
+            nutrientes['gorduras_saturadas'] += alimento.gorduras_saturadas * fator
+            nutrientes['gorduras_trans'] += alimento.gorduras_trans * fator
+            nutrientes['fibra_alimentar'] += alimento.fibra_alimentar * fator
+            nutrientes['sodio'] += alimento.sodio * fator
+        
+        return nutrientes
+
+    def calcular_nutrientes_por_porcao(self):
+        """Calcula nutrientes por porção individual"""
+        nutrientes_totais = self.calcular_nutrientes_totais()
+        nutrientes_porcao = {}
+        
+        rendimento_decimal = Decimal(str(self.rendimento))
+        if rendimento_decimal > 0:
+            for nutriente, valor in nutrientes_totais.items():
+                nutrientes_porcao[nutriente] = valor / rendimento_decimal
+        else:
+            for nutriente in nutrientes_totais:
+                nutrientes_porcao[nutriente] = Decimal('0.00')
+        
+        return nutrientes_porcao
+
+    def calcular_valores_diarios(self, nutrientes_porcao):
+        """Calcula % Valores Diários baseado em dieta de 2000kcal"""
+        vd_referencia = {
+            'valor_energetico': Decimal('2000.00'),  # kcal
+            'carboidratos': Decimal('300.00'),       # g
+            'proteinas': Decimal('75.00'),           # g
+            'gorduras_totais': Decimal('55.00'),     # g
+            'gorduras_saturadas': Decimal('22.00'),  # g
+            'fibra_alimentar': Decimal('25.00'),     # g
+            'sodio': Decimal('2400.00'),             # mg
+        }
+        
+        vd_calculado = {}
+        for nutriente, valor in nutrientes_porcao.items():
+            if nutriente in vd_referencia and vd_referencia[nutriente] > 0:
+                vd_calculado[nutriente] = (valor / vd_referencia[nutriente]) * Decimal('100.00')
+            else:
+                vd_calculado[nutriente] = Decimal('0.00')
+        
+        return vd_calculado

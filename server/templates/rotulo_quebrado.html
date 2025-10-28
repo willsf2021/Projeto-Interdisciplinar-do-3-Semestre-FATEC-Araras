@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>INFORMAÇÃO NUTRICIONAL</h1>
+        <div id="hr"></div>
+        <div class="container_porcoes">
+          <p>Porções por embalagem: {{ rotulo_nutricional.porcoes_embalagem }}</p>
+          <p>Porção: {{ rotulo_nutricional.porcao }} (medida caseira)</p>
+        </div>
+        <div id="hr2"></div>
+      </header>
+      <div class="container_tables">
+        <div class="main_container_tables">
+          <table>
+            <tr>
+              <th></th>
+              <th class="th_porcoes">100g</th>
+              <th class="th_porcoes">{{ rotulo_nutricional.porcao }}</th>
+              <th class="th_porcoes">%VD*</th>
+            </tr>
+            <tr>
+              <th class="th"><p>Valor energético (kcal)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.valor_energetico|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.valor_energetico|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.valor_energetico|floatformat:1 }}</td>
+            </tr>
+            <tr>
+              <th class="th"><p>Carboidratos (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.carboidratos|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.carboidratos|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.carboidratos|floatformat:1 }}</td>
+            </tr>
+            <tr>
+              <th class="th" style="padding-left: 8px">
+                <p>Açúcares totais (g)</p>
+              </th>
+              <td>{{ rotulo_nutricional.valores_100g.acucares_totais|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.acucares_totais|floatformat:1 }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th class="th padding_12"><p>Açúcares adicionados (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.acucares_adicionados|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.acucares_adicionados|floatformat:1 }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th class="th"><p>Proteínas (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.proteinas|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.proteinas|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.proteinas|floatformat:1 }}</td>
+            </tr>
+          </table>
+          <table>
+            <tr>
+              <th></th>
+              <th class="th_porcoes">100g</th>
+              <th class="th_porcoes">{{ rotulo_nutricional.porcao }}</th>
+              <th class="th_porcoes">%VD*</th>
+            </tr>
+            <tr>
+              <th class="th"><p>Gorduras totais (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.gorduras_totais|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.gorduras_totais|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.gorduras_totais|floatformat:1 }}</td>
+            </tr>
+            <tr>
+              <th class="th padding_12"><p>Gorduras saturadas (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.gorduras_saturadas|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.gorduras_saturadas|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.gorduras_saturadas|floatformat:1 }}</td>
+            </tr>
+            <tr>
+              <th class="th padding_12"><p>Gorduras trans (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.gorduras_trans|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.gorduras_trans|floatformat:1 }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <th class="th"><p>Fibras alimentares (g)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.fibra_alimentar|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.fibra_alimentar|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.fibra_alimentar|floatformat:1 }}</td>
+            </tr>
+            <tr>
+              <th class="th"><p>Sódio (mg)</p></th>
+              <td>{{ rotulo_nutricional.valores_100g.sodio|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_porcao.sodio|floatformat:1 }}</td>
+              <td>{{ rotulo_nutricional.valores_diarios.sodio|floatformat:1 }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="footer_container_table">
+          <small>* Percentual de valores diários fornecidos pela porção</small>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Receita - {{ receita.nome }}</title>
+</head>
+<body>
+    <div class="header">
+        <h1>FICHA TÉCNICA - {{ receita.nome }}</h1>
+        {% if documento.cliente %}
+        <p><strong>Cliente:</strong> {{ documento.cliente.nome_completo }}</p>
+        {% endif %}
+        <p><strong>Data de geração:</strong> {{ documento.data_geracao_pdf|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">INFORMAÇÕES DA RECEITA</div>
+        <p><strong>Categoria:</strong> {{ receita.categoria }}</p>
+        <p><strong>Tempo de preparo:</strong> {{ receita.tempo_preparo_horas }}h {{ receita.tempo_preparo_minutos }}min</p>
+        <p><strong>Porção individual:</strong> {{ receita.porcao_individual }}{{ receita.medida }}</p>
+        <p><strong>Rendimento:</strong> {{ receita.rendimento|floatformat:0 }} porções</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">INGREDIENTES</div>
+        <table class="receita-table">
+            <thead>
+                <tr>
+                    <th>Ingrediente</th>
+                    <th>Peso Bruto (g/ml)</th>
+                    <th>Peso Líquido (g/ml)</th>
+                    <th>Peso Processado (g/ml)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingrediente in ingredientes %}
+                <tr>
+                    <td>{{ ingrediente.alimento.nome }}</td>
+                    <td>{{ ingrediente.peso_bruto }}</td>
+                    <td>{{ ingrediente.peso_liquido }}</td>
+                    <td>{{ ingrediente.peso_processado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">MODO DE PREPARO</div>
+        <p>{{ receita.modo_preparo|linebreaks }}</p>
+    </div>
+
+    {% if precificacao.habilitada %}
+    <div class="section">
+        <div class="section-title">PRECIFICAÇÃO</div>
+        <table class="receita-table">
+            <tr>
+                <td><strong>Custo total da receita:</strong></td>
+                <td>R$ {{ precificacao.custo_total|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Markup aplicado:</strong></td>
+                <td>{{ precificacao.markup }}%</td>
+            </tr>
+            <tr>
+                <td><strong>Lucro:</strong></td>
+                <td>R$ {{ precificacao.lucro|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Preço sugerido:</strong></td>
+                <td>R$ {{ precificacao.preco_sugerido|floatformat:2 }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if documento.declaracao_alergenicos %}
+    <div class="section">
+        <div class="section-title">DECLARAÇÃO DE ALERGÊNICOS</div>
+        <p>{{ documento.declaracao_alergenicos|linebreaks }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>

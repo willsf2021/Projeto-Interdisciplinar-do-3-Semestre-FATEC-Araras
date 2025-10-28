@@ -446,10 +446,11 @@ horizontal_quebrado = """
       }
 """
 
-class DocumentoPdfView(APIView):
+class DocumentoBaseView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+class DocumentoPdfView(DocumentoBaseView):
     def get(self, request, documento_id):
         documento = get_object_or_404(Documento, id=documento_id)
 
@@ -573,10 +574,7 @@ class DocumentoPdfView(APIView):
         }
         """
     
-class RotuloPdfView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
+class RotuloPdfView(DocumentoBaseView):
     CSS_MAP = {
         'vertical': vertical,
         'horizontal': horizontal,
@@ -645,10 +643,7 @@ class RotuloPdfView(APIView):
             print(f"DEBUG - Erro ao preparar dados do rótulo: {str(e)}")
             return None
 
-class DocumentoCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-    
+class DocumentoCreateView(DocumentoBaseView):    
     def post(self, request):
         serializer = DocumentoCreateSerializer(
             data=request.data, 
@@ -664,10 +659,7 @@ class DocumentoCreateView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DocumentoListView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-    
+class DocumentoListView(DocumentoBaseView):
     def get(self, request):
         documentos = Documento.objects.filter(usuario=request.user)
         data = []

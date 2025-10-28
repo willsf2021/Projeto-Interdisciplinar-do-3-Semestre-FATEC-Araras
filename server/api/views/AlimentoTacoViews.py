@@ -6,13 +6,14 @@ from django.utils.decorators import method_decorator
 from api.models import AlimentoTaco
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
 from api.serializers import AlimentoTacoSerializer
 
-class AlimentoTacoView(APIView):
+
+class AlimentoTacoBaseView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+class AlimentoTacoView(AlimentoTacoBaseView):
     def get(self, request):
 
         alimentos = AlimentoTaco.objects.all()

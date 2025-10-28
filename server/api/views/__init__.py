@@ -5,3 +5,4 @@ from .ReceitaViews import ReceitaCreateView, ReceitaUpdateView, ReceitaDeleteVie
 from .IngredienteViews import IngredienteCreateView, IngredienteUpdateView, IngredienteDeleteView, IngredienteListByReceitaView, IngredienteDetailView
 from .RotuloNutricionalViews import RotuloNutricionalView
 from .DocumentoViews import DocumentoCreateView, DocumentoListView, DocumentoPdfView, RotuloPdfView
+from .ClienteViews import ClienteListView, ClienteCreateView, ClienteDetailView, ClienteDeleteView, ClienteUpdateView

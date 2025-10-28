@@ -5,5 +5,6 @@ from .ReceitaUrls import urlpatterns as receita_urls
 from .IngredienteUrls import urlpatterns as ingrediente_urls
 from .DocumentoUrls import urlpatterns as documento_urls
 from .RotuloNutricionalUrls import urlpatterns as rotulo_nutricional_urls
+from .ClienteUrls import urlpatterns as cliente_urls
 
-urlpatterns = usuario_urls + alimento_taco_urls + google_auth_urls + receita_urls + ingrediente_urls + documento_urls + rotulo_nutricional_urls
+urlpatterns = usuario_urls + alimento_taco_urls + google_auth_urls + receita_urls + ingrediente_urls + documento_urls + rotulo_nutricional_urls + cliente_urls

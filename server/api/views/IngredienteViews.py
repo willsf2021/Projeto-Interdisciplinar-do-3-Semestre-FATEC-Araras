@@ -8,12 +8,11 @@ from api.models import Ingrediente, Receita
 from api.serializers import IngredienteSerializer, IngredienteListSerializer
 from django.shortcuts import get_object_or_404
 
-
-class IngredienteCreateView(APIView):
-    """Adicionar ingrediente a uma receita"""
+class IngredienteBaseView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+class IngredienteCreateView(IngredienteBaseView):
     def post(self, request, receita_id):
 
         receita = get_object_or_404(Receita, id=receita_id)
@@ -38,12 +37,7 @@ class IngredienteCreateView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class IngredienteUpdateView(APIView):
-    """Editar ingrediente"""
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
+class IngredienteUpdateView(IngredienteBaseView):
     def put(self, request, ingrediente_id):
         ingrediente = get_object_or_404(Ingrediente, id=ingrediente_id)
         
@@ -66,15 +60,10 @@ class IngredienteUpdateView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class IngredienteDeleteView(APIView):
-    """Deletar ingrediente"""
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
+class IngredienteDeleteView(IngredienteBaseView):
     def delete(self, request, ingrediente_id):
         ingrediente = get_object_or_404(Ingrediente, id=ingrediente_id)
-        
-        # Verifica permissão
+
         if ingrediente.receita.usuario != request.user:
             return Response(
                 {"error": "Você não tem permissão para deletar este ingrediente."},
@@ -89,16 +78,10 @@ class IngredienteDeleteView(APIView):
             status=status.HTTP_200_OK
         )
 
-
-class IngredienteListByReceitaView(APIView):
-    """Listar todos os ingredientes de uma receita"""
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
+class IngredienteListByReceitaView(IngredienteBaseView):
     def get(self, request, receita_id):
         receita = get_object_or_404(Receita, id=receita_id)
-        
-        # Verifica permissão
+
         if receita.usuario != request.user:
             return Response(
                 {"error": "Você não tem permissão para visualizar os ingredientes desta receita."},
@@ -115,12 +98,7 @@ class IngredienteListByReceitaView(APIView):
             'ingredientes': serializer.data
         }, status=status.HTTP_200_OK)
 
-
-class IngredienteDetailView(APIView):
-    """Ver detalhes de um ingrediente específico"""
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
+class IngredienteDetailView(IngredienteBaseView):
     def get(self, request, ingrediente_id):
         ingrediente = get_object_or_404(Ingrediente, id=ingrediente_id)
 

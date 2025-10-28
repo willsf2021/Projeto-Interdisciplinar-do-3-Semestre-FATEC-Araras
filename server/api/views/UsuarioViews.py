@@ -7,10 +7,11 @@ from rest_framework.permissions import AllowAny
 from api.models import Usuario
 
 
-class RegistroView(APIView):
+class UsuarioBaseView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
 
+class RegistroView(UsuarioBaseView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
@@ -47,11 +48,7 @@ class RegistroView(APIView):
             "refresh": str(refresh)
         }, status=201)
 
-
-class LoginView(APIView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
-
+class LoginView(UsuarioBaseView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')

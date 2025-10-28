@@ -69,7 +69,6 @@ def google_auth(request):
             if updated:
                 user.save()
 
-        # Gera tokens JWT
         refresh = RefreshToken.for_user(user)
 
         return Response(

@@ -9,10 +9,8 @@ from django.shortcuts import get_object_or_404
 from decimal import Decimal, InvalidOperation
 
 class ReceitaBaseView(APIView):
-
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
-    
     
 class ReceitaCreateView(ReceitaBaseView):
     def post(self, request):
@@ -21,7 +19,6 @@ class ReceitaCreateView(ReceitaBaseView):
             serializer.save(usuario=request.user)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-
 
 class ReceitaUpdateView(ReceitaBaseView):
     def put(self, request, receita_id):
@@ -34,7 +31,6 @@ class ReceitaUpdateView(ReceitaBaseView):
             return Response(serializer.data, status=200)
         return Response(serializer.errors, status=400)
 
-
 class ReceitaDeleteView(ReceitaBaseView):
     def delete(self, request, receita_id):
         receita = get_object_or_404(Receita, id=receita_id)
@@ -43,7 +39,6 @@ class ReceitaDeleteView(ReceitaBaseView):
         receita_nome = receita.nome
         receita.delete()
         return Response({"message": f"Receita '{receita_nome}' deletada com sucesso."}, status=200)
-
 
 class ReceitaListView(ReceitaBaseView):
     def get(self, request):

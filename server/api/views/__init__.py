@@ -7,3 +7,4 @@ from .RotuloNutricionalViews import RotuloNutricionalView
 from .DocumentoViews import DocumentoCreateView, DocumentoListView, DocumentoPdfView, RotuloPdfView
 from .ClienteViews import ClienteListView, ClienteCreateView, ClienteDetailView, ClienteDeleteView, ClienteUpdateView
 from .ChangePasswordViews import ChangePasswordView
+from .RecoveryPasswordViews import PasswordResetConfirmView, PasswordResetRequestView

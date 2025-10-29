@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import googleIcon from "../../assets/images/google.svg";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   SectionFormWrapper,
   FormWrapper,
@@ -22,6 +25,24 @@ import { authService } from "../../services/authService";
 
 export const Login = () => {
   const navigate = useNavigate();
+
+  // Função reaproveitável para notificações
+  const notify = (message, type) => {
+    switch(type){
+      case'success':
+        toast.success(message);
+        break;
+      case'warning':
+        toast.warning(message);
+        break;
+      case'error':
+        toast.error(message);
+        break;
+      case'info':
+        toast.info(message);
+        break;
+    }
+  };
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -59,7 +80,9 @@ export const Login = () => {
         sessionStorage.setItem("token", token);
       }
 
-      navigate("/home");
+      notify("Login realizado, redirecionando...", 'info');
+
+      // navigate("/home");
     } catch (err) {
       setLoginData((prev) => ({
         ...prev,
@@ -103,7 +126,7 @@ export const Login = () => {
             onChange={(e) => handleChange("password", e.target.value)}
           />
         </InputFlexWrapper>
-
+        <ToastContainer position="top-right" autoClose={3000} />
         <div className="form-actions">
           <label>
             <input

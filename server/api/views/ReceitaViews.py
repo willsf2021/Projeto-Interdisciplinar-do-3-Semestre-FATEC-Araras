@@ -10,7 +10,6 @@ from decimal import Decimal, InvalidOperation
 
 class ReceitaBaseView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
     
 class ReceitaCreateView(ReceitaBaseView):
     def post(self, request):

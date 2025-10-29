@@ -8,7 +8,6 @@ from api.serializers import ChangePasswordSerializer
 
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
     
     def post(self, request):
         serializer = ChangePasswordSerializer(data=request.data)

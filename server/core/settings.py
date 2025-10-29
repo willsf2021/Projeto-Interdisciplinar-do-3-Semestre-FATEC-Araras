@@ -112,7 +112,7 @@ else:
 # Autenticação e DRF
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",  # uses CSRF + session
+        "api.authentication.CookieJWTAuthentication",  # uses CSRF + session
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",

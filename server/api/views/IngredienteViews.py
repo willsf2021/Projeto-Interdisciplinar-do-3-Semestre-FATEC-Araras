@@ -10,7 +10,6 @@ from django.shortcuts import get_object_or_404
 
 class IngredienteBaseView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
 class IngredienteCreateView(IngredienteBaseView):
     def post(self, request, receita_id):

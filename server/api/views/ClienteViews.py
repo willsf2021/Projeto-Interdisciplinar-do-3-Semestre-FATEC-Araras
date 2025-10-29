@@ -6,7 +6,6 @@ from api.serializers import ClienteSerializer
 
 class ReceitaBaseMixin:
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
 class ClienteListView(ReceitaBaseMixin, generics.ListAPIView):
     serializer_class = ClienteSerializer

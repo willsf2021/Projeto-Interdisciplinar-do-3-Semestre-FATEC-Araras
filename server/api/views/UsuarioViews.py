@@ -52,19 +52,39 @@ class LoginView(UsuarioBaseView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
+        remember = request.data.get("remember", False)
 
         user = authenticate(request, email=email, password=password)
         if user is None:
             return Response({"erro": "Credenciais inválidas."}, status=401)
 
         refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        
+        max_age = 7 * 24 * 60 * 60 if remember else None
 
-        return Response({
+        response = Response({
             "mensagem": "Login bem-sucedido.",
             "email": user.email,
             "name": user.name,
             "type": user.type,
             "avatar_url": user.avatar_url,
-            "access": str(refresh.access_token),
-            "refresh": str(refresh)
         })
+        
+        response.set_cookie(
+            key="access",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+            max_age=max_age,
+        )
+        response.set_cookie(
+            key="refresh",
+            value=str(refresh),
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+            max_age=max_age,
+        )
+        return response

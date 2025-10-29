@@ -9,7 +9,6 @@ from django.shortcuts import get_object_or_404
 
 class RotuloNutricionalBaseView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
     
 class RotuloNutricionalView(RotuloNutricionalBaseView):
     def get(self, request, receita_id):

@@ -23,6 +23,8 @@ export default function AppRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/recovery-password" element={<RecoveryPassword />} />
 
+        {/* Rotas Portegidas a partir daqui */}
+        
         <Route path="/home" element={<Home />} />
 
       </Routes>

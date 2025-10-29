@@ -448,7 +448,6 @@ horizontal_quebrado = """
 
 class DocumentoBaseView(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
 class DocumentoPdfView(DocumentoBaseView):
     def get(self, request, documento_id):

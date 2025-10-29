@@ -21,7 +21,7 @@ class RegistroView(UsuarioBaseView):
 
         if not email or not password or not name or not type:
             return Response(
-                {"erro": "Campos obrigatórios: email, password, name e type."},
+                {"erro": "Campos obrigatórios: E-mail, Senha, Nome e Tipo de Usuário."},
                 status=400
             )
 
@@ -45,8 +45,6 @@ class RegistroView(UsuarioBaseView):
             "name": user.name,
             "type": user.type,
             "avatar_url": user.avatar_url,
-            "access": str(refresh.access_token),
-            "refresh": str(refresh)
         }, status=201)
         
         response.set_cookie(

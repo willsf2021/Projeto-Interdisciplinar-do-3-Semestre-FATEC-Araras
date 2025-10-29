@@ -20,6 +20,9 @@ import googleIcon from "../../assets/images/google.svg";
 
 import { authService } from "../../services/authService";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const Register = () => {
   const navigate = useNavigate();
 
@@ -29,8 +32,31 @@ export const Register = () => {
     password: "",
     confirmPassword: "",
     loading: false,
+    type: "estudante", // TODO: CAMPO DE ESCOLHA NA UI!
     error: "",
   });
+
+  const notify = (message, type) => {
+      switch (type) {
+        case "success":
+          toast.success(message);
+          break;
+        case "warning":
+          toast.warning(message);
+          break;
+        case "error":
+          toast.error(message);
+          break;
+        case "info":
+          toast.info(message);
+          break;
+      }
+    };
+  
+    const notifyAndDelay = (message, type, delay = 1500) => {
+      notify(message, type);
+      return new Promise((resolve) => setTimeout(resolve, delay));
+    };
 
   const handleChange = (field, value) => {
     setRegisterData((prev) => ({ ...prev, [field]: value }));
@@ -38,43 +64,48 @@ export const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setRegisterData((prev) => ({ ...prev, error: "" }));
+    setRegisterData((prev) => ({ ...prev, error: "", loading: true }));
 
-    const { name, email, password, confirmPassword } = registerData;
+    const { name, email, password, confirmPassword, type } = registerData;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (password != confirmPassword) {
       setRegisterData((prev) => ({
         ...prev,
-        error: "Preencha todos os campos",
+        error: "As senhas não conferem.",
       }));
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (!email || !password || !confirmPassword || !name || !type) {
       setRegisterData((prev) => ({
         ...prev,
-        error: "As senhas não coincidem",
+        error: "Preencha todos os campos.",
       }));
       return;
     }
 
     try {
-      setRegisterData((prev) => ({ ...prev, loading: true }));
-      const { token } = await authService.register({
-        name,
-        email,
-        password,
-        confirmPassword,
-      });
+      const result = await authService.register({ name, email, password, type });
 
-      localStorage.setItem("token", token);
-
-      navigate("/home");
+      if (result.status === 201) {
+        await notifyAndDelay(
+          `${result.data.mensagem} redirecionando...`,
+          "success",
+          3000
+        );
+        navigate("/home");
+      } else if (result.status === 400) {
+        setRegisterData((prev) => ({ ...prev, error: result.data.erro }));
+        notify(result.data.erro, "error");
+      } else {
+        const message = result.data?.erro || "Erro inesperado ao fazer login";
+        setRegisterData((prev) => ({ ...prev, error: message }));
+        notify(message, "error");
+      }
     } catch (err) {
-      setRegisterData((prev) => ({
-        ...prev,
-        error: err.message || "Erro ao registrar",
-      }));
+      const message = err.message || "Erro ao fazer login";
+      setRegisterData((prev) => ({ ...prev, error: message }));
+      notify(message, "error");
     } finally {
       setRegisterData((prev) => ({ ...prev, loading: false }));
     }
@@ -85,6 +116,7 @@ export const Register = () => {
 
   return (
     <SectionFormWrapper>
+       <ToastContainer position="top-right" autoClose={3000} />
       <LogoContainer>
         <img src={logo} alt="Logo Sistema Rótus" />
         <h1>Rótus</h1>
@@ -131,7 +163,15 @@ export const Register = () => {
         )}
 
         <SubmitButton
-          title={loading ? "Registrando..." : "Confirmar"}
+          title={
+            loading ? (
+              <>
+                <span className="spinner" /> Registrando...
+              </>
+            ) : (
+              "Confirmar"
+            )
+          }
           disabled={loading}
           onClick={handleSubmit}
         />

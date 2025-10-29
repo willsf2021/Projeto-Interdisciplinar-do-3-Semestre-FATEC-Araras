@@ -28,20 +28,25 @@ export const Login = () => {
 
   // Função reaproveitável para notificações
   const notify = (message, type) => {
-    switch(type){
-      case'success':
+    switch (type) {
+      case "success":
         toast.success(message);
         break;
-      case'warning':
+      case "warning":
         toast.warning(message);
         break;
-      case'error':
+      case "error":
         toast.error(message);
         break;
-      case'info':
+      case "info":
         toast.info(message);
         break;
     }
+  };
+
+  const notifyAndDelay = (message, type, delay = 1500) => {
+    notify(message, type);
+    return new Promise((resolve) => setTimeout(resolve, delay));
   };
 
   const [loginData, setLoginData] = useState({
@@ -58,7 +63,7 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoginData((prev) => ({ ...prev, error: "" }));
+    setLoginData((prev) => ({ ...prev, error: "", loading: true }));
 
     const { email, password, remember } = loginData;
 
@@ -71,36 +76,43 @@ export const Login = () => {
     }
 
     try {
-      setLoginData((prev) => ({ ...prev, loading: true }));
-      const { token } = await authService.login({ email, password });
+      const result = await authService.login({ email, password, remember });
 
-      if (remember) {
-        localStorage.setItem("token", token);
+      if (result.status === 200) {
+        await notifyAndDelay(
+          `${result.data.mensagem} redirecionando...`,
+          "success",
+          3000
+        );
+        navigate("/home");
+      } else if (result.status === 401) {
+
+        setLoginData((prev) => ({ ...prev, error: result.data.erro }));
+        notify(result.data.erro, "error");
+
       } else {
-        sessionStorage.setItem("token", token);
+
+        const message = result.data?.erro || "Erro inesperado ao fazer login";
+        setLoginData((prev) => ({ ...prev, error: message }));
+        notify(message, "error");
+
       }
-
-      notify("Login realizado, redirecionando...", 'info');
-
-      // navigate("/home");
     } catch (err) {
-      setLoginData((prev) => ({
-        ...prev,
-        error: err.message || "Erro ao fazer login",
-      }));
+
+      const message = err.message || "Erro ao fazer login";
+      setLoginData((prev) => ({ ...prev, error: message }));
+      notify(message, "error");
+
     } finally {
       setLoginData((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  useEffect(() => {
-    console.log(loginData);
-  }, [loginData]);
-
   const { email, password, remember, loading, error } = loginData;
 
   return (
     <SectionFormWrapper>
+      <ToastContainer position="top-right" autoClose={3000} />
       <LogoContainer>
         <img src={logo} alt="Logo Sistema Rótus" />
         <h1>Rótus</h1>
@@ -126,7 +138,6 @@ export const Login = () => {
             onChange={(e) => handleChange("password", e.target.value)}
           />
         </InputFlexWrapper>
-        <ToastContainer position="top-right" autoClose={3000} />
         <div className="form-actions">
           <label>
             <input
@@ -148,7 +159,15 @@ export const Login = () => {
         )}
 
         <SubmitButton
-          title={loading ? "Entrando..." : "Entrar"}
+          title={
+            loading ? (
+              <>
+                <span className="spinner" /> Entrando...
+              </>
+            ) : (
+              "Entrar"
+            )
+          }
           disabled={loading}
           onClick={handleSubmit}
         />

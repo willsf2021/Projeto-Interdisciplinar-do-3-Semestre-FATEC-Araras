@@ -35,10 +35,11 @@ class RegistroView(UsuarioBaseView):
             type=type,
             avatar_url=avatar_url
         )
-
+        
         refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
 
-        return Response({
+        response = Response({
             "mensagem": "Usuário registrado com sucesso.",
             "email": user.email,
             "name": user.name,
@@ -47,6 +48,24 @@ class RegistroView(UsuarioBaseView):
             "access": str(refresh.access_token),
             "refresh": str(refresh)
         }, status=201)
+        
+        response.set_cookie(
+            key="access",
+            value=access_token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+            max_age=None,
+        )
+        response.set_cookie(
+            key="refresh",
+            value=str(refresh),
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+            max_age=None,
+        )
+        return response
 
 class LoginView(UsuarioBaseView):
     def post(self, request):

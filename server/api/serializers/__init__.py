@@ -4,3 +4,4 @@ from .ReceitaSerializers import ReceitaSerializer
 from .IngredienteSerializers import IngredienteSerializer, IngredienteListSerializer
 from .RotuloNutricionalSerializers import RotuloNutricionalSerializer, DocumentoCreateSerializer
 from .ClienteSerializers import ClienteSerializer
+from .ChangePasswordSerializers import ChangePasswordSerializer

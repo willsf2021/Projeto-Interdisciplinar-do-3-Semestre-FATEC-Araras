@@ -10,7 +10,7 @@ import { ToggleSwitch } from "../../components/Home/ToggleSwicth";
 import { FloatingButton } from "../../components/Home/FloatingButton/";
 import { CustomSelect } from "../../components/Home/CustomSelect";
 import { HomeContainer, MainSection } from "./style";
-
+import { Search } from "react-bootstrap-icons";
 import { FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
 
 export const Home = () => {
@@ -55,6 +55,7 @@ export const Home = () => {
           }
           placeholder={activeTab === "documents" ? "documentos" : "clientes"}
           type={activeTab}
+          icon={<Search />}
         />
 
         {dataLoading ? (

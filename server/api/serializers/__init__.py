@@ -5,3 +5,4 @@ from .IngredienteSerializers import IngredienteSerializer, IngredienteListSerial
 from .RotuloNutricionalSerializers import RotuloNutricionalSerializer, DocumentoCreateSerializer
 from .ClienteSerializers import ClienteSerializer
 from .ChangePasswordSerializers import ChangePasswordSerializer
+from .DocumentoSerializers import DocumentoSerializer

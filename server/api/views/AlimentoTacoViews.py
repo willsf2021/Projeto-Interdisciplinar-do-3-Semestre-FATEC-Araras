@@ -15,7 +15,7 @@ class AlimentoTacoView(AlimentoTacoBaseView):
     def get(self, request):
 
         alimentos = AlimentoTaco.objects.all()
-        nome = request.GET.get('nome')
+        nome = request.GET.get('search')
         if nome:
             alimentos = alimentos.filter(nome__icontains=nome)
         

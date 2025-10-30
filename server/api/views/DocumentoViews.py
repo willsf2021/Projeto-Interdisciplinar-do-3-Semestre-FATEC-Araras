@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from weasyprint import HTML, CSS
 from api.models import Documento, Receita
-from api.serializers import DocumentoCreateSerializer
+from api.serializers import DocumentoCreateSerializer, DocumentoSerializer
 from django.shortcuts import get_object_or_404
 import os
 from django.conf import settings
@@ -659,17 +659,16 @@ class DocumentoCreateView(DocumentoBaseView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DocumentoListView(DocumentoBaseView):
+    serializer_class = DocumentoSerializer
+    
     def get(self, request):
-        documentos = Documento.objects.filter(usuario=request.user)
-        data = []
-        for doc in documentos:
-            data.append({
-                'id': doc.id,
-                'receita_nome': doc.receita.nome,
-                'cliente_nome': doc.cliente.nome_completo if doc.cliente else None,
-                'formato_documento': doc.formato_documento,
-                'pdf_gerado': doc.pdf_gerado,
-                'data_geracao': doc.data_geracao_pdf,
-                'created_at': doc.created_at,
-            })
-        return Response(data)
+       documentos = Documento.objects.filter(usuario=request.user)
+
+       search = request.GET.get('search')
+       if search:
+           documentos = documentos.filter(receita__nome__icontains=search)
+
+       documentos = documentos[:10]
+
+       serializer = DocumentoSerializer(documentos, many=True)
+       return Response(serializer.data)

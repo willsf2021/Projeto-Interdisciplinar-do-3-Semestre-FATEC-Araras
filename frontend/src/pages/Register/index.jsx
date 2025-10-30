@@ -86,7 +86,6 @@ export const Register = () => {
 
       if (result.success) {
         notify("Cadastro realizado com sucesso!", "success");
-        // ✅ Redirecionamento automático pelo AuthContext
       }
     } catch (error) {
       notify("Erro ao criar conta", "error");

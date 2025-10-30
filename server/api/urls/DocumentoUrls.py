@@ -3,7 +3,6 @@ from api.views import (
     DocumentoCreateView, 
     DocumentoPdfView, 
     DocumentoListView,
-    RotuloPdfView
 )
 
 urlpatterns = [
@@ -11,6 +10,6 @@ urlpatterns = [
     
     # Documentos
     path('documentos/', DocumentoCreateView.as_view(), name='documento-create'),
-    path('documentos/list/', DocumentoListView.as_view(), name='documento-list'),
+    path('listar-documentos/', DocumentoListView.as_view(), name='documento-list-all'),
     path('documentos/<int:documento_id>/pdf/', DocumentoPdfView.as_view(), name='documento-pdf'),
 ]

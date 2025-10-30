@@ -1,12 +1,14 @@
 // pages/Home/Home.jsx
-import { useState, useEffect  } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useData } from "../../contexts/DataContext";
 import { Header } from "../../components/Home/Header";
 import { SearchBar } from "../../components/Home/SearchBar/";
 import { EmptyState } from "../../components/Home/EmptyState/";
 import { ToggleSwitch } from "../../components/Home/ToggleSwicth";
 import { FloatingButton } from "../../components/Home/FloatingButton/";
+import { CustomSelect } from "../../components/Home/CustomSelect";
 import { HomeContainer, MainSection } from "./style";
 
 import { FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
@@ -14,6 +16,7 @@ import { FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
 export const Home = () => {
   const [activeTab, setActiveTab] = useState("documents");
   const { user, isAuthenticated, loading } = useAuth();
+  const { clients, documents, loading: dataLoading } = useData();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export const Home = () => {
           height: "100vh",
         }}
       >
-        <div>Carregando...</div>
+        <div>Carregando autenticação...</div>
       </div>
     );
   }
@@ -46,24 +49,39 @@ export const Home = () => {
       <Header userName={user?.name} />
 
       <MainSection>
-        <SearchBar placeholder="Buscar..." />
+        <CustomSelect
+          endpoint={
+            activeTab === "documents" ? "listar-documentos" : "listar-clientes"
+          }
+          placeholder={activeTab === "documents" ? "documentos" : "clientes"}
+          type={activeTab}
+        />
 
-        {activeTab === "documents" ? (
-          <>
-            <EmptyState
-              text='Clique aqui para "Criar novo documento" e aproveite o melhor do sistema!'
-              linkText="Criar novo documento"
-              linkHref="/document.html"
-            />
-            <FloatingButton icon={<FilePlusFill />} href="/document" />
-          </>
+        {dataLoading ? (
+          <div style={{ padding: "2rem", textAlign: "center" }}>
+            Carregando dados...
+          </div>
         ) : (
           <>
-            <EmptyState
-              text='Clique aqui para "Adicionar novo Cliente" e aproveite o melhor do sistema!'
-              linkText="Adicionar novo Cliente"
-            />
-            <FloatingButton icon={<PersonPlusFill />} href="/client" />
+            {activeTab === "documents" ? (
+              <>
+                <EmptyState
+                  text='Clique aqui para "Criar novo documento" e aproveite o melhor do sistema!'
+                  linkText="Criar novo documento"
+                  linkHref="/document.html"
+                />
+                <FloatingButton icon={<FilePlusFill />} href="/document" />
+              </>
+            ) : (
+              <>
+                <EmptyState
+                  text='Clique aqui para "Adicionar novo Cliente" e aproveite o melhor do sistema!'
+                  linkText="Adicionar novo Cliente"
+                />
+
+                <FloatingButton icon={<PersonPlusFill />} href="/client" />
+              </>
+            )}
           </>
         )}
 

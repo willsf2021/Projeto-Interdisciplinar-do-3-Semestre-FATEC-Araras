@@ -11,7 +11,14 @@ class ClienteListView(ReceitaBaseMixin, generics.ListAPIView):
     serializer_class = ClienteSerializer
 
     def get_queryset(self):
-        return Cliente.objects.filter(usuario=self.request.user)
+        queryset = Cliente.objects.filter(usuario=self.request.user)
+        
+        nome = self.request.GET.get('search')
+        if nome:
+            queryset = queryset.filter(nome_completo__icontains=nome)
+            
+        queryset = queryset[:10]
+        return queryset
 
 class ClienteCreateView(ReceitaBaseMixin, generics.CreateAPIView):
     serializer_class = ClienteSerializer

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNotification } from "../../hooks/useNotification";
-
+import { useNavigate } from "react-router-dom";
 import {
   SectionFormWrapper,
   FormWrapper,
@@ -20,7 +20,13 @@ import logo from "../../assets/images/logo.svg";
 import googleIcon from "../../assets/images/google.svg";
 
 export const Register = () => {
-  const { register, loading: authLoading, error: authError } = useAuth();
+  const {
+    register,
+    loading: authLoading,
+    error: authError,
+    isAuthenticated,
+  } = useAuth();
+  const navigate = useNavigate();
   const { notify } = useNotification();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,13 +38,19 @@ export const Register = () => {
     type: "estudante",
   });
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Prevenir duplo clique
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -133,26 +145,28 @@ export const Register = () => {
         </InputFlexWrapper>
 
         {/* Campo tipo de usuário */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '0.5rem', 
-            fontWeight: '500',
-            color: '#333'
-          }}>
+        <div style={{ marginBottom: "1rem" }}>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              fontWeight: "500",
+              color: "#333",
+            }}
+          >
             Tipo de Conta:
           </label>
           <select
             value={formData.type}
             onChange={(e) => handleChange("type", e.target.value)}
             style={{
-              width: '100%',
-              padding: '0.75rem',
-              border: '1px solid #ddd',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              backgroundColor: 'white',
-              cursor: 'pointer'
+              width: "100%",
+              padding: "0.75rem",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              backgroundColor: "white",
+              cursor: "pointer",
             }}
             required
           >
@@ -164,15 +178,17 @@ export const Register = () => {
         </div>
 
         {authError && (
-          <p style={{ 
-            color: "red", 
-            fontSize: "0.9rem", 
-            marginTop: "8px",
-            padding: "0.5rem",
-            backgroundColor: "#ffe6e6",
-            borderRadius: "4px",
-            border: "1px solid #ffcccc"
-          }}>
+          <p
+            style={{
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "8px",
+              padding: "0.5rem",
+              backgroundColor: "#ffe6e6",
+              borderRadius: "4px",
+              border: "1px solid #ffcccc",
+            }}
+          >
             {authError}
           </p>
         )}

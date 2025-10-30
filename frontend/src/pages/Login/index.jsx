@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNotification } from "../../hooks/useNotification";
+import { useNavigate } from "react-router-dom";
 
 import {
   SectionFormWrapper,
@@ -20,8 +21,14 @@ import logo from "../../assets/images/logo.svg";
 import googleIcon from "../../assets/images/google.svg";
 
 export const Login = () => {
-  const { login, loading: authLoading, error: authError } = useAuth();
+  const {
+    login,
+    loading: authLoading,
+    error: authError,
+    isAuthenticated,
+  } = useAuth();
   const { notify } = useNotification();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -31,13 +38,19 @@ export const Login = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Prevenir duplo clique
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -56,9 +69,7 @@ export const Login = () => {
 
       if (result.success) {
         notify("Login realizado com sucesso!", "success");
-        // ✅ Redirecionamento automático pelo AuthContext
       } else {
-        // O erro já está no authError do contexto
       }
     } catch (error) {
       notify("Erro ao fazer login", "error");
@@ -114,15 +125,17 @@ export const Login = () => {
         </div>
 
         {authError && (
-          <p style={{ 
-            color: "red", 
-            fontSize: "0.9rem", 
-            marginTop: "8px",
-            padding: "0.5rem",
-            backgroundColor: "#ffe6e6",
-            borderRadius: "4px",
-            border: "1px solid #ffcccc"
-          }}>
+          <p
+            style={{
+              color: "red",
+              fontSize: "0.9rem",
+              marginTop: "8px",
+              padding: "0.5rem",
+              backgroundColor: "#ffe6e6",
+              borderRadius: "4px",
+              border: "1px solid #ffcccc",
+            }}
+          >
             {authError}
           </p>
         )}

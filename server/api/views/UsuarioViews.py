@@ -79,7 +79,7 @@ class LoginView(UsuarioBaseView):
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
         
-        max_age = 7 * 24 * 60 * 60 if remember else None
+        max_age = 120 if remember else None
 
         response = Response({
             "mensagem": "Login bem-sucedido.",

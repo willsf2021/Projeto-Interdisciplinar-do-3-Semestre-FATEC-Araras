@@ -1,11 +1,23 @@
 // pages/SplashScreen/SplashScreen.jsx
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Container } from "./style";
 import LogoSplash from "../../assets/images/logo_splash.svg";
 
 export const SplashScreen = () => {
+  const navigate = useNavigate();
   const { isAuthenticated, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading) {
+      if (isAuthenticated) {
+        navigate("/home");
+      } else {
+        navigate("/login");
+      }
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   if (loading) {
     return (

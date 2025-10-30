@@ -1,6 +1,7 @@
 // pages/Home/Home.jsx
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Home/Header";
 import { SearchBar } from "../../components/Home/SearchBar/";
 import { EmptyState } from "../../components/Home/EmptyState/";
@@ -12,22 +13,32 @@ import { FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
 
 export const Home = () => {
   const [activeTab, setActiveTab] = useState("documents");
-  const { user, loading } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
+  const navigate = useNavigate();
 
-  // 🛡️ A proteção da rota é AUTOMÁTICA pelo AuthContext
-  // Se não estiver autenticado, será redirecionado automaticamente
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <div>Carregando...</div>
       </div>
     );
+  }
+
+  if (!isAuthenticated) {
+    return null;
   }
 
   return (

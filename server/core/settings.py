@@ -74,7 +74,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'nao-responda@sistemarotus.com'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),   # access válido por 1h
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),   # access válido por 1h
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),      # refresh válido por 7 dias
 }
 

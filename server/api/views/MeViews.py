@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from django.conf import settings
 
 
 class CheckSessionView(APIView):
@@ -33,8 +34,7 @@ class LogoutView(APIView):
 
     def post(self, request):
         response = Response({"mensagem": "Logout realizado com sucesso"}, status=200)
-        
-        # Remove os cookies de autenticação
+
         response.delete_cookie("access")
         response.delete_cookie("refresh")
         
@@ -60,19 +60,20 @@ class RefreshTokenView(APIView):
             refresh = RefreshToken(refresh_token)
             new_access_token = str(refresh.access_token)
 
+            access_max_age = int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds())
+
             response = Response(
                 {"mensagem": "Token renovado com sucesso"},
                 status=status.HTTP_200_OK
             )
 
-            # Define o novo access token no cookie
             response.set_cookie(
                 key="access",
                 value=new_access_token,
                 httponly=True,
-                secure=False,  # True em produção (HTTPS)
+                secure=True,
                 samesite="Lax",
-                max_age=60 * 15,  # 15 minutos
+                max_age=access_max_age,
             )
 
             return response

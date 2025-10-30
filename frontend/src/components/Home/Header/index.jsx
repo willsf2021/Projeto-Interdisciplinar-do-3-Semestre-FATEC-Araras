@@ -1,7 +1,8 @@
-import { useState, useEffect  } from "react";
+// components/Home/Header/index.jsx
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useNotification } from "../../../hooks/useNotification";
-import { useNavigate } from "react-router-dom";
 import {
   HeaderContainer,
   AvatarContainer,
@@ -29,15 +30,19 @@ export const Header = ({ userName }) => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    notify("Saindo..", "success");
     setLoading(true);
 
     try {
+      console.log('🚪 Usuário solicitou logout...');
       const result = await logout();
-      if (result.success) {
+      
+      if (result?.success) {
+        notify("Logout realizado com sucesso!", "success");
+        console.log('✅ Logout bem-sucedido, redirecionando...');
         navigate("/login");
       }
     } catch (error) {
+      console.error('❌ Erro no logout:', error);
       notify("Erro ao fazer logout", "error");
     } finally {
       setLoading(false);
@@ -60,23 +65,21 @@ export const Header = ({ userName }) => {
       </GreetingMessage>
 
       <LogoutContainer>
-        <LogoutLink
-          href="#"
+        <LogoutLink 
+          href="#" 
           onClick={handleLogout}
           disabled={loading}
           title="Sair do sistema"
         >
           {loading ? (
-            <div
-              style={{
-                width: "16px",
-                height: "16px",
-                border: "2px solid currentColor",
-                borderTop: "2px solid transparent",
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-              }}
-            />
+            <div style={{
+              width: "16px",
+              height: "16px",
+              border: "2px solid currentColor",
+              borderTop: "2px solid transparent",
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite"
+            }} />
           ) : (
             <BoxArrowLeft />
           )}

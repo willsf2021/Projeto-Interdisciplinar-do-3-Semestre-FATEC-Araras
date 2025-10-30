@@ -5,6 +5,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.permissions import AllowAny
 from api.models import Usuario
+from django.conf import settings
 
 
 class UsuarioBaseView(APIView):
@@ -39,6 +40,9 @@ class RegistroView(UsuarioBaseView):
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
 
+        access_max_age = int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds())
+        refresh_max_age = int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds())
+
         response = Response({
             "mensagem": "Usuário registrado com sucesso.",
             "id": user.id,
@@ -54,7 +58,7 @@ class RegistroView(UsuarioBaseView):
             httponly=True,
             secure=True,
             samesite="Lax",
-            max_age=None,
+            max_age=access_max_age, 
         )
         response.set_cookie(
             key="refresh",
@@ -62,7 +66,7 @@ class RegistroView(UsuarioBaseView):
             httponly=True,
             secure=True,
             samesite="Lax",
-            max_age=None,
+            max_age=refresh_max_age,
         )
         return response
 
@@ -78,8 +82,14 @@ class LoginView(UsuarioBaseView):
 
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
+
+        access_max_age = int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds())
         
-        max_age = 120 if remember else None
+        if remember:
+            refresh_max_age = int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds())
+        else:
+
+            refresh_max_age = None
 
         response = Response({
             "mensagem": "Login bem-sucedido.",
@@ -96,7 +106,7 @@ class LoginView(UsuarioBaseView):
             httponly=True,
             secure=True,
             samesite="Lax",
-            max_age=max_age,
+            max_age=access_max_age,
         )
         response.set_cookie(
             key="refresh",
@@ -104,6 +114,6 @@ class LoginView(UsuarioBaseView):
             httponly=True,
             secure=True,
             samesite="Lax",
-            max_age=max_age,
+            max_age=refresh_max_age,
         )
         return response

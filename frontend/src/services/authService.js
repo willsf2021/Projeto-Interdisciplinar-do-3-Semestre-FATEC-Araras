@@ -74,6 +74,23 @@ export const authService = {
       
       return await handleResponse(response);
     } catch (error) {
+    
+      return {
+        status: 200,
+        data: { mensagem: "Logout realizado" }
+      };
+    }
+  },
+
+  refreshToken: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/refresh/`, {
+        method: "POST",
+        credentials: "include",
+      });
+      
+      return await handleResponse(response);
+    } catch (error) {
       return handleError(error);
     }
   },

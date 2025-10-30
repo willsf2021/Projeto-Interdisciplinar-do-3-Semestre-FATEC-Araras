@@ -36,6 +36,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
+
 ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'api.Usuario' 
 

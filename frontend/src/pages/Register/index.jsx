@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNotification } from "../../hooks/useNotification";
 
 import {
   SectionFormWrapper,
@@ -18,105 +19,74 @@ import { SubmitButton } from "../../components/Forms/SubmitButton";
 import logo from "../../assets/images/logo.svg";
 import googleIcon from "../../assets/images/google.svg";
 
-import { authService } from "../../services/authService";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 export const Register = () => {
-  const navigate = useNavigate();
+  const { register, loading: authLoading, error: authError } = useAuth();
+  const { notify } = useNotification();
 
-  const [registerData, setRegisterData] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    loading: false,
-    type: "estudante", // TODO: CAMPO DE ESCOLHA NA UI!
-    error: "",
+    type: "estudante",
   });
 
-  const notify = (message, type) => {
-      switch (type) {
-        case "success":
-          toast.success(message);
-          break;
-        case "warning":
-          toast.warning(message);
-          break;
-        case "error":
-          toast.error(message);
-          break;
-        case "info":
-          toast.info(message);
-          break;
-      }
-    };
-  
-    const notifyAndDelay = (message, type, delay = 1500) => {
-      notify(message, type);
-      return new Promise((resolve) => setTimeout(resolve, delay));
-    };
-
   const handleChange = (field, value) => {
-    setRegisterData((prev) => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setRegisterData((prev) => ({ ...prev, error: "", loading: true }));
+    
+    // Prevenir duplo clique
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    const { name, email, password, confirmPassword, type } = registerData;
+    const { name, email, password, confirmPassword, type } = formData;
 
-    if (password != confirmPassword) {
-      setRegisterData((prev) => ({
-        ...prev,
-        error: "As senhas não conferem.",
-      }));
+    // Validações locais
+    if (!email || !password || !confirmPassword || !name || !type) {
+      notify("Preencha todos os campos.", "warning");
+      setIsSubmitting(false);
       return;
     }
 
-    if (!email || !password || !confirmPassword || !name || !type) {
-      setRegisterData((prev) => ({
-        ...prev,
-        error: "Preencha todos os campos.",
-      }));
+    if (password !== confirmPassword) {
+      notify("As senhas não conferem.", "error");
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      notify("A senha deve ter pelo menos 6 caracteres.", "warning");
+      setIsSubmitting(false);
       return;
     }
 
     try {
-      const result = await authService.register({ name, email, password, type });
+      const result = await register({
+        name,
+        email,
+        password,
+        type,
+      });
 
-      if (result.status === 201) {
-        await notifyAndDelay(
-          `${result.data.mensagem} redirecionando...`,
-          "success",
-          3000
-        );
-        navigate("/home");
-      } else if (result.status === 400) {
-        setRegisterData((prev) => ({ ...prev, error: result.data.erro }));
-        notify(result.data.erro, "error");
-      } else {
-        const message = result.data?.erro || "Erro inesperado ao fazer login";
-        setRegisterData((prev) => ({ ...prev, error: message }));
-        notify(message, "error");
+      if (result.success) {
+        notify("Cadastro realizado com sucesso!", "success");
+        // ✅ Redirecionamento automático pelo AuthContext
       }
-    } catch (err) {
-      const message = err.message || "Erro ao fazer login";
-      setRegisterData((prev) => ({ ...prev, error: message }));
-      notify(message, "error");
+    } catch (error) {
+      notify("Erro ao criar conta", "error");
     } finally {
-      setRegisterData((prev) => ({ ...prev, loading: false }));
+      setIsSubmitting(false);
     }
   };
 
-  const { name, email, password, confirmPassword, loading, error } =
-    registerData;
+  const loading = authLoading || isSubmitting;
 
   return (
     <SectionFormWrapper>
-       <ToastContainer position="top-right" autoClose={3000} />
       <LogoContainer>
         <img src={logo} alt="Logo Sistema Rótus" />
         <h1>Rótus</h1>
@@ -129,36 +99,81 @@ export const Register = () => {
           <Input
             label="Nome"
             type="text"
-            value={name}
+            value={formData.name}
             placeholder="Digite seu nome..."
             onChange={(e) => handleChange("name", e.target.value)}
+            required
           />
           <Input
             label="E-mail"
             type="email"
-            value={email}
+            value={formData.email}
             placeholder="Digite seu e-mail..."
             onChange={(e) => handleChange("email", e.target.value)}
+            required
           />
           <Input
             label="Senha"
             type="password"
-            value={password}
+            value={formData.password}
             placeholder="Digite sua senha..."
             onChange={(e) => handleChange("password", e.target.value)}
+            required
+            minLength={6}
           />
           <Input
             label="Confirmar Senha"
             type="password"
-            value={confirmPassword}
+            value={formData.confirmPassword}
             placeholder="Confirme sua senha..."
             onChange={(e) => handleChange("confirmPassword", e.target.value)}
+            required
+            minLength={6}
           />
         </InputFlexWrapper>
 
-        {error && (
-          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "8px" }}>
-            {error}
+        {/* Campo tipo de usuário */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ 
+            display: 'block', 
+            marginBottom: '0.5rem', 
+            fontWeight: '500',
+            color: '#333'
+          }}>
+            Tipo de Conta:
+          </label>
+          <select
+            value={formData.type}
+            onChange={(e) => handleChange("type", e.target.value)}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              border: '1px solid #ddd',
+              borderRadius: '8px',
+              fontSize: '1rem',
+              backgroundColor: 'white',
+              cursor: 'pointer'
+            }}
+            required
+          >
+            <option value="">Selecione um tipo</option>
+            <option value="estudante">Estudante</option>
+            <option value="professor">Professor</option>
+            <option value="administrador">Administrador</option>
+          </select>
+        </div>
+
+        {authError && (
+          <p style={{ 
+            color: "red", 
+            fontSize: "0.9rem", 
+            marginTop: "8px",
+            padding: "0.5rem",
+            backgroundColor: "#ffe6e6",
+            borderRadius: "4px",
+            border: "1px solid #ffcccc"
+          }}>
+            {authError}
           </p>
         )}
 
@@ -169,11 +184,11 @@ export const Register = () => {
                 <span className="spinner" /> Registrando...
               </>
             ) : (
-              "Confirmar"
+              "Confirmar Cadastro"
             )
           }
           disabled={loading}
-          onClick={handleSubmit}
+          type="submit"
         />
       </FormWrapper>
 
@@ -184,7 +199,7 @@ export const Register = () => {
           <div className="hr" />
         </DividerWrapper>
 
-        <SecondaryButton>
+        <SecondaryButton type="button">
           <img src={googleIcon} alt="Ícone do Google" />
           Cadastrar com o Google
         </SecondaryButton>

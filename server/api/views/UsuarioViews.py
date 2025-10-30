@@ -41,6 +41,7 @@ class RegistroView(UsuarioBaseView):
 
         response = Response({
             "mensagem": "Usuário registrado com sucesso.",
+            "id": user.id,
             "email": user.email,
             "name": user.name,
             "type": user.type,
@@ -82,6 +83,7 @@ class LoginView(UsuarioBaseView):
 
         response = Response({
             "mensagem": "Login bem-sucedido.",
+            "id": user.id,
             "email": user.email,
             "name": user.name,
             "type": user.type,

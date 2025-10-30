@@ -1,11 +1,6 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import logo from "../../assets/images/logo.svg";
-import googleIcon from "../../assets/images/google.svg";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNotification } from "../../hooks/useNotification";
 
 import {
   SectionFormWrapper,
@@ -21,98 +16,61 @@ import {
 import { Input } from "../../components/Forms/Input";
 import { SubmitButton } from "../../components/Forms/SubmitButton";
 
-import { authService } from "../../services/authService";
+import logo from "../../assets/images/logo.svg";
+import googleIcon from "../../assets/images/google.svg";
 
 export const Login = () => {
-  const navigate = useNavigate();
+  const { login, loading: authLoading, error: authError } = useAuth();
+  const { notify } = useNotification();
 
-  // Função reaproveitável para notificações
-  const notify = (message, type) => {
-    switch (type) {
-      case "success":
-        toast.success(message);
-        break;
-      case "warning":
-        toast.warning(message);
-        break;
-      case "error":
-        toast.error(message);
-        break;
-      case "info":
-        toast.info(message);
-        break;
-    }
-  };
-
-  const notifyAndDelay = (message, type, delay = 1500) => {
-    notify(message, type);
-    return new Promise((resolve) => setTimeout(resolve, delay));
-  };
-
-  const [loginData, setLoginData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
     remember: false,
-    loading: false,
-    error: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (field, value) => {
-    setLoginData((prev) => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoginData((prev) => ({ ...prev, error: "", loading: true }));
+    
+    // Prevenir duplo clique
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-    const { email, password, remember } = loginData;
+    const { email, password } = formData;
 
+    // Validações locais
     if (!email || !password) {
-      setLoginData((prev) => ({
-        ...prev,
-        error: "Preencha todos os campos.",
-      }));
+      notify("Preencha todos os campos.", "warning");
+      setIsSubmitting(false);
       return;
     }
 
     try {
-      const result = await authService.login({ email, password, remember });
+      const result = await login(formData);
 
-      if (result.status === 200) {
-        await notifyAndDelay(
-          `${result.data.mensagem} redirecionando...`,
-          "success",
-          3000
-        );
-        navigate("/home");
-      } else if (result.status === 401) {
-
-        setLoginData((prev) => ({ ...prev, error: result.data.erro }));
-        notify(result.data.erro, "error");
-
+      if (result.success) {
+        notify("Login realizado com sucesso!", "success");
+        // ✅ Redirecionamento automático pelo AuthContext
       } else {
-
-        const message = result.data?.erro || "Erro inesperado ao fazer login";
-        setLoginData((prev) => ({ ...prev, error: message }));
-        notify(message, "error");
-
+        // O erro já está no authError do contexto
       }
-    } catch (err) {
-
-      const message = err.message || "Erro ao fazer login";
-      setLoginData((prev) => ({ ...prev, error: message }));
-      notify(message, "error");
-
+    } catch (error) {
+      notify("Erro ao fazer login", "error");
     } finally {
-      setLoginData((prev) => ({ ...prev, loading: false }));
+      setIsSubmitting(false);
     }
   };
 
-  const { email, password, remember, loading, error } = loginData;
+  const loading = authLoading || isSubmitting;
 
   return (
     <SectionFormWrapper>
-      <ToastContainer position="top-right" autoClose={3000} />
       <LogoContainer>
         <img src={logo} alt="Logo Sistema Rótus" />
         <h1>Rótus</h1>
@@ -125,36 +83,47 @@ export const Login = () => {
           <Input
             label="E-mail"
             type="email"
-            value={email}
+            value={formData.email}
             placeholder="Digite seu e-mail..."
             onChange={(e) => handleChange("email", e.target.value)}
+            required
           />
 
           <Input
             label="Senha"
             type="password"
-            value={password}
+            value={formData.password}
             placeholder="Digite sua senha..."
             onChange={(e) => handleChange("password", e.target.value)}
+            required
           />
         </InputFlexWrapper>
+
         <div className="form-actions">
           <label>
             <input
               type="checkbox"
-              checked={remember}
+              checked={formData.remember}
               onChange={(e) => handleChange("remember", e.target.checked)}
             />
             Relembrar-me
           </label>
-          <a href="/recovery_password" id="forgot-password">
+          <a href="/recovery-password" id="forgot-password">
             Esqueceu sua senha?
           </a>
         </div>
 
-        {error && (
-          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "8px" }}>
-            {error}
+        {authError && (
+          <p style={{ 
+            color: "red", 
+            fontSize: "0.9rem", 
+            marginTop: "8px",
+            padding: "0.5rem",
+            backgroundColor: "#ffe6e6",
+            borderRadius: "4px",
+            border: "1px solid #ffcccc"
+          }}>
+            {authError}
           </p>
         )}
 
@@ -169,7 +138,7 @@ export const Login = () => {
             )
           }
           disabled={loading}
-          onClick={handleSubmit}
+          type="submit"
         />
       </FormWrapper>
 
@@ -180,7 +149,7 @@ export const Login = () => {
           <div className="hr" />
         </DividerWrapper>
 
-        <SecondaryButton>
+        <SecondaryButton type="button">
           <img src={googleIcon} alt="Ícone do Google" />
           Entrar com o Google
         </SecondaryButton>

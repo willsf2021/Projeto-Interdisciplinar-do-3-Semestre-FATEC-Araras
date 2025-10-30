@@ -1,27 +1,28 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
+// pages/SplashScreen/SplashScreen.jsx
+import { useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 import { Container } from "./style";
-import LogoSplash from "../../assets/images/logo_splash.svg"
+import LogoSplash from "../../assets/images/logo_splash.svg";
 
 export const SplashScreen = () => {
-    const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
 
-    useEffect(()=>{
-        const timer = setTimeout(()=>{
-            navigate("/login")
-        }, 4000)
-    }, [])
+  if (loading) {
+    return (
+      <Container>
+        <div id="container-logo">
+          <img src={LogoSplash} alt="Logo do Sistema Rótus" id="logo-splash" />
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container>
-        <div id="container-logo">
-          <img
-            src={LogoSplash}
-            alt="Logo do Sistema Rótus"
-            id="logo-splash"
-          />
-        </div>
+      <div id="container-logo">
+        <img src={LogoSplash} alt="Logo do Sistema Rótus" id="logo-splash" />
+        <p>Verificando autenticação...</p>
+      </div>
     </Container>
   );
 };

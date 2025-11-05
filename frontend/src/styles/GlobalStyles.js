@@ -28,7 +28,9 @@ export const GlobalStyle = createGlobalStyle`
   button {
     cursor: pointer;
   }
-
+  ul li  {
+    list-style: none;
+  }
   .spinner {
     border: 2px solid rgba(255, 255, 255, 0.4);
     border-left-color: #fff;
@@ -39,6 +41,13 @@ export const GlobalStyle = createGlobalStyle`
     margin-right: 8px;
     animation: spin 0.8s linear infinite;
     vertical-align: middle;
+  }
+
+  .step-content h3 {
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    margin-bottom: 24px;
+    color: ${({ theme }) => theme.colors.textColor};
+    text-align:center;
   }
 
   @keyframes spin {

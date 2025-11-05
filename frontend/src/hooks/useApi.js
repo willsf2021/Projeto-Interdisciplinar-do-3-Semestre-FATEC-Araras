@@ -11,7 +11,7 @@ export const useApi = () => {
       ...options,
       credentials: 'include',
     });
-
+    console.log(options)
     if (response.status === 401) {
      
       try {

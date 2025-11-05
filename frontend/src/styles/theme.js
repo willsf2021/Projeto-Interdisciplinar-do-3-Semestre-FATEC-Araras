@@ -4,6 +4,7 @@ export const theme = {
     primaryLinear: "#47c0ac",
     primaryHover: "#349283ff",
 
+    textColorMuted: "#868686ff",
     textColor: "#444444",
     borderColor: "#AAAAAA",
     grayButton: "#3f3f3f"

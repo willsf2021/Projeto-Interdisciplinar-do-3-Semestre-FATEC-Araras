@@ -6,6 +6,7 @@ import { Eye, EyeSlash } from "react-bootstrap-icons";
 export const Input = ({
   label,
   type = "text",
+  name='',
   value,
   onChange,
   placeholder,
@@ -25,6 +26,7 @@ export const Input = ({
         placeholder={placeholder}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        name={name}
       />
       
       {type === "password" && (

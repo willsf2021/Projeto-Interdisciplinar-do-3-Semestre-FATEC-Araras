@@ -10,8 +10,7 @@ import { ToggleSwitch } from "../../components/Home/ToggleSwicth";
 import { FloatingButton } from "../../components/Home/FloatingButton/";
 import { CustomSelect } from "../../components/Home/CustomSelect";
 import { HomeContainer, MainSection } from "./style";
-import { Search } from "react-bootstrap-icons";
-import { FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
+import { Search, FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
 
 export const Home = () => {
   const [activeTab, setActiveTab] = useState("documents");
@@ -69,7 +68,7 @@ export const Home = () => {
                 <EmptyState
                   text='Clique aqui para "Criar novo documento" e aproveite o melhor do sistema!'
                   linkText="Criar novo documento"
-                  linkHref="/document.html"
+                  linkHref="/document"
                 />
                 <FloatingButton icon={<FilePlusFill />} href="/document" />
               </>

@@ -69,7 +69,7 @@ const authReducer = (state, action) => {
 };
 
 // ⏰ TEMPOS REDUZIDOS PARA TESTES - OPÇÃO SEGURA
-const REFRESH_INTERVAL = 25 * 1000; // 25 SEGUNDOS (teste) → produção: 13 * 60 * 1000 (13min)
+const REFRESH_INTERVAL = 250 * 1000; // 25 SEGUNDOS (teste) → produção: 13 * 60 * 1000 (13min)
 const INACTIVITY_TIMEOUT = 60 * 1000; // 1 MINUTO (teste) → produção: 30 * 60 * 1000 (30min)
 
 // Fila para evitar múltiplos refresh simultâneos

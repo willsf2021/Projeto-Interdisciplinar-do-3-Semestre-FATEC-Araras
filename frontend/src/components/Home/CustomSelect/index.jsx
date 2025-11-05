@@ -1,5 +1,5 @@
 // components/Home/CustomSelect/index.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Adicione useEffect
 import AsyncSelect from "react-select/async";
 import { Search } from "react-bootstrap-icons";
 import { Container } from "./style";
@@ -12,9 +12,10 @@ export const CustomSelect = ({
   placeholder,
   type,
   onSelectChange,
-  variant = "default", // nova prop para variantes de estilo
-  customStyles = {}, // permite sobrescrever estilos específicos
+  variant = "default",
+  customStyles = {},
   icon,
+  value, // Certifique-se que esta prop está sendo recebida
 }) => {
   const [selected, setSelected] = useState(null);
   const { clients, documents } = useData();
@@ -23,6 +24,15 @@ export const CustomSelect = ({
     clients,
     documents
   );
+
+  // Efeito para sincronizar o value externo com o estado interno
+  useEffect(() => {
+    if (value) {
+      setSelected(value);
+    } else {
+      setSelected(null);
+    }
+  }, [value]);
 
   const handleChange = (selectedOption) => {
     setSelected(selectedOption);

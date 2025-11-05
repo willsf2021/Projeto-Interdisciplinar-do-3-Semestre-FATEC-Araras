@@ -71,7 +71,6 @@ export const Client = () => {
 
       console.log("Cliente cadastrado com sucesso:", response);
 
-      // Reset do formulário e feedback de sucesso
       setFormData({
         nome_completo: "",
         email: "",
@@ -79,7 +78,6 @@ export const Client = () => {
       });
       setSuccess(true);
 
-      // Remove mensagem de sucesso após 3 segundos
       setTimeout(() => {
         setSuccess(false);
       }, 3000);

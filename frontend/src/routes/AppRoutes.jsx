@@ -9,6 +9,7 @@ import { Register } from "../pages/Register";
 import { RecoveryPassword } from "../pages/RecoveryPassword";
 import { Document } from "../pages/Document";
 import { Client } from "../pages/Client";
+import { Profile } from "../pages/Profile";
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/document" element={<Document />} />
         <Route path="/client" element={<Client />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

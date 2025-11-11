@@ -1,0 +1,9 @@
+venv/
+server/venv
+**/.env
+# Ignorar caches do Python
+**/__pycache__/
+**/*.py[cod]
+
+# Ignorar outros diretórios de cache
+server/documentos

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Documento - {{ documento.receita.nome }}</title>
+</head>
+<body>
+    <div class="header">
+        <h1>FICHA TÉCNICA - {{ documento.receita.nome }}</h1>
+        {% if documento.cliente %}
+        <p><strong>Cliente:</strong> {{ documento.cliente.nome_completo }}</p>
+        {% endif %}
+        <p><strong>Data de geração:</strong> {{ documento.data_geracao_pdf|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">INFORMAÇÕES DA RECEITA</div>
+        <p><strong>Categoria:</strong> {{ receita.categoria }}</p>
+        <p><strong>Tempo de preparo:</strong> {{ receita.tempo_preparo_horas }}h {{ receita.tempo_preparo_minutos }}min</p>
+        <p><strong>Porção individual:</strong> {{ receita.porcao_individual }}{{ receita.medida }}</p>
+        <p><strong>Rendimento:</strong> {{ receita.rendimento|floatformat:0 }} porções</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">INGREDIENTES</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ingrediente</th>
+                    <th>Peso Bruto (g/ml)</th>
+                    <th>Peso Líquido (g/ml)</th>
+                    <th>Peso Processado (g/ml)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingrediente in ingredientes %}
+                <tr>
+                    <td>{{ ingrediente.alimento.nome }}</td>
+                    <td>{{ ingrediente.peso_bruto }}</td>
+                    <td>{{ ingrediente.peso_liquido }}</td>
+                    <td>{{ ingrediente.peso_processado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">MODO DE PREPARO</div>
+        <p>{{ receita.modo_preparo|linebreaks }}</p>
+    </div>
+
+    {% if precificacao.habilitada %}
+    <div class="section">
+        <div class="section-title">PRECIFICAÇÃO</div>
+        <table>
+            <tr>
+                <td><strong>Custo total da receita:</strong></td>
+                <td>R$ {{ precificacao.custo_total|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Markup aplicado:</strong></td>
+                <td>{{ precificacao.markup }}%</td>
+            </tr>
+            <tr>
+                <td><strong>Lucro:</strong></td>
+                <td>R$ {{ precificacao.lucro|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Preço sugerido:</strong></td>
+                <td>R$ {{ precificacao.preco_sugerido|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td><strong>Preço por porção:</strong></td>
+                <td>R$ {{ precificacao.preco_sugerido|floatformat:2 }}</td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+
+    {% if rotulo_nutricional and receita.habilitar_rotulo_nutricional %}
+    <div class="section">
+        <div class="section-title">INFORMAÇÃO NUTRICIONAL</div>
+        
+        <div style="border: 2px solid #000; padding: 15px; margin: 10px 0;">
+            <h2 style="text-align: center; margin: 0 0 10px 0;">INFORMAÇÃO NUTRICIONAL</h2>
+            
+            <p style="margin: 5px 0;">
+                <strong>Porções por embalagem:</strong> {{ rotulo_nutricional.porcoes_embalagem }}<br>
+                <strong>Porção:</strong> {{ rotulo_nutricional.porcao }} (medida caseira)
+            </p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #000; padding: 5px;"></th>
+                        <th style="border: 1px solid #000; padding: 5px;">100g</th>
+                        <th style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.porcao }}</th>
+                        <th style="border: 1px solid #000; padding: 5px;">%VD*</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Valor energético (kcal)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.valor_energetico|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.valor_energetico|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.valor_energetico|floatformat:1 }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Carboidratos (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.carboidratos|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.carboidratos|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.carboidratos|floatformat:1 }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Açúcares totais (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.acucares_totais|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.acucares_totais|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Açúcares adicionados (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.acucares_adicionados|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.acucares_adicionados|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Proteínas (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.proteinas|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.proteinas|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.proteinas|floatformat:1 }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Gorduras totais (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.gorduras_totais|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.gorduras_totais|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.gorduras_totais|floatformat:1 }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Gorduras saturadas (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.gorduras_saturadas|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.gorduras_saturadas|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.gorduras_saturadas|floatformat:1 }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Gorduras trans (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.gorduras_trans|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.gorduras_trans|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">-</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Fibras alimentares (g)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.fibra_alimentar|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.fibra_alimentar|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.fibra_alimentar|floatformat:1 }}</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 5px;">Sódio (mg)</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_100g.sodio|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_porcao.sodio|floatformat:1 }}</td>
+                        <td style="border: 1px solid #000; padding: 5px;">{{ rotulo_nutricional.valores_diarios.sodio|floatformat:1 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p style="font-size: 12px; margin: 10px 0 0 0;">
+                * Percentual de valores diários fornecidos pela porção
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if documento.declaracao_alergenicos %}
+    <div class="section">
+        <div class="section-title">DECLARAÇÃO DE ALERGÊNICOS</div>
+        <p>{{ documento.declaracao_alergenicos|linebreaks }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>

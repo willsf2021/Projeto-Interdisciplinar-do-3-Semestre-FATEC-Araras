@@ -73,7 +73,7 @@ Veja o layout completo  [aqui.](https://www.figma.com/design/oR2lK6DuMUX3lG1kJor
         <img src="https://avatars.githubusercontent.com/u/178531137?v=4" width="100px;" alt="Wilson"/>
         <br />
         <sub>
-          <b>Wilson Júnior</b>
+          <b>wilson</b>
         </sub>
        </a>
        <br />

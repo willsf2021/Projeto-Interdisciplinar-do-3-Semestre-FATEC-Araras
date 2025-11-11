@@ -18,65 +18,114 @@ import logo from "../../assets/images/logo.svg";
 import googleIcon from "../../assets/images/google.svg";
 import { Container } from "./style";
 
+import { authService } from "../../services/authService";
+
 export const Profile = () => {
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: "Renan Augusto Eugenio Marques",
-    email: "renanmarques894@gmail.com",
+    name: "",
+    email: "",
+    url: "",
   });
 
-  const handleChange = (field) => (e) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-  };
+  // --- Buscar dados do usuário ---
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setLoading(true);
+        const response = await authService.getUser();
 
-  const handleImage = (e) => {
+        setFormData({
+          name: response.name || "",
+          email: response.email || "",
+          url: response.avatar_url || "",
+        });
+        setPreview(response.avatar_url || null);
+      } catch (error) {
+        console.error("Erro ao buscar usuário:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // --- Atualizar imagem localmente ---
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
-    setPreview(URL.createObjectURL(file));
+    if (file) {
+      setPreview(URL.createObjectURL(file));
+      setFormData((prev) => ({ ...prev, file }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  // --- Atualizar perfil ---
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Dados salvos:", formData);
-    // Aqui você pode integrar com o backend
+    try {
+      setLoading(true);
+      await authService.updateUser(formData); // supondo que exista este método
+      alert("Perfil atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      alert("Ocorreu um erro ao atualizar o perfil.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteAccount = () => {
+  // --- Logout ---
+  const handleLogout = () => {
+    authService.logout();
+  };
+
+  // --- Excluir conta ---
+  const handleDelete = async () => {
     if (window.confirm("Tem certeza que deseja excluir sua conta?")) {
-      console.log("Conta excluída");
+      try {
+        await authService.deleteAccount();
+        alert("Conta excluída com sucesso!");
+      } catch (error) {
+        console.error("Erro ao excluir conta:", error);
+        alert("Não foi possível excluir a conta.");
+      }
     }
   };
 
   return (
     <Container>
-      {/* Imagem de perfil */}
-      <div className="profile-image">
-        <label htmlFor="imageUpload">
-          <img
-            src={
-              preview || "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-            }
-            alt="Foto de perfil"
+      <FormWrapper onSubmit={handleSubmit}>
+        {/* Imagem de perfil */}
+        <div className="profile-image">
+          <label htmlFor="imageUpload">
+            <img
+              src={
+                preview || "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+              }
+              alt="Foto de perfil"
+            />
+          </label>
+          <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{ display: "none" }}
           />
-        </label>
-        <input
-          id="imageUpload"
-          type="file"
-          accept="image/*"
-          onChange={handleImage}
-        />
-      </div>
-      
-      <FormWrapper>
+        </div>
+
         <div className="step-content">
           <div className="step-content-inner">
             <InputFlexWrapper>
               <Input
                 label="Nome"
-                type="password"
-                value={formData.password}
-                placeholder="Digite sua senha..."
-                onChange={(e) => handleChange("password", e.target.value)}
+                type="text"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
                 required
               />
 
@@ -84,22 +133,29 @@ export const Profile = () => {
                 label="E-mail"
                 type="email"
                 value={formData.email}
-                placeholder="Digite seu e-mail..."
-                onChange={(e) => handleChange("email", e.target.value)}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, email: e.target.value }))
+                }
                 required
               />
             </InputFlexWrapper>
           </div>
         </div>
 
-        <SubmitButton title="Sair" type="submit" />
+        <SubmitButton
+          title={"Salvar"}
+          type="submit"
+          variant="submit"
+        />
 
-        <button className="deleteAccount" title="deleteAccount" type="submit">
-          Excluir Conta
-        </button>
+          <SubmitButton
+          title={"Excluir Conta"}
+          type="submit"
+          variant="background_transparent"
+        />
+        
+
       </FormWrapper>
-
-      
     </Container>
   );
 };

@@ -50,5 +50,7 @@ export const theme = {
     sm: "4px",
     md: "10px",
     lg: "16px",
+    xl: "32px",
+    xxl: "48px",
   },
 };

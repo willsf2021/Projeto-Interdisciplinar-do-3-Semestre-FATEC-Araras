@@ -6,9 +6,10 @@ export const SubmitButton = ({
   type = "button",
   onClick,
   disabled = false,
+  variant = "submit"
 }) => {
   return (
-    <ButtonElement type={type} onClick={onClick} disabled={disabled}>
+    <ButtonElement variant ={variant} type={type} onClick={onClick} disabled={disabled}>
       {title}
     </ButtonElement>
   );

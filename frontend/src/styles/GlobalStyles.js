@@ -45,7 +45,6 @@ export const GlobalStyle = createGlobalStyle`
 
   .step-content h3 {
     font-size: ${({ theme }) => theme.fontSizes.base};
-    margin-bottom: 24px;
     color: ${({ theme }) => theme.colors.textColor};
     text-align:center;
   }

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+
 export const ButtonElement = styled.button`
   font-family: inherit;
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
@@ -19,4 +20,19 @@ export const ButtonElement = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.colors.primaryHover};
   }
+
+  /* --- Estilo alternativo (variant = 'background_transparent') --- */
+  ${({ variant, theme }) =>
+    variant === "background_transparent" &&
+    `
+      background: transparent;
+      border: 1px solid ${theme.colors.primary};
+      color: ${theme.colors.primary};
+      font-weight: ${theme.fontWeights.medium};
+
+      &:hover {
+        /* background: ${theme.colors.danger}; */
+        color: white;
+      }
+  `}
 `;

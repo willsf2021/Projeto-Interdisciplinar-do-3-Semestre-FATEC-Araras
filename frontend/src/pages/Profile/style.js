@@ -40,6 +40,5 @@ export const Container = styled.div`
 
   #imageUpload {
     display: none;
-  }
-  
+  }  
 `;

@@ -9,6 +9,13 @@ export const Container = styled.div`
   padding-bottom: 24px;
   height: 100vh;
 
+  header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+  }
+
   .step-content {
     flex: 1;
     display: flex;
@@ -22,7 +29,7 @@ export const Container = styled.div`
 
   .profile-image {
     position: relative;
-    margin-bottom: 25px;
+    margin-top: 50px;
     display: flex;
     justify-content: center;
   }
@@ -33,12 +40,34 @@ export const Container = styled.div`
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
-    border: 3px solid #00a884;
+    border: 2px solid #00a884;
     position: relative;
     margin-bottom: 25px;
   }
 
   #imageUpload {
     display: none;
-  }  
+  }
+
+  footer {
+    margin-top: 290px;
+  }
+`;
+
+export const BackButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #333;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.primary};
+  }
+
+  svg {
+    margin-right: 4px;
+  }
 `;

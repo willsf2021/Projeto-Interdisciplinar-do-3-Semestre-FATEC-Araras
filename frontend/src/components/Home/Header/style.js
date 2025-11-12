@@ -12,6 +12,7 @@ export const HeaderContainer = styled.header`
 export const AvatarContainer = styled.div`
   padding-right: 8px;
   font-size: 48px;
+  display: flex;
 `;
 
 export const GreetingMessage = styled.div`

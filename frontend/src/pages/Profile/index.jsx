@@ -14,13 +14,15 @@ import {
 import { Input } from "../../components/Forms/Input";
 import { SubmitButton } from "../../components/Forms/SubmitButton";
 
-import logo from "../../assets/images/logo.svg";
-import googleIcon from "../../assets/images/google.svg";
-import { Container } from "./style";
+import { Container, BackButton } from "./style";
 
 import { authService } from "../../services/authService";
 
+import { ArrowLeft } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
+
 export const Profile = () => {
+  const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -35,13 +37,17 @@ export const Profile = () => {
       try {
         setLoading(true);
         const response = await authService.getUser();
+        //console.log("Retorno completo do getUser:", response);
+        
+        const user = response.data ?? {};
+        //console.log("O user esta retornando corretamente!", user);
 
         setFormData({
-          name: response.name || "",
-          email: response.email || "",
-          url: response.avatar_url || "",
+          name: user.name ?? "",
+          email: user.email ?? "",
+          url: user.avatar_url ?? "",
         });
-        setPreview(response.avatar_url || null);
+        setPreview(user.avatar_url ?? null);
       } catch (error) {
         console.error("Erro ao buscar usuário:", error);
       } finally {
@@ -51,6 +57,7 @@ export const Profile = () => {
 
     fetchUser();
   }, []);
+
 
   // --- Atualizar imagem localmente ---
   const handleImageChange = (e) => {
@@ -96,13 +103,19 @@ export const Profile = () => {
 
   return (
     <Container>
+      <header>
+        <BackButton type="button" onClick={() => navigate("/home")}>
+          <ArrowLeft size={32} />
+        </BackButton>
+      </header>
+
       <FormWrapper onSubmit={handleSubmit}>
-        {/* Imagem de perfil */}
         <div className="profile-image">
           <label htmlFor="imageUpload">
             <img
               src={
-                preview || "https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                preview ||
+                "https://cdn-icons-png.flaticon.com/512/847/847969.png"
               }
               alt="Foto de perfil"
             />
@@ -142,19 +155,15 @@ export const Profile = () => {
           </div>
         </div>
 
-        <SubmitButton
-          title={"Salvar"}
-          type="submit"
-          variant="submit"
-        />
+        <SubmitButton title={"Salvar"} type="submit" variant="submit" />
 
+        <footer>
           <SubmitButton
-          title={"Excluir Conta"}
-          type="submit"
-          variant="background_transparent"
-        />
-        
-
+            title={"Excluir Conta"}
+            type="submit"
+            variant="background_transparent"
+          />
+        </footer>
       </FormWrapper>
     </Container>
   );

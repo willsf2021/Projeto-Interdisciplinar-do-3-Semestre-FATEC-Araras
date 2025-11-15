@@ -21,9 +21,9 @@ import { useAuth } from "../../contexts/AuthContext";
 // Função para construir a URL completa do avatar
 const buildAvatarUrl = (avatarPath) => {
   if (!avatarPath) return null;
-  
-  if (avatarPath.startsWith('http')) return avatarPath;
-  
+
+  if (avatarPath.startsWith("http")) return avatarPath;
+
   const baseUrl = import.meta.env.VITE_API_URL;
   return `${baseUrl}${avatarPath}`;
 };
@@ -33,15 +33,41 @@ export const Profile = () => {
   const [preview, setPreview] = useState(null);
   const [nameLoading, setNameLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const { apiFetch } = useApi();
   const { notify } = useNotification();
-  
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [confirmationText, setConfirmationText] = useState("");
+  const [editName, setEditName] = useState("");
+
   const { user, updateUserAvatar, updateUserProfile } = useAuth();
-  
+
   const [formData, setFormData] = useState({
     name: "",
     avatar_url: "",
   });
+
+  const openDeleteModal = () => {
+    setShowDeleteModal(true);
+    setConfirmationText("");
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setConfirmationText("");
+  };
+
+  const openEditModal = () => {
+    setEditName(formData.name);
+    setShowEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setEditName("");
+  };
 
   // --- Buscar dados do usuário ---
   useEffect(() => {
@@ -76,35 +102,32 @@ export const Profile = () => {
 
     try {
       setAvatarLoading(true);
-      
+
       const formData = new FormData();
-      formData.append('avatar', file);
+      formData.append("avatar", file);
 
       const apiBaseUrl = import.meta.env.VITE_API_URL;
-      const response = await apiFetch(
-        `${apiBaseUrl}/update-avatar/`,
-        {
-          method: "PUT",
-          body: formData,
-        }
-      );
+      const response = await apiFetch(`${apiBaseUrl}/update-avatar/`, {
+        method: "PUT",
+        body: formData,
+      });
 
       const data = await response.json();
 
       if (response.ok) {
         const fullAvatarUrl = buildAvatarUrl(data.avatar_url);
-        
+
         notify("Foto de perfil atualizada com sucesso!", "success");
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          avatar_url: fullAvatarUrl
+          avatar_url: fullAvatarUrl,
         }));
-        
+
         if (updateUserAvatar) {
           updateUserAvatar(fullAvatarUrl);
         }
       } else {
-        throw new Error(data.erro || 'Erro ao atualizar avatar');
+        throw new Error(data.erro || "Erro ao atualizar avatar");
       }
     } catch (error) {
       console.error("Erro ao atualizar avatar:", error);
@@ -116,8 +139,12 @@ export const Profile = () => {
   };
 
   // --- Atualizar perfil (nome) ---
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleEditName = async () => {
+    if (!editName.trim()) {
+      notify("Por favor, insira um nome válido", "warning");
+      return;
+    }
+
     try {
       setNameLoading(true);
 
@@ -129,32 +156,30 @@ export const Profile = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.name
+          name: editName,
         }),
       };
 
-      const response = await apiFetch(
-        `${apiBaseUrl}/update-user/`,
-        options
-      );
+      const response = await apiFetch(`${apiBaseUrl}/update-user/`, options);
 
       const data = await response.json();
 
       if (response.ok) {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          name: data.name || formData.name,
+          name: data.name || editName,
         }));
-        
+
         if (updateUserProfile) {
           updateUserProfile({
-            name: data.name || formData.name,
+            name: data.name || editName,
           });
         }
-        
-        notify("Dados do usuário alterados com sucesso!", "success");
+
+        notify("Nome alterado com sucesso!", "success");
+        closeEditModal();
       } else {
-        throw new Error(data.erro || 'Erro ao atualizar perfil');
+        throw new Error(data.erro || "Erro ao atualizar perfil");
       }
     } catch (error) {
       console.log(error);
@@ -166,14 +191,30 @@ export const Profile = () => {
 
   // --- Excluir conta ---
   const handleDelete = async () => {
-    if (window.confirm("Tem certeza que deseja excluir sua conta?")) {
-      try {
-        await authService.deleteAccount();
-        alert("Conta excluída com sucesso!");
-      } catch (error) {
-        console.error("Erro ao excluir conta:", error);
-        alert("Não foi possível excluir a conta.");
+    if (confirmationText !== "DELETAR") {
+      return;
+    }
+
+    try {
+      setDeleteLoading(true);
+      const result = await authService.deleteAccount();
+
+      if (result.status === 200) {
+        notify("✅ Conta desativada com sucesso! Redirecionando...", "success");
+        closeDeleteModal();
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      } else {
+        throw new Error(result.data?.erro || "Erro ao desativar conta");
       }
+    } catch (error) {
+      console.error("Erro ao desativar conta:", error);
+      notify(`❌ ${error.message}`, "error");
+      closeDeleteModal();
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -185,7 +226,7 @@ export const Profile = () => {
         </BackButton>
       </header>
 
-      <FormWrapper onSubmit={handleSubmit}>
+      <FormWrapper>
         <div className="profile-image">
           <label id="avatar-wrapper" htmlFor="imageUpload">
             <img
@@ -216,41 +257,147 @@ export const Profile = () => {
           />
         </div>
 
-        <div className="step-content">
-          <div className="step-content-inner">
-            <InputFlexWrapper>
-              <Input
-                label="Nome"
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
-                required
-                disabled={nameLoading || avatarLoading}
-              />
-            </InputFlexWrapper>
+        <div className="user-info">
+          <h2>{formData.name}</h2>
+          <div className="info-grid">
+            <div className="info-item">
+              <span className="label">Email:</span>
+              <span className="value">{user?.email}</span>
+            </div>
+            <div className="info-item">
+              <span className="label">Tipo de Usuário:</span>
+              <span className="value">
+                {user?.type?.charAt(0).toUpperCase() + user?.type?.slice(1)}
+              </span>
+            </div>
           </div>
         </div>
 
-        <SubmitButton 
-          title={nameLoading ? "Salvando..." : "Salvar"} 
-          type="submit" 
-          variant="submit" 
-          disabled={nameLoading || avatarLoading}
-          loading={nameLoading}
-        />
-
-        <footer>
+        <div className="actions-container">
+          <SubmitButton
+            title={"Editar Nome"}
+            type="button"
+            variant="submit"
+            onClick={openEditModal}
+            disabled={avatarLoading}
+          />
+          
           <SubmitButton
             title={"Excluir Conta"}
             type="button"
             variant="background_transparent"
-            onClick={handleDelete}
-            disabled={nameLoading || avatarLoading}
+            onClick={openDeleteModal}
+            disabled={avatarLoading}
           />
-        </footer>
+        </div>
       </FormWrapper>
+
+      {/* Modal de Edição de Nome */}
+      {showEditModal && (
+        <div className="modal-overlay">
+          <div className="edit-modal">
+            <h3>Editar Nome</h3>
+            <p>Digite seu novo nome abaixo:</p>
+
+            <div className="input-container">
+              <Input
+                label="Nome"
+                type="text"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                required
+                disabled={nameLoading}
+                autoFocus
+              />
+            </div>
+
+            <div className="modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={closeEditModal}
+                disabled={nameLoading}
+              >
+                Cancelar
+              </button>
+              <button
+                className="confirm-btn"
+                onClick={handleEditName}
+                disabled={nameLoading || !editName.trim()}
+              >
+                {nameLoading ? (
+                  <>
+                    <div className="button-spinner"></div>
+                    Salvando...
+                  </>
+                ) : (
+                  "Salvar"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Exclusão */}
+      {showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="delete-modal">
+            <h3>Desativar Conta</h3>
+            <p>
+              Tem certeza que deseja desativar sua conta? Esta ação não pode ser
+              desfeita.
+            </p>
+
+            <div className="consequences">
+              <p>• Sua conta será desativada imediatamente</p>
+              <p>• Você não poderá mais fazer login</p>
+              <p>• Seus dados pessoais serão removidos</p>
+            </div>
+
+            <div className="confirmation-input">
+              <label>
+                Digite <strong>DELETAR</strong> para confirmar:
+              </label>
+              <input
+                type="text"
+                value={confirmationText}
+                onChange={(e) => setConfirmationText(e.target.value)}
+                placeholder="DELETAR"
+                disabled={deleteLoading}
+              />
+              {confirmationText !== "DELETAR" && confirmationText !== "" && (
+                <div className="error-message">
+                  Digite exatamente "DELETAR" para confirmar
+                </div>
+              )}
+            </div>
+
+            <div className="modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={closeDeleteModal}
+                disabled={deleteLoading}
+              >
+                Cancelar
+              </button>
+              <button
+                className="delete-btn"
+                onClick={handleDelete}
+                disabled={confirmationText !== "DELETAR" || deleteLoading}
+              >
+                {deleteLoading ? (
+                  <>
+                    <div className="button-spinner"></div>
+                    Excluindo...
+                  </>
+                ) : (
+                  "Desativar Conta"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Container>
   );
 };

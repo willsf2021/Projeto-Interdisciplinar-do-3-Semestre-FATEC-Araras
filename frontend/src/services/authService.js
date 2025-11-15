@@ -1,13 +1,13 @@
 // services/authService.js
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = "http://localhost:8000/api";
 
 const handleResponse = async (response) => {
   const data = await response.json();
-  
+
   if (!response.ok) {
     throw new Error(data.erro || `Erro HTTP: ${response.status}`);
   }
-  
+
   return {
     status: response.status,
     data,
@@ -15,8 +15,8 @@ const handleResponse = async (response) => {
 };
 
 const handleError = (error) => {
-  if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-    throw new Error('Erro de conexão. Verifique sua internet.');
+  if (error.name === "TypeError" && error.message.includes("Failed to fetch")) {
+    throw new Error("Erro de conexão. Verifique sua internet.");
   }
   throw error;
 };
@@ -30,7 +30,7 @@ export const authService = {
         body: JSON.stringify({ email, password, remember }),
         credentials: "include",
       });
-      
+
       return await handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -45,7 +45,7 @@ export const authService = {
         body: JSON.stringify({ name, email, password, type }),
         credentials: "include",
       });
-      
+
       return await handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -58,7 +58,7 @@ export const authService = {
         method: "GET",
         credentials: "include",
       });
-      
+
       return await handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -71,13 +71,12 @@ export const authService = {
         method: "POST",
         credentials: "include",
       });
-      
+
       return await handleResponse(response);
     } catch (error) {
-    
       return {
         status: 200,
-        data: { mensagem: "Logout realizado" }
+        data: { mensagem: "Logout realizado" },
       };
     }
   },
@@ -88,7 +87,7 @@ export const authService = {
         method: "POST",
         credentials: "include",
       });
-      
+
       return await handleResponse(response);
     } catch (error) {
       return handleError(error);
@@ -101,7 +100,20 @@ export const authService = {
         method: "GET",
         credentials: "include",
       });
-      
+
+      return await handleResponse(response);
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  deleteAccount: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/delete-account/`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
       return await handleResponse(response);
     } catch (error) {
       return handleError(error);

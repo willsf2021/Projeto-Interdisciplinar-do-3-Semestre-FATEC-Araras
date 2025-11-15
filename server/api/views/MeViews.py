@@ -148,3 +148,61 @@ class AvatarUpdateView(APIView):
             return Response({
                 "erro": f"Erro ao atualizar avatar: {str(e)}"
             }, status=500)
+            
+            
+            
+            
+            
+            
+class DeleteAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+
+        user = request.user
+        
+        try:
+            
+            if not user.is_active:
+                return Response(
+                    {"erro": "Esta conta já está desativada."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+
+            user_email = user.email
+            
+            user.is_active = False
+            
+            if user.avatar:
+                user.avatar.delete(save=False)
+                user.avatar = None
+            
+            user.email = f"deleted_{user.id}_{user.email}"
+            user.name = "Usuário Desativado"
+            # TODO: implementar exclusão de documentos/receitas relacionados ao usuário em questão
+            
+            user.save()
+
+            response = Response(
+                {
+                    "mensagem": "Conta desativada com sucesso.",
+                    "email": user_email,
+                    "detalhe": "Seus dados foram removidos e a conta foi desativada."
+                },
+                status=status.HTTP_200_OK
+            )
+            
+            # Limpa os cookies de autenticação
+            response.delete_cookie("access")
+            response.delete_cookie("refresh")
+            
+            return response
+            
+        except Exception as e:
+            return Response(
+                {
+                    "erro": f"Erro ao desativar conta: {str(e)}"
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

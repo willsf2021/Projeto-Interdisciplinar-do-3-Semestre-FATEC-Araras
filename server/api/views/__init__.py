@@ -8,4 +8,4 @@ from .DocumentoViews import DocumentoCreateView, DocumentoListView, DocumentoPdf
 from .ClienteViews import ClienteListView, ClienteCreateView, ClienteDetailView, ClienteDeleteView, ClienteUpdateView
 from .ChangePasswordViews import ChangePasswordView
 from .RecoveryPasswordViews import PasswordResetConfirmView, PasswordResetRequestView
-from .MeViews import CheckSessionView, GetUserView, LogoutView, RefreshTokenView, UpdateUserView, AvatarUpdateView
+from .MeViews import CheckSessionView, GetUserView, LogoutView, RefreshTokenView, UpdateUserView, AvatarUpdateView, DeleteAccountView

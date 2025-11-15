@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from django.conf import settings
+from api.models import Usuario
 
 
 class CheckSessionView(APIView):
@@ -83,3 +84,37 @@ class RefreshTokenView(APIView):
                 {"erro": f"Token inválido ou expirado: {str(e)}"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+            
+            
+            
+class UpdateUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    def put(self, request):
+        user = request.user
+        data = request.data
+        new_name = data.get("name")
+        new_email = data.get("email")
+        new_avatar = data.get("avatar_url")
+        if new_email and Usuario.objects.filter(email=new_email).exclude(id=user.id).exists():
+            return Response(
+                {"message": "Este email já está em uso por outro usuário."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        # ✏ Atualiza apenas os campos enviados
+        if new_name is not None:
+            user.name = new_name
+        if new_email is not None:
+            user.email = new_email
+        if new_avatar is not None:
+            user.avatar_url = new_avatar
+        user.save()
+        return Response(
+            {
+                "message": "Usuário atualizado com sucesso.",
+                "name": user.name,
+                "email": user.email,
+                "avatar_url": user.avatar_url,
+                
+            },
+            status=status.HTTP_200_OK
+        )

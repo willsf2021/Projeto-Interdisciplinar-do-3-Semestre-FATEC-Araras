@@ -25,10 +25,10 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
         ('professor', 'Professor'),
     ]
     
-    name = models.CharField(max_length=20, verbose_name='Nome do Usuário')
+    name = models.CharField(max_length=255, verbose_name='Nome do Usuário')
     email = models.EmailField(unique=True, verbose_name='Email')
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, verbose_name='Tipo de Usuário')
-    avatar_url = models.URLField(null=True, blank=True, verbose_name='URL do Avatar')
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado a')

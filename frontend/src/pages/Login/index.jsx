@@ -70,6 +70,7 @@ export const Login = () => {
       if (result.success) {
         notify("Login realizado com sucesso!", "success");
       } else {
+        notify("Erro ao fazer login", "error");
       }
     } catch (error) {
       notify("Erro ao fazer login", "error");

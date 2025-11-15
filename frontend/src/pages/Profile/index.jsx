@@ -20,15 +20,18 @@ import { authService } from "../../services/authService";
 
 import { ArrowLeft } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
+import { useApi } from "../../hooks/useApi";
+import { useNotification } from "../../hooks/useNotification";
 
 export const Profile = () => {
   const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { apiFetchJson } = useApi();
+  const {notify} = useNotification();
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    url: "",
+    avatar_url: "",
   });
 
   // --- Buscar dados do usuário ---
@@ -38,14 +41,13 @@ export const Profile = () => {
         setLoading(true);
         const response = await authService.getUser();
         //console.log("Retorno completo do getUser:", response);
-        
+
         const user = response.data ?? {};
         //console.log("O user esta retornando corretamente!", user);
 
         setFormData({
           name: user.name ?? "",
-          email: user.email ?? "",
-          url: user.avatar_url ?? "",
+          avatar_url: user.avatar_url ?? "",
         });
         setPreview(user.avatar_url ?? null);
       } catch (error) {
@@ -57,7 +59,6 @@ export const Profile = () => {
 
     fetchUser();
   }, []);
-
 
   // --- Atualizar imagem localmente ---
   const handleImageChange = (e) => {
@@ -73,11 +74,30 @@ export const Profile = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await authService.updateUser(formData); // supondo que exista este método
-      alert("Perfil atualizado com sucesso!");
+
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      };
+
+      const response = await apiFetchJson(
+        "http://localhost:8000/api/update-user/",
+        options
+      );
+
+      const user = response ?? {};
+
+      setFormData({
+        name: user.name ?? "",
+        avatar_url: user.avatar_url ?? "",
+      });
+      notify("Dados do usuário alterados com sucesso!", "success");
     } catch (error) {
-      console.error("Erro ao atualizar perfil:", error);
-      alert("Ocorreu um erro ao atualizar o perfil.");
+      console.log(error)
+      notify(error.message, "error");
     } finally {
       setLoading(false);
     }
@@ -142,15 +162,6 @@ export const Profile = () => {
                 required
               />
 
-              <Input
-                label="E-mail"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, email: e.target.value }))
-                }
-                required
-              />
             </InputFlexWrapper>
           </div>
         </div>

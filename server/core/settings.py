@@ -17,7 +17,8 @@ import dj_database_url
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 load_dotenv(BASE_DIR / '.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -74,7 +75,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'nao-responda@sistemarotus.com'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),   # access válido por 1h
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),   # access válido por 1h
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),      # refresh válido por 7 dias
 }
 

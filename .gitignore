@@ -7,3 +7,4 @@ server/venv
 
 # Ignorar outros diretórios de cache
 server/documentos
+server/media/avatars

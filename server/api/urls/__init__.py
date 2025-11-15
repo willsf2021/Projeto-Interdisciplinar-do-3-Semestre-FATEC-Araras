@@ -10,4 +10,8 @@ from .ChangePasswordUrls import urlpatterns as change_password_urls
 from .RecoveryPasswordUrls import urlpatterns as recovery_password_urls
 from .MeUrls import urlpatterns as me_urls
 
-urlpatterns = usuario_urls + alimento_taco_urls + google_auth_urls + receita_urls + ingrediente_urls + documento_urls + rotulo_nutricional_urls + cliente_urls + change_password_urls + recovery_password_urls + me_urls
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+urlpatterns = usuario_urls + alimento_taco_urls + google_auth_urls + receita_urls + ingrediente_urls + documento_urls + rotulo_nutricional_urls + cliente_urls + change_password_urls + recovery_password_urls + me_urls + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -23,12 +23,26 @@ import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useNotification } from "../../hooks/useNotification";
 
+// Função para construir a URL completa do avatar
+const buildAvatarUrl = (avatarPath) => {
+  if (!avatarPath) return null;
+  
+  // Se já for uma URL completa, retorna como está
+  if (avatarPath.startsWith('http')) return avatarPath;
+  
+  // Se for um caminho relativo, constrói a URL completa
+  const baseUrl = import.meta.env.VITE_API_URL;
+  console.log(`${baseUrl}${avatarPath}`)
+  return `${baseUrl}${avatarPath}`;
+};
+
 export const Profile = () => {
   const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { apiFetchJson } = useApi();
-  const {notify} = useNotification();
+  const [avatarLoading, setAvatarLoading] = useState(false);
+  const { apiFetchJson, apiFetch } = useApi();
+  const { notify } = useNotification();
   const [formData, setFormData] = useState({
     name: "",
     avatar_url: "",
@@ -40,16 +54,16 @@ export const Profile = () => {
       try {
         setLoading(true);
         const response = await authService.getUser();
-        //console.log("Retorno completo do getUser:", response);
-
         const user = response.data ?? {};
-        //console.log("O user esta retornando corretamente!", user);
+
+        // Usa a função buildAvatarUrl para garantir URL completa
+        const fullAvatarUrl = buildAvatarUrl(user.avatar_url);
 
         setFormData({
           name: user.name ?? "",
-          avatar_url: user.avatar_url ?? "",
+          avatar_url: fullAvatarUrl ?? "",
         });
-        setPreview(user.avatar_url ?? null);
+        setPreview(fullAvatarUrl);
       } catch (error) {
         console.error("Erro ao buscar usuário:", error);
       } finally {
@@ -60,52 +74,93 @@ export const Profile = () => {
     fetchUser();
   }, []);
 
-  // --- Atualizar imagem localmente ---
-  const handleImageChange = (e) => {
+  // --- Atualizar avatar IMEDIATAMENTE quando selecionar uma imagem ---
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setPreview(URL.createObjectURL(file));
-      setFormData((prev) => ({ ...prev, file }));
+    if (!file) return;
+
+    // Preview imediato
+    const previewUrl = URL.createObjectURL(file);
+    setPreview(previewUrl);
+
+    try {
+      setAvatarLoading(true);
+      
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      // Usa URL base da variável de ambiente ou fallback para localhost
+      const apiBaseUrl =  import.meta.env.VITE_API_URL;
+      const response = await apiFetch(
+        `${apiBaseUrl}/update-avatar/`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+
+        const fullAvatarUrl = buildAvatarUrl(data.avatar_url);
+        
+        notify("Foto de perfil atualizada com sucesso!", "success");
+        setFormData(prev => ({
+          ...prev,
+          avatar_url: fullAvatarUrl
+        }));
+      } else {
+        throw new Error(data.erro || 'Erro ao atualizar avatar');
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar avatar:", error);
+      notify(error.message, "error");
+      // Reverte o preview em caso de erro
+      setPreview(formData.avatar_url);
+    } finally {
+      setAvatarLoading(false);
     }
   };
 
-  // --- Atualizar perfil ---
+  // --- Atualizar perfil (nome) ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
+
+      // Usa URL base da variável de ambiente ou fallback para localhost
+      const apiBaseUrl = import.meta.env.VITE_API_URL
 
       const options = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name
+        }),
       };
 
       const response = await apiFetchJson(
-        "http://localhost:8000/api/update-user/",
+        `${apiBaseUrl}/api/update-user/`,
         options
       );
 
       const user = response ?? {};
 
-      setFormData({
-        name: user.name ?? "",
-        avatar_url: user.avatar_url ?? "",
-      });
+      setFormData(prev => ({
+        ...prev,
+        name: user.name ?? prev.name,
+      }));
+      
       notify("Dados do usuário alterados com sucesso!", "success");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       notify(error.message, "error");
     } finally {
       setLoading(false);
     }
-  };
-
-  // --- Logout ---
-  const handleLogout = () => {
-    authService.logout();
   };
 
   // --- Excluir conta ---
@@ -139,6 +194,11 @@ export const Profile = () => {
               }
               alt="Foto de perfil"
             />
+            {avatarLoading && (
+              <div className="upload-overlay">
+                <div className="spinner">Enviando...</div>
+              </div>
+            )}
           </label>
           <input
             type="file"
@@ -146,6 +206,7 @@ export const Profile = () => {
             accept="image/*"
             onChange={handleImageChange}
             style={{ display: "none" }}
+            disabled={avatarLoading}
           />
         </div>
 
@@ -160,19 +221,25 @@ export const Profile = () => {
                   setFormData((prev) => ({ ...prev, name: e.target.value }))
                 }
                 required
+                disabled={loading}
               />
-
             </InputFlexWrapper>
           </div>
         </div>
 
-        <SubmitButton title={"Salvar"} type="submit" variant="submit" />
+        <SubmitButton 
+          title={loading ? "Salvando..." : "Salvar"} 
+          type="submit" 
+          variant="submit" 
+          disabled={loading}
+        />
 
         <footer>
           <SubmitButton
             title={"Excluir Conta"}
-            type="submit"
+            type="button"
             variant="background_transparent"
+            onClick={handleDelete}
           />
         </footer>
       </FormWrapper>

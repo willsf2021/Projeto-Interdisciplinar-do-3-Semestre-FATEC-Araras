@@ -18,7 +18,6 @@ class RegistroView(UsuarioBaseView):
         password = request.data.get('password')
         name = request.data.get('name')
         type = request.data.get('type')
-        avatar_url = request.data.get('avatar_url', None)
 
         if not email or not password or not name or not type:
             return Response(
@@ -34,7 +33,6 @@ class RegistroView(UsuarioBaseView):
             password=password,
             name=name,
             type=type,
-            avatar_url=avatar_url
         )
         
         refresh = RefreshToken.for_user(user)
@@ -42,14 +40,15 @@ class RegistroView(UsuarioBaseView):
 
         access_max_age = int(settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'].total_seconds())
         refresh_max_age = int(settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'].total_seconds())
-
+        avatar_url = user.avatar.url if user.avatar else None
+        
         response = Response({
             "mensagem": "Usuário registrado com sucesso.",
             "id": user.id,
             "email": user.email,
             "name": user.name,
             "type": user.type,
-            "avatar_url": user.avatar_url,
+            "avatar_url": avatar_url,
         }, status=201)
         
         response.set_cookie(
@@ -90,6 +89,8 @@ class LoginView(UsuarioBaseView):
         else:
 
             refresh_max_age = None
+            
+        avatar_url = user.avatar.url if user.avatar else None
 
         response = Response({
             "mensagem": "Login bem-sucedido.",
@@ -97,7 +98,7 @@ class LoginView(UsuarioBaseView):
             "email": user.email,
             "name": user.name,
             "type": user.type,
-            "avatar_url": user.avatar_url,
+            "avatar_url": avatar_url,
         })
         
         response.set_cookie(

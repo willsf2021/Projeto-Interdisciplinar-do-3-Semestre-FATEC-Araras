@@ -6,6 +6,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from django.conf import settings
 from api.models import Usuario
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 
 
 class CheckSessionView(APIView):
@@ -20,13 +22,15 @@ class GetUserView(APIView):
 
     def get(self, request):
         user = request.user
-
+        
+        avatar_url = user.avatar.url if user.avatar else None
+        
         return Response({
             "id": user.id,
             "email": user.email,
             "name": user.name,
             "type": user.type,
-            "avatar_url": user.avatar_url,
+            "avatar_url": avatar_url,
         }, status=200)
 
 
@@ -93,28 +97,54 @@ class UpdateUserView(APIView):
         user = request.user
         data = request.data
         new_name = data.get("name")
-        new_email = data.get("email")
-        new_avatar = data.get("avatar_url")
-        if new_email and Usuario.objects.filter(email=new_email).exclude(id=user.id).exists():
-            return Response(
-                {"message": "Este email já está em uso por outro usuário."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        # ✏ Atualiza apenas os campos enviados
+        
         if new_name is not None:
             user.name = new_name
-        if new_email is not None:
-            user.email = new_email
-        if new_avatar is not None:
-            user.avatar_url = new_avatar
+
         user.save()
         return Response(
             {
                 "message": "Usuário atualizado com sucesso.",
                 "name": user.name,
-                "email": user.email,
-                "avatar_url": user.avatar_url,
-                
             },
             status=status.HTTP_200_OK
         )
+        
+        
+class AvatarUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def put(self, request):
+        user = request.user
+        
+        if 'avatar' not in request.FILES:
+            return Response({"erro": "Nenhuma imagem enviada."}, status=400)
+        
+        avatar_file = request.FILES['avatar']
+        
+        # Validações
+        if avatar_file.size > 5 * 1024 * 1024:  # 5MB
+            return Response({"erro": "Arquivo muito grande. Tamanho máximo: 5MB."}, status=400)
+        
+        if not avatar_file.content_type.startswith('image/'):
+            return Response({"erro": "Apenas arquivos de imagem são permitidos."}, status=400)
+        
+        try:
+            # Remove avatar anterior se existir
+            if user.avatar:
+                user.avatar.delete(save=False)
+            
+            # Salva o novo avatar
+            user.avatar = avatar_file
+            user.save()
+            
+            return Response({
+                "mensagem": "Avatar atualizado com sucesso.",
+                "avatar_url": user.avatar.url
+            })
+            
+        except Exception as e:
+            return Response({
+                "erro": f"Erro ao atualizar avatar: {str(e)}"
+            }, status=500)

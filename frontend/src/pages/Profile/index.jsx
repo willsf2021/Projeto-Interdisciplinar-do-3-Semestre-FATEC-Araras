@@ -12,7 +12,7 @@ import { Container, BackButton } from "./style";
 
 import { authService } from "../../services/authService";
 
-import { ArrowLeft } from "react-bootstrap-icons";
+import { ArrowLeft, PencilFill } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useNotification } from "../../hooks/useNotification";
@@ -198,7 +198,7 @@ export const Profile = () => {
 
       <FormWrapper onSubmit={handleSubmit}>
         <div className="profile-image">
-          <label htmlFor="imageUpload">
+          <label id="avatar-wrapper" htmlFor="imageUpload">
             <img
               src={
                 preview ||
@@ -211,6 +211,9 @@ export const Profile = () => {
                 <div className="spinner">Enviando...</div>
               </div>
             )}
+            <div className="edit-icon">
+            <PencilFill />
+          </div>
           </label>
           <input
             type="file"

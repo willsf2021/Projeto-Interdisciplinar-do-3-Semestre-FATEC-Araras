@@ -32,6 +32,27 @@ export const Container = styled.div`
     margin-top: 50px;
     display: flex;
     justify-content: center;
+
+    #avatar-wrapper{
+      position: relative;
+
+      .edit-icon{
+        display: flex;
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        z-index: 2;
+        background-color: white;
+        color: ${({ theme }) => theme.colors.primary};
+        width: min-content;
+        max-height: fit-content;
+        padding: 6px;
+        border-radius: 50%;
+        border: 2px solid ${({ theme }) => theme.colors.primary};
+        font-size: 16px;
+      }
+    }
+
   }
 
   .profile-image img {
@@ -40,13 +61,13 @@ export const Container = styled.div`
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
-    border: 2px solid #00a884;
     position: relative;
-    margin-bottom: 25px;
   }
 
   #imageUpload {
     display: none;
+    position: relative;
+    background-color: red;
   }
 
   footer {

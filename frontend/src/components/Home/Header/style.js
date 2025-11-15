@@ -25,6 +25,7 @@ export const AvatarContainer = styled.div`
       overflow: hidden;
       img{
         width: 100%;
+        object-fit: cover;
       }
     }
 

@@ -16,30 +16,26 @@ import { ArrowLeft, PencilFill } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useNotification } from "../../hooks/useNotification";
-import { useAuth } from "../../contexts/AuthContext"; // 👈 SÓ ADICIONEI ISSO
+import { useAuth } from "../../contexts/AuthContext";
 
 // Função para construir a URL completa do avatar
 const buildAvatarUrl = (avatarPath) => {
   if (!avatarPath) return null;
   
-  // Se já for uma URL completa, retorna como está
   if (avatarPath.startsWith('http')) return avatarPath;
   
-  // Se for um caminho relativo, constrói a URL completa
   const baseUrl = import.meta.env.VITE_API_URL;
-  console.log(`${baseUrl}${avatarPath}`)
   return `${baseUrl}${avatarPath}`;
 };
 
 export const Profile = () => {
   const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [nameLoading, setNameLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
   const { apiFetch } = useApi();
   const { notify } = useNotification();
   
-  // 👈 SÓ ADICIONEI ESTA LINHA - mantém seu estado local E usa o context
   const { user, updateUserAvatar, updateUserProfile } = useAuth();
   
   const [formData, setFormData] = useState({
@@ -51,11 +47,9 @@ export const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        setLoading(true);
         const response = await authService.getUser();
         const user = response.data ?? {};
 
-        // Usa a função buildAvatarUrl para garantir URL completa
         const fullAvatarUrl = buildAvatarUrl(user.avatar_url);
 
         setFormData({
@@ -65,8 +59,6 @@ export const Profile = () => {
         setPreview(fullAvatarUrl);
       } catch (error) {
         console.error("Erro ao buscar usuário:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -90,7 +82,7 @@ export const Profile = () => {
 
       const apiBaseUrl = import.meta.env.VITE_API_URL;
       const response = await apiFetch(
-        `${apiBaseUrl}/update-avatar/`, // 👈 CORRIGI: adicionei /
+        `${apiBaseUrl}/update-avatar/`,
         {
           method: "PUT",
           body: formData,
@@ -108,7 +100,6 @@ export const Profile = () => {
           avatar_url: fullAvatarUrl
         }));
         
-        // 👈 SÓ ADICIONEI ESTA LINHA - atualiza o context também
         if (updateUserAvatar) {
           updateUserAvatar(fullAvatarUrl);
         }
@@ -118,7 +109,6 @@ export const Profile = () => {
     } catch (error) {
       console.error("Erro ao atualizar avatar:", error);
       notify(error.message, "error");
-      // Reverte o preview em caso de erro
       setPreview(formData.avatar_url);
     } finally {
       setAvatarLoading(false);
@@ -129,7 +119,7 @@ export const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      setNameLoading(true);
 
       const apiBaseUrl = import.meta.env.VITE_API_URL;
 
@@ -156,7 +146,6 @@ export const Profile = () => {
           name: data.name || formData.name,
         }));
         
-        // 👈 SÓ ADICIONEI ESTA LINHA - atualiza o context também
         if (updateUserProfile) {
           updateUserProfile({
             name: data.name || formData.name,
@@ -171,7 +160,7 @@ export const Profile = () => {
       console.log(error);
       notify(error.message, "error");
     } finally {
-      setLoading(false);
+      setNameLoading(false);
     }
   };
 
@@ -208,12 +197,14 @@ export const Profile = () => {
             />
             {avatarLoading && (
               <div className="upload-overlay">
-                <div className="spinner">Enviando...</div>
+                <div className="spinner-container">
+                  <div className="spinner"></div>
+                </div>
               </div>
             )}
             <div className="edit-icon">
-            <PencilFill />
-          </div>
+              <PencilFill />
+            </div>
           </label>
           <input
             type="file"
@@ -236,17 +227,18 @@ export const Profile = () => {
                   setFormData((prev) => ({ ...prev, name: e.target.value }))
                 }
                 required
-                disabled={loading}
+                disabled={nameLoading || avatarLoading}
               />
             </InputFlexWrapper>
           </div>
         </div>
 
         <SubmitButton 
-          title={loading ? "Salvando..." : "Salvar"} 
+          title={nameLoading ? "Salvando..." : "Salvar"} 
           type="submit" 
           variant="submit" 
-          disabled={loading}
+          disabled={nameLoading || avatarLoading}
+          loading={nameLoading}
         />
 
         <footer>
@@ -255,6 +247,7 @@ export const Profile = () => {
             type="button"
             variant="background_transparent"
             onClick={handleDelete}
+            disabled={nameLoading || avatarLoading}
           />
         </footer>
       </FormWrapper>

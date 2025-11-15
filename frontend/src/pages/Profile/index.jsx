@@ -143,11 +143,7 @@ export const Profile = () => {
         }),
       };
 
-<<<<<<< HEAD
-      const response = await apiFetchJson(
-=======
       const response = await apiFetch(
->>>>>>> 35052fc04b2248b2552f687a87767ef1a04b75e2
         `${apiBaseUrl}/update-user/`,
         options
       );

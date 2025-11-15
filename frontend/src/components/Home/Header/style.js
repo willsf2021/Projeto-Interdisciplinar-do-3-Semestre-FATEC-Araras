@@ -17,6 +17,16 @@ export const AvatarContainer = styled.div`
   .avatar-wrapper{
     display: flex;
     position: relative;
+    
+    .avatar-image{
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      overflow: hidden;
+      img{
+        width: 100%;
+      }
+    }
 
     .edit-icon{
       display: flex;

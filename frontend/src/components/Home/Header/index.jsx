@@ -50,6 +50,21 @@ export const Header = ({ userName }) => {
   };
 
   const displayName = user?.name || userName;
+  
+  // Função para construir a URL completa do avatar
+  const buildAvatarUrl = (avatarPath) => {
+    if (!avatarPath) return null;
+    
+    // Se já for uma URL completa, retorna como está
+    if (avatarPath.startsWith('http')) return avatarPath;
+    
+    // Se for um caminho relativo, constrói a URL completa
+    const baseUrl = import.meta.env.VITE_API_URL;
+    console.log(`${baseUrl}${avatarPath}`)
+    return `${baseUrl}${avatarPath}`;
+  };
+  
+  const avatarUrl = buildAvatarUrl(user?.avatar_url);
 
   return (
     <HeaderContainer>
@@ -59,7 +74,9 @@ export const Header = ({ userName }) => {
         title="Ver perfil"
       >
         <div className="avatar-wrapper">
-          <PersonCircle size={46} />
+          <div className="avatar-image">
+            <img src={avatarUrl} alt="" />
+          </div>
           <div className="edit-icon">
             <GearFill size={12} />
           </div>

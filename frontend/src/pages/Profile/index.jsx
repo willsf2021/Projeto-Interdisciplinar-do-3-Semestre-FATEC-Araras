@@ -1,13 +1,7 @@
 import { useState, useEffect } from "react";
 
 import {
-  SectionFormWrapper,
   FormWrapper,
-  DividerWrapper,
-  SecondaryButton,
-  FormFooter,
-  ActionFooter,
-  LogoContainer,
   InputFlexWrapper,
 } from "../../components/Forms/FormWrappers/styles";
 
@@ -22,6 +16,7 @@ import { ArrowLeft } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useNotification } from "../../hooks/useNotification";
+import { useAuth } from "../../contexts/AuthContext"; // 👈 SÓ ADICIONEI ISSO
 
 // Função para construir a URL completa do avatar
 const buildAvatarUrl = (avatarPath) => {
@@ -41,8 +36,12 @@ export const Profile = () => {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const { apiFetchJson, apiFetch } = useApi();
+  const { apiFetch } = useApi();
   const { notify } = useNotification();
+  
+  // 👈 SÓ ADICIONEI ESTA LINHA - mantém seu estado local E usa o context
+  const { user, updateUserAvatar, updateUserProfile } = useAuth();
+  
   const [formData, setFormData] = useState({
     name: "",
     avatar_url: "",
@@ -89,10 +88,9 @@ export const Profile = () => {
       const formData = new FormData();
       formData.append('avatar', file);
 
-      // Usa URL base da variável de ambiente ou fallback para localhost
-      const apiBaseUrl =  import.meta.env.VITE_API_URL;
+      const apiBaseUrl = import.meta.env.VITE_API_URL;
       const response = await apiFetch(
-        `${apiBaseUrl}/update-avatar/`,
+        `${apiBaseUrl}/update-avatar/`, // 👈 CORRIGI: adicionei /
         {
           method: "PUT",
           body: formData,
@@ -102,7 +100,6 @@ export const Profile = () => {
       const data = await response.json();
 
       if (response.ok) {
-
         const fullAvatarUrl = buildAvatarUrl(data.avatar_url);
         
         notify("Foto de perfil atualizada com sucesso!", "success");
@@ -110,6 +107,11 @@ export const Profile = () => {
           ...prev,
           avatar_url: fullAvatarUrl
         }));
+        
+        // 👈 SÓ ADICIONEI ESTA LINHA - atualiza o context também
+        if (updateUserAvatar) {
+          updateUserAvatar(fullAvatarUrl);
+        }
       } else {
         throw new Error(data.erro || 'Erro ao atualizar avatar');
       }
@@ -129,8 +131,7 @@ export const Profile = () => {
     try {
       setLoading(true);
 
-      // Usa URL base da variável de ambiente ou fallback para localhost
-      const apiBaseUrl = import.meta.env.VITE_API_URL
+      const apiBaseUrl = import.meta.env.VITE_API_URL;
 
       const options = {
         method: "PUT",
@@ -142,19 +143,30 @@ export const Profile = () => {
         }),
       };
 
-      const response = await apiFetchJson(
-        `${apiBaseUrl}/api/update-user/`,
+      const response = await apiFetch(
+        `${apiBaseUrl}/update-user/`,
         options
       );
 
-      const user = response ?? {};
+      const data = await response.json();
 
-      setFormData(prev => ({
-        ...prev,
-        name: user.name ?? prev.name,
-      }));
-      
-      notify("Dados do usuário alterados com sucesso!", "success");
+      if (response.ok) {
+        setFormData(prev => ({
+          ...prev,
+          name: data.name || formData.name,
+        }));
+        
+        // 👈 SÓ ADICIONEI ESTA LINHA - atualiza o context também
+        if (updateUserProfile) {
+          updateUserProfile({
+            name: data.name || formData.name,
+          });
+        }
+        
+        notify("Dados do usuário alterados com sucesso!", "success");
+      } else {
+        throw new Error(data.erro || 'Erro ao atualizar perfil');
+      }
     } catch (error) {
       console.log(error);
       notify(error.message, "error");

@@ -12,6 +12,8 @@ const ACTION_TYPES = {
   CLEAR_ERROR: "CLEAR_ERROR",
   LOGOUT: "LOGOUT",
   SET_ACTIVITY: "SET_ACTIVITY",
+  UPDATE_USER: "UPDATE_USER", // 👈 NOVA ACTION para atualizar dados do usuário
+  UPDATE_AVATAR: "UPDATE_AVATAR", // 👈 NOVA ACTION para atualizar avatar
 };
 
 // Estado inicial
@@ -37,6 +39,24 @@ const authReducer = (state, action) => {
         loading: false,
         error: null,
         lastActivity: Date.now(),
+      };
+
+    case ACTION_TYPES.UPDATE_USER: // 👈 NOVO CASE
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...action.payload
+        }
+      };
+
+    case ACTION_TYPES.UPDATE_AVATAR: // 👈 NOVO CASE
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          avatar_url: action.payload
+        }
       };
 
     case ACTION_TYPES.SET_ERROR:
@@ -157,12 +177,9 @@ export const AuthProvider = ({ children }) => {
     
     refreshIntervalRef.current = setInterval(async () => {
       try {
-        // 🔒 OPÇÃO SEGURA: Auto-refresh NÃO atualiza a atividade do usuário
-        // Isso garante que apenas atividades reais do usuário resetem o timer de inatividade
         await refreshToken();
       } catch (error) {
         // Erro silencioso no auto-refresh
-        // O logout só acontecerá quando o usuário tentar fazer uma ação e o token estiver expirado
       }
     }, REFRESH_INTERVAL);
   };
@@ -204,6 +221,7 @@ export const AuthProvider = ({ children }) => {
       const result = await authService.getUser();
 
       if (result.status === 200) {
+        // 👇 AGORA SALVA AS INFORMAÇÕES COMPLETAS DO USUÁRIO
         dispatch({ type: ACTION_TYPES.SET_USER, payload: result.data });
       } else {
         dispatch({ type: ACTION_TYPES.LOGOUT });
@@ -211,6 +229,30 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       dispatch({ type: ACTION_TYPES.LOGOUT });
     }
+  };
+
+  // 👇 NOVAS FUNÇÕES PARA ATUALIZAR DADOS DO USUÁRIO
+  const updateUserData = async (userData) => {
+    try {
+      const result = await authService.getUser();
+      
+      if (result.status === 200) {
+        dispatch({ type: ACTION_TYPES.UPDATE_USER, payload: result.data });
+        return { success: true, data: result.data };
+      } else {
+        return { success: false, error: 'Erro ao atualizar dados do usuário' };
+      }
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
+  const updateUserProfile = (userData) => {
+    dispatch({ type: ACTION_TYPES.UPDATE_USER, payload: userData });
+  };
+
+  const updateUserAvatar = (avatarUrl) => {
+    dispatch({ type: ACTION_TYPES.UPDATE_AVATAR, payload: avatarUrl });
   };
 
   // Refresh token com fila para evitar múltiplas chamadas simultâneas
@@ -227,9 +269,6 @@ export const AuthProvider = ({ children }) => {
       const result = await authService.refreshToken();
       
       if (result.status === 200) {
-        // 🔒 OPÇÃO SEGURA: NÃO atualiza a atividade do usuário ao renovar token
-        // Apenas renova o token silenciosamente
-        
         refreshQueue.forEach(({ resolve }) => resolve({ 
           success: true, 
           data: result.data 
@@ -344,6 +383,9 @@ export const AuthProvider = ({ children }) => {
     checkAuth,
     refreshToken,
     updateActivity,
+    updateUserData, // 👈 NOVA FUNÇÃO
+    updateUserProfile, // 👈 NOVA FUNÇÃO
+    updateUserAvatar, // 👈 NOVA FUNÇÃO
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

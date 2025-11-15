@@ -33,16 +33,16 @@ export const Header = ({ userName }) => {
     setLoading(true);
 
     try {
-      console.log('🚪 Usuário solicitou logout...');
+      console.log("🚪 Usuário solicitou logout...");
       const result = await logout();
-      
+
       if (result?.success) {
         notify("Logout realizado com sucesso!", "success");
-        console.log('✅ Logout bem-sucedido, redirecionando...');
+        console.log("✅ Logout bem-sucedido, redirecionando...");
         navigate("/login");
       }
     } catch (error) {
-      console.error('❌ Erro no logout:', error);
+      console.error("❌ Erro no logout:", error);
       notify("Erro ao fazer logout", "error");
     } finally {
       setLoading(false);
@@ -53,8 +53,12 @@ export const Header = ({ userName }) => {
 
   return (
     <HeaderContainer>
-      <AvatarContainer>
-        <PersonCircle />
+      <AvatarContainer
+        onClick={() => navigate("/profile")} // ✅ redireciona ao clicar
+        style={{ cursor: "pointer" }} // 💡 indica que é clicável
+        title="Ver perfil"
+      >
+        <PersonCircle size={46} />
       </AvatarContainer>
 
       <GreetingMessage>
@@ -65,21 +69,23 @@ export const Header = ({ userName }) => {
       </GreetingMessage>
 
       <LogoutContainer>
-        <LogoutLink 
-          href="#" 
+        <LogoutLink
+          href="#"
           onClick={handleLogout}
           disabled={loading}
           title="Sair do sistema"
         >
           {loading ? (
-            <div style={{
-              width: "16px",
-              height: "16px",
-              border: "2px solid currentColor",
-              borderTop: "2px solid transparent",
-              borderRadius: "50%",
-              animation: "spin 0.8s linear infinite"
-            }} />
+            <div
+              style={{
+                width: "16px",
+                height: "16px",
+                border: "2px solid currentColor",
+                borderTop: "2px solid transparent",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+              }}
+            />
           ) : (
             <BoxArrowLeft />
           )}

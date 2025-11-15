@@ -13,6 +13,27 @@ export const AvatarContainer = styled.div`
   padding-right: 8px;
   font-size: 48px;
   display: flex;
+
+  .avatar-wrapper{
+    display: flex;
+    position: relative;
+
+    .edit-icon{
+      display: flex;
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      z-index: 2;
+      background-color: white;
+      color: ${({ theme }) => theme.colors.primary};
+      width: min-content;
+      max-height: fit-content;
+      padding: 2px;
+      border-radius: 50%;
+      border: 2px solid ${({ theme }) => theme.colors.primary};
+    }
+  }
+
 `;
 
 export const GreetingMessage = styled.div`

@@ -143,7 +143,7 @@ export const Profile = () => {
       };
 
       const response = await apiFetchJson(
-        `${apiBaseUrl}/api/update-user/`,
+        `${apiBaseUrl}/update-user/`,
         options
       );
 

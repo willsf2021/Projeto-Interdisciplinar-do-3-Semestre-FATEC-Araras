@@ -11,7 +11,7 @@ import {
   LogoutLink,
 } from "./style";
 
-import { PersonCircle, BoxArrowLeft } from "react-bootstrap-icons";
+import { PersonCircle, BoxArrowLeft, GearFill } from "react-bootstrap-icons";
 
 export const Header = ({ userName }) => {
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,12 @@ export const Header = ({ userName }) => {
         style={{ cursor: "pointer" }} // 💡 indica que é clicável
         title="Ver perfil"
       >
-        <PersonCircle size={46} />
+        <div className="avatar-wrapper">
+          <PersonCircle size={46} />
+          <div className="edit-icon">
+            <GearFill size={12} />
+          </div>
+        </div>
       </AvatarContainer>
 
       <GreetingMessage>

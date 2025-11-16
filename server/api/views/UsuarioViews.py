@@ -58,7 +58,7 @@ class RegistroView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=access_max_age, 
-           domain="192.168.3.16", 
+           domain="192.168.3.4", 
         )
         response.set_cookie(
             key="refresh",
@@ -67,7 +67,7 @@ class RegistroView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=refresh_max_age,
-            domain="192.168.3.16",  # Adicione
+            domain="192.168.3.4",  # Adicione
         )
         return response
 
@@ -110,7 +110,7 @@ class LoginView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=access_max_age,
-            domain="192.168.3.16",   # Adicione
+            domain="192.168.3.4",   # Adicione
         )
         response.set_cookie(
             key="refresh",
@@ -119,7 +119,7 @@ class LoginView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=refresh_max_age,
-            domain="192.168.3.16",  # Adicione
+            domain="192.168.3.4",  # Adicione
         )
         return response
     

@@ -36,16 +36,16 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://192.168.3.16:5173", # ME ALTERE COM PORTA
+    "http://192.168.3.4:5173", # ME ALTERE COM PORTA
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.3.16'] # ME ALTERE SEM PORTA (ÚLTIMO IP)
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.3.4'] # ME ALTERE SEM PORTA (ÚLTIMO IP)
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
-    "http://192.168.3.16:5173", # ME ALTERE COM PORTA
+    "http://192.168.3.4:5173", # ME ALTERE COM PORTA
     "http://localhost:8000",
-    "http://192.168.3.16:8000", # ME ALTERE COM PORTA
+    "http://192.168.3.4:8000", # ME ALTERE COM PORTA
 ]
 
 AUTH_USER_MODEL = 'api.Usuario' 

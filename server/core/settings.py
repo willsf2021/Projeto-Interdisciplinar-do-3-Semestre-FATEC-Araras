@@ -33,7 +33,7 @@ GOOGLE_OAUTH_CLIENT_SECET = os.getenv('GOOGLE_OAUTH_CLIENT_SECET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ORIGIN = os.getenv("ORIGIN", "192.168.3.4")
+ORIGIN = os.getenv("ORIGIN", "localhost")
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [

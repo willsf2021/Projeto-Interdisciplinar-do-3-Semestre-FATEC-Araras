@@ -12,8 +12,8 @@ const ACTION_TYPES = {
   CLEAR_ERROR: "CLEAR_ERROR",
   LOGOUT: "LOGOUT",
   SET_ACTIVITY: "SET_ACTIVITY",
-  UPDATE_USER: "UPDATE_USER", // 👈 NOVA ACTION para atualizar dados do usuário
-  UPDATE_AVATAR: "UPDATE_AVATAR", // 👈 NOVA ACTION para atualizar avatar
+  UPDATE_USER: "UPDATE_USER",
+  UPDATE_AVATAR: "UPDATE_AVATAR",
 };
 
 // Estado inicial
@@ -25,6 +25,30 @@ const initialState = {
   lastActivity: Date.now(),
 };
 
+// Função para construir a URL completa do avatar (CENTRALIZADA)
+const buildAvatarUrl = (avatarPath) => {
+  if (!avatarPath) return null;
+
+  if (avatarPath.startsWith("http")) return avatarPath;
+
+  const baseUrl = import.meta.env.VITE_API_URL;
+  return `${baseUrl}${avatarPath}`;
+};
+
+// Função para processar dados do usuário aplicando a URL do avatar
+const processUserData = (userData) => {
+  if (!userData) return null;
+  
+  return {
+    ...userData,
+    avatar_url: buildAvatarUrl(userData.avatar_url),
+    // Garante que outros campos estejam presentes
+    name: userData.name || "",
+    email: userData.email || "",
+    type: userData.type || "user"
+  };
+};
+
 // Reducer
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -34,28 +58,28 @@ const authReducer = (state, action) => {
     case ACTION_TYPES.SET_USER:
       return {
         ...state,
-        user: action.payload,
+        user: processUserData(action.payload),
         isAuthenticated: true,
         loading: false,
         error: null,
         lastActivity: Date.now(),
       };
 
-    case ACTION_TYPES.UPDATE_USER: // 👈 NOVO CASE
+    case ACTION_TYPES.UPDATE_USER:
       return {
         ...state,
-        user: {
+        user: processUserData({
           ...state.user,
           ...action.payload
-        }
+        })
       };
 
-    case ACTION_TYPES.UPDATE_AVATAR: // 👈 NOVO CASE
+    case ACTION_TYPES.UPDATE_AVATAR:
       return {
         ...state,
         user: {
           ...state.user,
-          avatar_url: action.payload
+          avatar_url: buildAvatarUrl(action.payload)
         }
       };
 
@@ -221,7 +245,6 @@ export const AuthProvider = ({ children }) => {
       const result = await authService.getUser();
 
       if (result.status === 200) {
-        // 👇 AGORA SALVA AS INFORMAÇÕES COMPLETAS DO USUÁRIO
         dispatch({ type: ACTION_TYPES.SET_USER, payload: result.data });
       } else {
         dispatch({ type: ACTION_TYPES.LOGOUT });
@@ -231,8 +254,8 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 👇 NOVAS FUNÇÕES PARA ATUALIZAR DADOS DO USUÁRIO
-  const updateUserData = async (userData) => {
+  // 👇 FUNÇÕES PARA ATUALIZAR DADOS DO USUÁRIO
+  const updateUserData = async () => {
     try {
       const result = await authService.getUser();
       
@@ -383,9 +406,9 @@ export const AuthProvider = ({ children }) => {
     checkAuth,
     refreshToken,
     updateActivity,
-    updateUserData, // 👈 NOVA FUNÇÃO
-    updateUserProfile, // 👈 NOVA FUNÇÃO
-    updateUserAvatar, // 👈 NOVA FUNÇÃO
+    updateUserData,
+    updateUserProfile,
+    updateUserAvatar,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

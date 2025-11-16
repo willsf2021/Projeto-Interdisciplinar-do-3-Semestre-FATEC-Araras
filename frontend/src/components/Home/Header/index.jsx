@@ -1,5 +1,5 @@
 // components/Home/Header/index.jsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useNotification } from "../../../hooks/useNotification";
@@ -11,13 +11,12 @@ import {
   LogoutLink,
 } from "./style";
 
-import { PersonCircle, BoxArrowLeft, GearFill } from "react-bootstrap-icons";
+import { BoxArrowLeft, GearFill } from "react-bootstrap-icons";
 
 export const Header = ({ userName }) => {
   const [loading, setLoading] = useState(false);
   const { logout, user } = useAuth();
   const { notify } = useNotification();
-  const [avatarUrl, setAvatarUrl] = useState("");
 
   const navigate = useNavigate();
 
@@ -52,34 +51,20 @@ export const Header = ({ userName }) => {
   };
 
   const displayName = user?.name || userName;
-  useEffect(() => {
-    buildAvatarUrl(user?.avatar_url);
-  }, []);
-  // Função para construir a URL completa do avatar
-  function buildAvatarUrl(avatarPath) {
-    if (!avatarPath) return null;
-    const avatarPathFinal = "";
-    // Se já for uma URL completa, retorna como está
-    if (avatarPath.startsWith("http")) {
-      setAvatarUrl(avatarPath);
-      return;
-    }
-    const baseUrl = import.meta.env.VITE_API_URL;
-    setAvatarUrl(`${baseUrl}${avatarPath}`);
-    console.log(`${baseUrl}${avatarPath}`);
-    return;
-  }
 
   return (
     <HeaderContainer>
       <AvatarContainer
-        onClick={() => navigate("/profile")} // ✅ redireciona ao clicar
-        style={{ cursor: "pointer" }} // 💡 indica que é clicável
+        onClick={() => navigate("/profile")}
+        style={{ cursor: "pointer" }}
         title="Ver perfil"
       >
         <div className="avatar-wrapper">
           <div className="avatar-image">
-            <img src={avatarUrl} alt="" />
+            <img 
+              src={user?.avatar_url || "https://cdn-icons-png.flaticon.com/512/847/847969.png"} 
+              alt="Avatar do usuário" 
+            />
           </div>
           <div className="edit-icon">
             <GearFill size={12} />

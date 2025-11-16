@@ -8,4 +8,6 @@ __pycache__/
 
 # Ignorar outros diretórios de cache
 server/documentos
-server/media/avatars
+
+avatars/
+documentos/

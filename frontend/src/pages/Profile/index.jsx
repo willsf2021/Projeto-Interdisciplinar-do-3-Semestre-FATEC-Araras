@@ -1,32 +1,17 @@
 import { useState, useEffect } from "react";
-
 import {
   FormWrapper,
   InputFlexWrapper,
 } from "../../components/Forms/FormWrappers/styles";
-
 import { Input } from "../../components/Forms/Input";
 import { SubmitButton } from "../../components/Forms/SubmitButton";
-
 import { Container, BackButton } from "./style";
-
 import { authService } from "../../services/authService";
-
 import { ArrowLeft, PencilFill } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../../hooks/useApi";
 import { useNotification } from "../../hooks/useNotification";
 import { useAuth } from "../../contexts/AuthContext";
-
-// Função para construir a URL completa do avatar
-const buildAvatarUrl = (avatarPath) => {
-  if (!avatarPath) return null;
-
-  if (avatarPath.startsWith("http")) return avatarPath;
-
-  const baseUrl = import.meta.env.VITE_API_URL;
-  return `${baseUrl}${avatarPath}`;
-};
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -71,25 +56,14 @@ export const Profile = () => {
 
   // --- Buscar dados do usuário ---
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await authService.getUser();
-        const user = response.data ?? {};
-
-        const fullAvatarUrl = buildAvatarUrl(user.avatar_url);
-
-        setFormData({
-          name: user.name ?? "",
-          avatar_url: fullAvatarUrl ?? "",
-        });
-        setPreview(fullAvatarUrl);
-      } catch (error) {
-        console.error("Erro ao buscar usuário:", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        avatar_url: user.avatar_url || "",
+      });
+      setPreview(user.avatar_url);
+    }
+  }, [user]);
 
   // --- Atualizar avatar IMEDIATAMENTE quando selecionar uma imagem ---
   const handleImageChange = async (e) => {
@@ -115,16 +89,14 @@ export const Profile = () => {
       const data = await response.json();
 
       if (response.ok) {
-        const fullAvatarUrl = buildAvatarUrl(data.avatar_url);
-
         notify("Foto de perfil atualizada com sucesso!", "success");
         setFormData((prev) => ({
           ...prev,
-          avatar_url: fullAvatarUrl,
+          avatar_url: data.avatar_url,
         }));
 
         if (updateUserAvatar) {
-          updateUserAvatar(fullAvatarUrl);
+          updateUserAvatar(data.avatar_url);
         }
       } else {
         throw new Error(data.erro || "Erro ao atualizar avatar");

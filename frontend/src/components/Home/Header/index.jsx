@@ -1,5 +1,5 @@
 // components/Home/Header/index.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import { useNotification } from "../../../hooks/useNotification";
@@ -17,6 +17,8 @@ export const Header = ({ userName }) => {
   const [loading, setLoading] = useState(false);
   const { logout, user } = useAuth();
   const { notify } = useNotification();
+  const [avatarUrl, setAvatarUrl] = useState("");
+
   const navigate = useNavigate();
 
   const today = new Date();
@@ -50,21 +52,23 @@ export const Header = ({ userName }) => {
   };
 
   const displayName = user?.name || userName;
-  
+  useEffect(() => {
+    buildAvatarUrl(user?.avatar_url);
+  }, []);
   // Função para construir a URL completa do avatar
-  const buildAvatarUrl = (avatarPath) => {
+  function buildAvatarUrl(avatarPath) {
     if (!avatarPath) return null;
-    
+    const avatarPathFinal = "";
     // Se já for uma URL completa, retorna como está
-    if (avatarPath.startsWith('http')) return avatarPath;
-    
-    // Se for um caminho relativo, constrói a URL completa
+    if (avatarPath.startsWith("http")) {
+      setAvatarUrl(avatarPath);
+      return;
+    }
     const baseUrl = import.meta.env.VITE_API_URL;
-    console.log(`${baseUrl}${avatarPath}`)
-    return `${baseUrl}${avatarPath}`;
-  };
-  
-  const avatarUrl = buildAvatarUrl(user?.avatar_url);
+    setAvatarUrl(`${baseUrl}${avatarPath}`);
+    console.log(`${baseUrl}${avatarPath}`);
+    return;
+  }
 
   return (
     <HeaderContainer>

@@ -33,19 +33,25 @@ GOOGLE_OAUTH_CLIENT_SECET = os.getenv('GOOGLE_OAUTH_CLIENT_SECET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
+ORIGIN = os.getenv("ORIGIN", "192.168.3.4")
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://192.168.3.4:5173", # ME ALTERE COM PORTA
+    f"http://{ORIGIN}:5173",
 ]
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.3.4'] # ME ALTERE SEM PORTA (ÚLTIMO IP)
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    ORIGIN,
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
-    "http://192.168.3.4:5173", # ME ALTERE COM PORTA
+    f"http://{ORIGIN}:5173",
     "http://localhost:8000",
-    "http://192.168.3.4:8000", # ME ALTERE COM PORTA
+    f"http://{ORIGIN}:8000",
 ]
 
 AUTH_USER_MODEL = 'api.Usuario' 

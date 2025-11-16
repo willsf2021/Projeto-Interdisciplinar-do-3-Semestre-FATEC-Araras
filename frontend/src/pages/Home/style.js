@@ -45,7 +45,6 @@ export const FixedBottom = styled.div`
   bottom: 24px;
   left: 24px;
   right: 24px;
-  background: white;
   z-index: 10;
   flex: 1;
 `;

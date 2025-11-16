@@ -5,7 +5,6 @@ import bgDesktop from "../../assets/images/bg_desktop.svg";
 
 
 export const HomeContainer = styled.div`
-  /* COLOQUE SUA COR DE FUNDO AQUI - var(--primary-color) */
   background: url(${bgMobile}),
     ${({ theme }) => theme.colors.primary} no-repeat center center / cover;
   height: 100dvh;
@@ -23,6 +22,7 @@ export const MainSection = styled.section`
   border-radius: 24px 24px 0px 0px;
   display: flex;
   flex-direction: column;
+  gap: 32px 0px;
   padding: 24px;
   height: 100dvh;
   position: relative;
@@ -30,4 +30,22 @@ export const MainSection = styled.section`
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     background-image: url(${bgDesktop});
   }
+`;
+
+/* ADICIONE este novo componente: */
+export const ScrollContainer = styled.div`
+  overflow-y: auto;
+  margin-bottom: 24px;
+  max-height: 60vh;
+`;
+
+/* ADICIONE este novo componente: */
+export const FixedBottom = styled.div`
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  background: white;
+  z-index: 10;
+  flex: 1;
 `;

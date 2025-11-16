@@ -8,7 +8,7 @@ export const FloatingBtn = styled.button`
   width: 48px;
   height: 48px;
   border: 1px solid ${({ theme }) => theme.colors.grayButton};
-  background-color: transparent;
+  background-color: white;
   bottom: 96px;
   right: 24px;
   z-index: 999;

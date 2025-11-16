@@ -9,11 +9,18 @@ import { EmptyState } from "../../components/Home/EmptyState/";
 import { ToggleSwitch } from "../../components/Home/ToggleSwicth";
 import { FloatingButton } from "../../components/Home/FloatingButton/";
 import { CustomSelect } from "../../components/Home/CustomSelect";
-import { HomeContainer, MainSection } from "./style";
+import { List } from "../../components/Home/List"; // Novo componente
+import {
+  HomeContainer,
+  MainSection,
+  ScrollContainer,
+  FixedBottom,
+} from "./style";
 import { Search, FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
 
 export const Home = () => {
   const [activeTab, setActiveTab] = useState("documents");
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
   const { user, isAuthenticated, loading } = useAuth();
   const { clients, documents, loading: dataLoading } = useData();
   const navigate = useNavigate();
@@ -23,6 +30,24 @@ export const Home = () => {
       navigate("/login");
     }
   }, [isAuthenticated, loading, navigate]);
+
+  // Função para lidar com seleção no CustomSelect
+  const handleSelectChange = (selectedOption) => {
+    if (selectedOption) {
+      setSearchTerm(selectedOption.label || "");
+    } else {
+      setSearchTerm("");
+    }
+  };
+
+  // Função para lidar com clique em um item da lista
+  const handleItemClick = (item) => {
+    if (activeTab === "documents") {
+      navigate(`/document/${item.id}`);
+    } else {
+      navigate(`/client/${item.id}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -43,6 +68,9 @@ export const Home = () => {
     return null;
   }
 
+  const currentItems = activeTab === "documents" ? documents : clients;
+  const hasItems = currentItems && currentItems.length > 0;
+
   return (
     <HomeContainer>
       <Header userName={user?.name} />
@@ -55,44 +83,60 @@ export const Home = () => {
           placeholder={activeTab === "documents" ? "documentos" : "clientes"}
           type={activeTab}
           icon={<Search />}
+          onSelectChange={handleSelectChange}
         />
 
-        {dataLoading ? (
-          <div style={{ padding: "2rem", textAlign: "center" }}>
-            Carregando dados...
-          </div>
-        ) : (
-          <>
-            {activeTab === "documents" ? (
-              <>
+        <ScrollContainer>
+          {" "}
+          {/* ENVOLVA apenas o conteúdo scrollável */}
+          {dataLoading ? (
+            <div style={{ padding: "2rem", textAlign: "center" }}>
+              Carregando dados...
+            </div>
+          ) : (
+            <>
+              {hasItems ? (
+                <List
+                  type={activeTab}
+                  items={currentItems}
+                  searchTerm={searchTerm}
+                  onItemClick={handleItemClick}
+                />
+              ) : activeTab === "documents" ? (
                 <EmptyState
                   text='Clique aqui para "Criar novo documento" e aproveite o melhor do sistema!'
                   linkText="Criar novo documento"
                   linkHref="/document"
                 />
-                <FloatingButton icon={<FilePlusFill />} href="/document" />
-              </>
-            ) : (
-              <>
+              ) : (
                 <EmptyState
                   text='Clique aqui para "Adicionar novo Cliente" e aproveite o melhor do sistema!'
                   linkText="Adicionar novo Cliente"
+                  linkHref="/client"
                 />
+              )}
 
+              {/* Floating Button */}
+              {activeTab === "documents" ? (
+                <FloatingButton icon={<FilePlusFill />} href="/document" />
+              ) : (
                 <FloatingButton icon={<PersonPlusFill />} href="/client" />
-              </>
-            )}
-          </>
-        )}
+              )}
+            </>
+          )}
+        </ScrollContainer>
 
-        <ToggleSwitch
-          options={[
-            { value: "documents", label: "Documentos" },
-            { value: "clients", label: "Clientes" },
-          ]}
-          activeOption={activeTab}
-          onChange={setActiveTab}
-        />
+        {/* MOVER o ToggleSwitch para o FixedBottom - FORA do ScrollContainer */}
+        <FixedBottom>
+          <ToggleSwitch
+            options={[
+              { value: "documents", label: "Documentos" },
+              { value: "clients", label: "Clientes" },
+            ]}
+            activeOption={activeTab}
+            onChange={setActiveTab}
+          />
+        </FixedBottom>
       </MainSection>
     </HomeContainer>
   );

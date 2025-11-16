@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 export const ToggleContainer = styled.div`
-  display: flex;
+   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: auto;
+  width: 100%;
 `;
 
 export const Toggle = styled.div`

@@ -115,19 +115,18 @@ export const Home = () => {
                   linkHref="/client"
                 />
               )}
-
-              {/* Floating Button */}
-              {activeTab === "documents" ? (
-                <FloatingButton icon={<FilePlusFill />} href="/document" />
-              ) : (
-                <FloatingButton icon={<PersonPlusFill />} href="/client" />
-              )}
             </>
           )}
         </ScrollContainer>
 
         {/* MOVER o ToggleSwitch para o FixedBottom - FORA do ScrollContainer */}
         <FixedBottom>
+          {/* Floating Button */}
+          {activeTab === "documents" ? (
+            <FloatingButton icon={<FilePlusFill />} href="/document" />
+          ) : (
+            <FloatingButton icon={<PersonPlusFill />} href="/client" />
+          )}
           <ToggleSwitch
             options={[
               { value: "documents", label: "Documentos" },

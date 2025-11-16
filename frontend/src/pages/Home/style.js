@@ -36,7 +36,7 @@ export const MainSection = styled.section`
 export const ScrollContainer = styled.div`
   overflow-y: auto;
   margin-bottom: 24px;
-  max-height: 60vh;
+  max-height: calc(90dvh - 240px); /* Altura dinâmica considerando header, search e toggle */
 `;
 
 /* ADICIONE este novo componente: */

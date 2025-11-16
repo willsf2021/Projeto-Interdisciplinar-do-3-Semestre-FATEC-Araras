@@ -55,17 +55,19 @@ class RegistroView(UsuarioBaseView):
             key="access",
             value=access_token,
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="Lax",
             max_age=access_max_age, 
+           domain="192.168.3.16", 
         )
         response.set_cookie(
             key="refresh",
             value=str(refresh),
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="Lax",
             max_age=refresh_max_age,
+            domain="192.168.3.16",  # Adicione
         )
         return response
 
@@ -105,17 +107,19 @@ class LoginView(UsuarioBaseView):
             key="access",
             value=access_token,
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="Lax",
             max_age=access_max_age,
+            domain="192.168.3.16",   # Adicione
         )
         response.set_cookie(
             key="refresh",
             value=str(refresh),
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="Lax",
             max_age=refresh_max_age,
+            domain="192.168.3.16",  # Adicione
         )
         return response
     

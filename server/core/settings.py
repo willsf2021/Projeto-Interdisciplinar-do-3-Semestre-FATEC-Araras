@@ -36,13 +36,23 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "http://192.168.3.16:5173", # ME ALTERE COM PORTA
 ]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.3.16'] # ME ALTERE SEM PORTA (ÚLTIMO IP)
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://192.168.3.16:5173", # ME ALTERE COM PORTA
+    "http://localhost:8000",
+    "http://192.168.3.16:8000", # ME ALTERE COM PORTA
+]
+
 AUTH_USER_MODEL = 'api.Usuario' 
 
 # Application definition
-
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -126,6 +136,9 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

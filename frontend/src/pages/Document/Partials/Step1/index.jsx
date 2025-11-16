@@ -61,7 +61,7 @@ export const Step1 = () => {
     }
 
     try {
-      const url = `http://localhost:8000/api/criar-cliente/`;
+      const url = `${import.meta.env.VITE_API_URL}/criar-cliente/`;
       const options = {
         method: "POST",
         headers: {

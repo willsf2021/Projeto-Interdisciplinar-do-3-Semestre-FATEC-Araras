@@ -1,5 +1,4 @@
 // services/authService.js
-const API_BASE_URL = "http://localhost:8000/api";
 
 const handleResponse = async (response) => {
   const data = await response.json();
@@ -24,7 +23,7 @@ const handleError = (error) => {
 export const authService = {
   login: async ({ email, password, remember }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/login/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, remember }),
@@ -39,7 +38,7 @@ export const authService = {
 
   register: async ({ email, password, name, type }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/registro/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/registro/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, type }),
@@ -54,7 +53,7 @@ export const authService = {
 
   getUser: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/get-user/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/get-user/`, {
         method: "GET",
         credentials: "include",
       });
@@ -67,7 +66,7 @@ export const authService = {
 
   logout: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/logout/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/logout/`, {
         method: "POST",
         credentials: "include",
       });
@@ -83,7 +82,7 @@ export const authService = {
 
   refreshToken: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/refresh/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/refresh/`, {
         method: "POST",
         credentials: "include",
       });
@@ -96,7 +95,7 @@ export const authService = {
 
   verifySession: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/check-session/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/check-session/`, {
         method: "GET",
         credentials: "include",
       });
@@ -109,7 +108,7 @@ export const authService = {
 
   deleteAccount: async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/delete-account/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/delete-account/`, {
         method: "DELETE",
         credentials: "include",
       });

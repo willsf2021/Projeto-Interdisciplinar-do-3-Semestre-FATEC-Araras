@@ -38,7 +38,7 @@ export const useSelectOptions = (type, clients, documents) => {
     }
 
     try {
-      const url = `http://localhost:8000/api/${endpoint}?search=${encodeURIComponent(inputValue)}`;
+      const url = `${import.meta.env.VITE_API_URL}/${endpoint}?search=${encodeURIComponent(inputValue)}`;
       const response = await fetch(url, { credentials: "include" });
       
       if (!response.ok) throw new Error("Erro na requisição");

@@ -17,7 +17,7 @@ export const useSelectSearch = (type, clients, documents) => {
     }
 
     try {
-      let url = `http://localhost:8000/api/${endpoint}`;
+      let url = `${import.meta.env.VITE_API_URL}/${endpoint}`;
       if (inputValue) {
         url += `?search=${encodeURIComponent(inputValue)}`;
       }

@@ -170,9 +170,9 @@ export const DataProvider = ({ children }) => {
       dispatch({ type: ACTION_TYPES.SET_LOADING, payload: true });
 
       const [clientsData, documentsData, foodsData] = await Promise.all([
-        apiFetchJson("http://localhost:8000/api/listar-clientes/"),
-        apiFetchJson("http://localhost:8000/api/listar-documentos/"),
-        apiFetchJson("http://localhost:8000/api/alimentos/"),
+        apiFetchJson(`${import.meta.env.VITE_API_URL}/listar-clientes/`),
+        apiFetchJson(`${import.meta.env.VITE_API_URL}/listar-documentos/`),
+        apiFetchJson(`${import.meta.env.VITE_API_URL}/alimentos/`),
       ]);
 
       dispatch({ type: ACTION_TYPES.SET_CLIENTS, payload: clientsData });
@@ -187,7 +187,7 @@ export const DataProvider = ({ children }) => {
   const refreshClients = async () => {
     try {
       const clientsData = await apiFetchJson(
-        "http://localhost:8000/api/listar-clientes/"
+        `${import.meta.env.VITE_API_URL}/listar-clientes/`
       );
       dispatch({ type: ACTION_TYPES.SET_CLIENTS, payload: clientsData });
       return { success: true, data: clientsData };
@@ -200,7 +200,7 @@ export const DataProvider = ({ children }) => {
   const refreshDocuments = async () => {
     try {
       const documentsData = await apiFetchJson(
-        "http://localhost:8000/api/listar-documentos/"
+        `${import.meta.env.VITE_API_URL}/listar-documentos/`
       );
       dispatch({ type: ACTION_TYPES.SET_DOCUMENTS, payload: documentsData });
       return { success: true, data: documentsData };
@@ -213,7 +213,7 @@ export const DataProvider = ({ children }) => {
   const refreshFoods = async () => {
     try {
       const foodsData = await apiFetchJson(
-        "http://localhost:8000/api/alimentos/"
+        `${import.meta.env.VITE_API_URL}/alimentos/`
       );
       dispatch({ type: ACTION_TYPES.SET_FOODS, payload: foodsData });
       return { success: true, data: foodsData };

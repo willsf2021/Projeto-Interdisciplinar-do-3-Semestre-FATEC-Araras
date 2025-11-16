@@ -158,7 +158,7 @@ export const Step1 = () => {
         </div>
 
         <button 
-          className="btn-add-client" 
+          className="btn-add-client fade-in" 
           onClick={handleToggleForm}
           disabled={loading}
         >

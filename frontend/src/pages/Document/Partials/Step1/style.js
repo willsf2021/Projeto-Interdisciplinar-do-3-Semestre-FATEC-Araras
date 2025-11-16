@@ -38,6 +38,22 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
+
+    .fade-in {
+      animation: fadeInUp 0.2s ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0.5;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
 `;
 
 export const HeaderWrapper = styled.div`
@@ -65,6 +81,7 @@ export const HeaderWrapper = styled.div`
     transition: all 0.3s ease;
     white-space: nowrap;
     height: 48px;
+
 
     &:hover {
       background-color: ${({ theme }) => theme.colors.primaryDark};

@@ -4,6 +4,7 @@ server/venv
 # Ignorar caches do Python
 **/__pycache__/
 **/*.py[cod]
+__pycache__/
 
 # Ignorar outros diretórios de cache
 server/documentos

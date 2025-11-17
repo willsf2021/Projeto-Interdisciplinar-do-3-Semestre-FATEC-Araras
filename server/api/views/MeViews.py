@@ -78,8 +78,8 @@ class RefreshTokenView(APIView):
                 httponly=True,
                 secure=False,
                 samesite="Lax",
-                domain="192.168.3.4", # Adicione
                 max_age=access_max_age,
+                domain=self.ORIGIN, # Adicione
             )
 
             return response

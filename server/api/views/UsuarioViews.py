@@ -7,10 +7,13 @@ from rest_framework.permissions import AllowAny
 from api.models import Usuario
 from django.conf import settings
 
+import os
 
 class UsuarioBaseView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
+
+    ORIGIN = os.getenv("ORIGIN", "localhost")
 
 class RegistroView(UsuarioBaseView):
     def post(self, request):
@@ -58,7 +61,7 @@ class RegistroView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=access_max_age, 
-           domain="192.168.3.4", 
+            domain=self.ORIGIN, 
         )
         response.set_cookie(
             key="refresh",
@@ -67,7 +70,7 @@ class RegistroView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=refresh_max_age,
-            domain="192.168.3.4",  # Adicione
+            domain=self.ORIGIN,  # Adicione
         )
         return response
 
@@ -110,7 +113,7 @@ class LoginView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=access_max_age,
-            domain="192.168.3.4",   # Adicione
+            domain=self.ORIGIN,   # Adicione
         )
         response.set_cookie(
             key="refresh",
@@ -119,7 +122,7 @@ class LoginView(UsuarioBaseView):
             secure=False,
             samesite="Lax",
             max_age=refresh_max_age,
-            domain="192.168.3.4",  # Adicione
+            domain=self.ORIGIN,  # Adicione
         )
         return response
     

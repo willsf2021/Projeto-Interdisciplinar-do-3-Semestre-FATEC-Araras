@@ -8,7 +8,7 @@ export const ButtonElement = styled.button`
   color: white;
   height: 48px;
   border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
   background: linear-gradient(
     to bottom,
     ${({ theme }) => theme.colors.primaryLinear},

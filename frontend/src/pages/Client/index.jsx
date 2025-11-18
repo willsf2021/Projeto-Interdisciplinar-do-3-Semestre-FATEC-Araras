@@ -86,7 +86,7 @@ export const Client = () => {
 
   return (
     <Container>
-      <FormWrapper onSubmit={handleSubmit}>
+      <FormWrapper onSubmit={handleSubmit} id="client-form">
         <div className="form-header">
           <h3>Cadastrar Cliente</h3>
         </div>
@@ -127,28 +127,25 @@ export const Client = () => {
               />
             </InputFlexWrapper>
           </div>
-
-          {/* Botão Cadastrar Cliente */}
-          <div className="submit-button-container">
-            <SubmitButton
-              title={loading ? "Cadastrando..." : "Cadastrar Cliente"}
-              disabled={loading}
-              type="submit"
-            />
-          </div>
         </div>
       </FormWrapper>
 
-      {/* Botão Home - fica fixo na parte inferior centralizada */}
-      <div className="home-button-container">
-        <button
-          type="button"
-          onClick={handleHome}
-          className="home-button"
-          disabled={loading}
-        >
-          <HouseFill />
-        </button>
+      {/* Botões de controle - mesmo estilo do Document */}
+      <div className="control-buttons">
+        <div className="container-control-home">
+          <button onClick={handleHome} disabled={loading}>
+            <HouseFill />
+          </button>
+        </div>
+        <div className="container-control-button">
+          <SubmitButton
+            title={loading ? "Cadastrando..." : "Cadastrar Cliente"}
+            disabled={loading}
+            type="submit"
+            form="client-form"
+            onClick={handleSubmit}
+          />
+        </div>
       </div>
     </Container>
   );

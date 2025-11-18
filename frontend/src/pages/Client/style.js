@@ -1,37 +1,49 @@
 import styled from "styled-components";
 
-export const Container = styled.section`
+export const Container = styled.main`
   padding: 0px 24px;
-  padding-top: 56px;
   display: flex;
   flex-direction: column;
   flex: 1;
   padding-bottom: 24px;
   height: 100vh;
 
+  .form-header {
+    margin: 50px auto 0px auto;
+    width: fit-content;
+    max-height: fit-content;
+    
+    h3 {
+      color: ${({ theme }) => theme.colors.textColor};
+      font-size: ${({ theme }) => theme.fontSizes.lg};
+      font-weight: ${({ theme }) => theme.fontWeights.semibold};
+      text-align: center;
+      margin: 0;
+    }
+  }
+
   .step-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    position: relative;
+    overflow-y: auto;
   }
 
   .step-content-inner {
     flex: 1;
+    padding-top: 32px;
   }
 
-  .submit-button-container {
-    margin-top: auto;
-    padding: 24px 0;
-  }
-
-  .home-button-container {
+  /* Control Buttons - mesmo estilo do Document */
+  .control-buttons {
+    flex: 1;
     display: flex;
-    justify-content: center;
-    padding: 16px 0;
+    gap: 8px;
+    align-items: flex-end;
+    padding-top: 24px;
   }
 
-  .home-button {
+  .container-control-home button {
     font-size: 24px;
     color: ${({ theme }) => theme.colors.grayButton};
     border-radius: 50%;
@@ -59,4 +71,9 @@ export const Container = styled.section`
       cursor: not-allowed;
     }
   }
+
+  .container-control-button {
+    flex: 1;
+  }
+
 `;

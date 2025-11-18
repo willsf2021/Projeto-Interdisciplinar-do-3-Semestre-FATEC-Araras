@@ -32,14 +32,10 @@ export const EditModal = styled.div`
     font-weight: ${({ theme }) => theme.fontWeights.semibold};
   }
 
-  .input-container {
-    margin: 20px 0;
-  }
-
   .error-message {
     color: #e74c3c;
     font-size: ${({ theme }) => theme.fontSizes.sm};
-    margin-top: 8px;
+    margin: 1rem 0;
     text-align: center;
     font-weight: ${({ theme }) => theme.fontWeights.medium};
   }
@@ -53,6 +49,49 @@ export const EditModal = styled.div`
       opacity: 1;
       transform: scale(1) translateY(0);
     }
+  }
+`;
+
+export const InputContainer = styled.div`
+  margin: 20px 0;
+  
+  input {
+    color: ${({ $isEditing, theme }) => 
+      $isEditing ? theme.colors.textColor : theme.colors.textColorMuted};
+    
+    &:read-only {
+      color: ${({ theme }) => theme.colors.textColorMuted};
+      background-color: #f8f9fa;
+    }
+    
+    &:disabled {
+      color: ${({ theme }) => theme.colors.textColorMuted};
+      background-color: #f8f9fa;
+    }
+  }
+  
+  label {
+    color: ${({ $isEditing, theme }) => 
+      $isEditing ? theme.colors.textColor : theme.colors.textColorMuted};
+  }
+`;
+
+export const DateContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.borderColor};
+`;
+
+export const InfoText = styled.small`
+  color: ${({ theme }) => theme.colors.textColorMuted};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  line-height: 1.4;
+  
+  strong {
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
   }
 `;
 

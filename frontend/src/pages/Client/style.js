@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.section`
   padding: 0px 24px;
-  padding-top:56px;
+  padding-top: 56px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -58,25 +58,5 @@ export const Container = styled.section`
       opacity: 0.5;
       cursor: not-allowed;
     }
-  }
-
-  .error-message {
-    background-color: #fee2e2;
-    border: 1px solid #fecaca;
-    color: #dc2626;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    font-size: 14px;
-  }
-
-  .success-message {
-    background-color: #d1fae5;
-    border: 1px solid #a7f3d0;
-    color: #065f46;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    font-size: 14px;
   }
 `;

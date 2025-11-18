@@ -4,6 +4,9 @@ import {
   ModalOverlay,
   EditModal,
   ModalActions,
+  InfoText,
+  InputContainer,
+  DateContainer,
 } from "./style";
 import { Input } from "../../Forms/Input";
 import { useNotification } from "../../../hooks/useNotification";
@@ -83,14 +86,14 @@ export const ClientModal = ({ client, loading, error, onClose, onUpdateClient })
         )}
 
         {error && (
-          <div className="error-message" style={{ textAlign: "center", margin: "1rem 0" }}>
+          <div className="error-message">
             {error}
           </div>
         )}
 
         {client && !loading && (
           <>
-            <div className="input-container">
+            <InputContainer $isEditing={isEditing}>
               <Input
                 label="Nome Completo"
                 type="text"
@@ -99,9 +102,9 @@ export const ClientModal = ({ client, loading, error, onClose, onUpdateClient })
                 readOnly={!isEditing}
                 disabled={!isEditing || updateLoading}
               />
-            </div>
+            </InputContainer>
 
-            <div className="input-container">
+            <InputContainer $isEditing={isEditing}>
               <Input
                 label="Email"
                 type="email"
@@ -110,9 +113,9 @@ export const ClientModal = ({ client, loading, error, onClose, onUpdateClient })
                 readOnly={!isEditing}
                 disabled={!isEditing || updateLoading}
               />
-            </div>
+            </InputContainer>
 
-            <div className="input-container">
+            <InputContainer $isEditing={isEditing}>
               <Input
                 label="Celular"
                 type="tel"
@@ -121,27 +124,22 @@ export const ClientModal = ({ client, loading, error, onClose, onUpdateClient })
                 readOnly={!isEditing}
                 disabled={!isEditing || updateLoading}
               />
-            </div>
+            </InputContainer>
 
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "1fr 1fr", 
-              gap: "1rem",
-              marginTop: "1rem"
-            }}>
+            <DateContainer>
               <div>
-                <small>
+                <InfoText>
                   <strong>Criado em:</strong><br />
                   {new Date(client.created_at).toLocaleDateString('pt-BR')}
-                </small>
+                </InfoText>
               </div>
               <div>
-                <small>
+                <InfoText>
                   <strong>Atualizado em:</strong><br />
                   {new Date(client.updated_at).toLocaleDateString('pt-BR')}
-                </small>
+                </InfoText>
               </div>
-            </div>
+            </DateContainer>
           </>
         )}
 

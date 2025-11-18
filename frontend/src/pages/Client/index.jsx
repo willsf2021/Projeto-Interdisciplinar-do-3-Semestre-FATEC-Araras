@@ -7,6 +7,8 @@ import { SubmitButton } from "../../components/Forms/SubmitButton";
 import { Container } from "./style";
 import { HouseFill } from "react-bootstrap-icons";
 import { useApi } from "../../hooks/useApi";
+import { useData } from "../../contexts/DataContext";
+import { useNotification } from "../../hooks/useNotification";
 
 export const Client = () => {
   const navigate = useNavigate();
@@ -19,8 +21,9 @@ export const Client = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+
+  const { refreshData } = useData();
+  const { notify } = useNotification();
 
   const handleHome = () => {
     navigate("/home");
@@ -32,18 +35,15 @@ export const Client = () => {
       ...prev,
       [name]: value,
     }));
-    // Limpa mensagens de erro quando o usuário começar a digitar
-    if (error) setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     // Validação básica
     if (!formData.nome_completo.trim() || !formData.email.trim()) {
-      setError("Nome completo e e-mail são obrigatórios");
+      notify("Nome completo e e-mail são obrigatórios", "error");
       setLoading(false);
       return;
     }
@@ -51,7 +51,7 @@ export const Client = () => {
     // Validação de email simples
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setError("Por favor, insira um e-mail válido");
+      notify("Por favor, insira um e-mail válido", "error");
       setLoading(false);
       return;
     }
@@ -69,21 +69,16 @@ export const Client = () => {
 
       const response = await apiFetchJson(url, options);
 
-      console.log("Cliente cadastrado com sucesso:", response);
-
       setFormData({
         nome_completo: "",
         email: "",
         celular: "",
       });
-      setSuccess(true);
 
-      setTimeout(() => {
-        setSuccess(false);
-      }, 3000);
+      notify("Cliente cadastrado com sucesso!", "success");
+      await refreshData("clients");
     } catch (error) {
-      console.error("Erro ao cadastrar cliente:", error);
-      setError(error.message || "Erro ao cadastrar cliente. Tente novamente.");
+      notify("Erro ao cadastrar cliente, tente novamente!", "error");
     } finally {
       setLoading(false);
     }
@@ -95,13 +90,6 @@ export const Client = () => {
         <div className="form-header">
           <h3>Cadastrar Cliente</h3>
         </div>
-
-        {/* Mensagens de feedback */}
-        {error && <div className="error-message">{error}</div>}
-
-        {success && (
-          <div className="success-message">Cliente cadastrado com sucesso!</div>
-        )}
 
         <div className="step-content">
           <div className="step-content-inner">

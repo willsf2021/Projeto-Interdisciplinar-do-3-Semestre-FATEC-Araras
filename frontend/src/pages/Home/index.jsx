@@ -3,13 +3,15 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
+import { useApi } from "../../hooks/useApi";
 import { Header } from "../../components/Home/Header";
 import { SearchBar } from "../../components/Home/SearchBar/";
 import { EmptyState } from "../../components/Home/EmptyState/";
 import { ToggleSwitch } from "../../components/Home/ToggleSwicth";
 import { FloatingButton } from "../../components/Home/FloatingButton/";
 import { CustomSelect } from "../../components/Home/CustomSelect";
-import { List } from "../../components/Home/List"; // Novo componente
+import { List } from "../../components/Home/List";
+import { ClientModal } from "../../components/Home/ClientModal";
 import {
   HomeContainer,
   MainSection,
@@ -20,9 +22,17 @@ import { Search, FilePlusFill, PersonPlusFill } from "react-bootstrap-icons";
 
 export const Home = () => {
   const [activeTab, setActiveTab] = useState("documents");
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
+  const [searchTerm, setSearchTerm] = useState("");
   const { user, isAuthenticated, loading } = useAuth();
-  const { clients, documents, loading: dataLoading } = useData();
+  const { apiFetch, apiFetchJson } = useApi();
+  
+  // Estados para o modal do cliente
+  const [showClientModal, setShowClientModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [clientLoading, setClientLoading] = useState(false);
+  const [clientError, setClientError] = useState(null);
+
+  const { clients, documents, loading: dataLoading, refreshData } = useData();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +41,6 @@ export const Home = () => {
     }
   }, [isAuthenticated, loading, navigate]);
 
-  // Função para lidar com seleção no CustomSelect
   const handleSelectChange = (selectedOption) => {
     if (selectedOption) {
       setSearchTerm(selectedOption.label || "");
@@ -40,13 +49,59 @@ export const Home = () => {
     }
   };
 
-  // Função para lidar com clique em um item da lista
-  const handleItemClick = (item) => {
+  // Função para buscar dados do cliente pela API
+  const fetchClientData = async (clientId) => {
+    setClientLoading(true);
+    setClientError(null);
+    
+    try {
+      const clientData = await apiFetchJson(`${import.meta.env.VITE_API_URL}/detalhes-cliente/${clientId}/`);
+      setSelectedClient(clientData);
+      setShowClientModal(true);
+    } catch (error) {
+      console.error("Erro ao buscar dados do cliente:", error);
+      setClientError("Erro ao carregar dados do cliente");
+    } finally {
+      setClientLoading(false);
+    }
+  };
+
+  // Função para atualizar dados do cliente
+  const handleUpdateClient = async (clientId, updatedData) => {
+    try {
+      const response = await apiFetch(`${import.meta.env.VITE_API_URL}/atualizar-cliente/${clientId}/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        await refreshData('clients');
+        return { success: true };
+      } else {
+        throw new Error("Erro ao atualizar cliente");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar cliente:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const handleItemClick = async (item) => {
     if (activeTab === "documents") {
       navigate(`/document/${item.id}`);
     } else {
-      navigate(`/client/${item.id}`);
+      // Para clientes, busca dados atualizados e abre modal
+      await fetchClientData(item.id);
     }
+  };
+
+  const closeClientModal = () => {
+    setShowClientModal(false);
+    setSelectedClient(null);
+    setClientError(null);
   };
 
   if (loading) {
@@ -87,8 +142,6 @@ export const Home = () => {
         />
 
         <ScrollContainer>
-          {" "}
-          {/* ENVOLVA apenas o conteúdo scrollável */}
           {dataLoading ? (
             <div style={{ padding: "2rem", textAlign: "center" }}>
               Carregando dados...
@@ -119,9 +172,7 @@ export const Home = () => {
           )}
         </ScrollContainer>
 
-        {/* MOVER o ToggleSwitch para o FixedBottom - FORA do ScrollContainer */}
         <FixedBottom>
-          {/* Floating Button */}
           {activeTab === "documents" ? (
             <FloatingButton icon={<FilePlusFill />} href="/document" />
           ) : (
@@ -137,6 +188,16 @@ export const Home = () => {
           />
         </FixedBottom>
       </MainSection>
+
+      {showClientModal && (
+        <ClientModal
+          client={selectedClient}
+          loading={clientLoading}
+          error={clientError}
+          onClose={closeClientModal}
+          onUpdateClient={handleUpdateClient}
+        />
+      )}
     </HomeContainer>
   );
 };

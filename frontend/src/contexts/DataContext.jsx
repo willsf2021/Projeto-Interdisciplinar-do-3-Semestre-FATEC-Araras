@@ -184,43 +184,55 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const refreshClients = async () => {
+  // Função flexível para refresh de dados
+  const refreshData = async (dataType = null) => {
     try {
-      const clientsData = await apiFetchJson(
-        `${import.meta.env.VITE_API_URL}/listar-clientes/`
-      );
-      dispatch({ type: ACTION_TYPES.SET_CLIENTS, payload: clientsData });
-      return { success: true, data: clientsData };
+      dispatch({ type: ACTION_TYPES.SET_LOADING, payload: true });
+
+      if (dataType === 'clients' || dataType === null) {
+        const clientsData = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/listar-clientes/`
+        );
+        dispatch({ type: ACTION_TYPES.SET_CLIENTS, payload: clientsData });
+      }
+
+      if (dataType === 'documents' || dataType === null) {
+        const documentsData = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/listar-documentos/`
+        );
+        dispatch({ type: ACTION_TYPES.SET_DOCUMENTS, payload: documentsData });
+      }
+
+      if (dataType === 'foods' || dataType === null) {
+        const foodsData = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/alimentos/`
+        );
+        dispatch({ type: ACTION_TYPES.SET_FOODS, payload: foodsData });
+      }
+
+      dispatch({ type: ACTION_TYPES.SET_LOADING, payload: false });
+      return { success: true };
     } catch (error) {
-      notify("Erro ao atualizar clientes", "error");
+      dispatch({ type: ACTION_TYPES.SET_ERROR, payload: error.message });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, payload: false });
+      
+      const errorMessage = `Erro ao atualizar ${dataType || 'dados'}`;
+      notify(errorMessage, "error");
       return { success: false, error: error.message };
     }
+  };
+
+  // Funções específicas mantidas para compatibilidade
+  const refreshClients = async () => {
+    return refreshData('clients');
   };
 
   const refreshDocuments = async () => {
-    try {
-      const documentsData = await apiFetchJson(
-        `${import.meta.env.VITE_API_URL}/listar-documentos/`
-      );
-      dispatch({ type: ACTION_TYPES.SET_DOCUMENTS, payload: documentsData });
-      return { success: true, data: documentsData };
-    } catch (error) {
-      notify("Erro ao atualizar documentos", "error");
-      return { success: false, error: error.message };
-    }
+    return refreshData('documents');
   };
 
   const refreshFoods = async () => {
-    try {
-      const foodsData = await apiFetchJson(
-        `${import.meta.env.VITE_API_URL}/alimentos/`
-      );
-      dispatch({ type: ACTION_TYPES.SET_FOODS, payload: foodsData });
-      return { success: true, data: foodsData };
-    } catch (error) {
-      notify("Erro ao atualizar alimentos", "error");
-      return { success: false, error: error.message };
-    }
+    return refreshData('foods');
   };
 
   const addClient = (client) => {
@@ -266,6 +278,7 @@ export const DataProvider = ({ children }) => {
   const value = {
     ...state,
     loadAllData,
+    refreshData, // Nova função flexível
     refreshClients,
     refreshDocuments,
     refreshFoods,

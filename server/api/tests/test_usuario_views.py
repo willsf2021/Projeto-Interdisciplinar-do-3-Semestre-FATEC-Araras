@@ -23,8 +23,11 @@ class UsuarioViewsTest(TestCase):
         response = self.client.post("/api/registro/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("mensagem", response.data)
-        self.assertIn("access", response.data)
-        self.assertIn("refresh", response.data)
+        # self.assertIn("access", response.data)
+        # self.assertIn("refresh", response.data)
+        # Verifica cookies (não o body)
+        self.assertIn("access", response.cookies)
+        self.assertIn("refresh", response.cookies)
         self.assertTrue(Usuario.objects.filter(email="novo@email.com").exists())
 
     def test_registro_usuario_exists(self):
@@ -52,8 +55,12 @@ class UsuarioViewsTest(TestCase):
         self.assertIn("email", response.data)
         self.assertIn("name", response.data)
         self.assertIn("type", response.data)
-        self.assertIn("access", response.data)
-        self.assertIn("refresh", response.data)
+        # Verifica body da response
+        # self.assertIn("access", response.data)
+        # self.assertIn("refresh", response.data)
+        # Verifica cookies (não o body)
+        self.assertIn("access", response.cookies)
+        self.assertIn("refresh", response.cookies)
 
     def test_login_usuario_invalid_credentials(self):
         data = {"email": "existente@email.com", "password": "senhaerrada"}

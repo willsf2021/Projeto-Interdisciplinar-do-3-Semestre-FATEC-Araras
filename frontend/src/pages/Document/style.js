@@ -1,17 +1,17 @@
 import styled from "styled-components";
-// Styled Components
+
 export const Container = styled.main`
   padding: 0px 24px;
   display: flex;
   flex-direction: column;
-  flex: 1;
-  padding-bottom: 24px;
   height: 100vh;
+  overflow: hidden; /* Impede scroll global */
 
   .container-steps {
     margin: 50px auto 0px auto;
     width: fit-content;
     max-height: fit-content;
+    flex-shrink: 0; /* Impede que encolha */
   }
 
   .container-steps ul {
@@ -91,19 +91,26 @@ export const Container = styled.main`
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden; /* Container não scrolla */
+    position: relative;
   }
 
   .step-content-inner {
     flex: 1;
+    overflow-y: auto; /* Só o conteúdo interno scrolla */
+    padding-bottom: 20px; /* Espaço para não cortar conteúdo */
   }
 
   .control-buttons {
-    flex: 1;
+    flex-shrink: 0; /* Impede que os controles encolham */
     display: flex;
     gap: 8px;
     align-items: flex-end;
-    padding-top: 24px;
+    padding: 24px 0;
+    background: white; /* Fundo sólido para sobrepor conteúdo */
+    position: relative;
+    z-index: 10;
+    margin-top: auto; /* Garante que fique na base */
   }
 
   .container-control-home button {
@@ -175,5 +182,24 @@ export const Container = styled.main`
   .container-control-button button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  /* Garante que em telas muito pequenas ainda funcione */
+  @media (max-height: 600px) {
+    .container-steps {
+      margin: 20px auto 0px auto;
+    }
+    
+    .container-steps ul {
+      padding: 10px 0px 20px;
+    }
+    
+    .step-content-inner {
+      padding-bottom: 10px;
+    }
+    
+    .control-buttons {
+      padding: 16px 0;
+    }
   }
 `;

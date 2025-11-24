@@ -17,7 +17,9 @@ export const Document = () => {
     tempoPreparo: '',
     porcaoIndividual: '',
     unidadeMedida: '',
-    modoPreparo: ''
+    modoPreparo: '',
+    habilitarPrecificacao: false, // NOVO CAMPO
+    markup: '' // NOVO CAMPO
   });
   const [loading, setLoading] = useState(false);
   const { apiFetchJson } = useApi();
@@ -63,7 +65,8 @@ export const Document = () => {
       porcao_individual: parseFloat(receitaData.porcaoIndividual),
       medida: receitaData.unidadeMedida,
       modo_preparo: receitaData.modoPreparo,
-      habilitar_precificacao: false,
+      habilitar_precificacao: receitaData.habilitarPrecificacao, // NOVO
+      markup: receitaData.habilitarPrecificacao ? parseFloat(receitaData.markup) : null, // NOVO
       habilitar_rotulo_nutricional: false,
     };
 
@@ -98,6 +101,7 @@ export const Document = () => {
     }
   };
 
+  // ... (restante do código permanece igual)
   const handleNext = async () => {
     if (currentStep === 2) {
       // Ao avançar do step2 para step3, salva/atualiza a receita

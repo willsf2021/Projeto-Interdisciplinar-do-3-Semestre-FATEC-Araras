@@ -1,7 +1,7 @@
-import { CustomSelect } from "./CustomSelect";
+import { CustomSelect } from "../CustomSelect";
 import { EggFried, CupHot, Basket, Cart4 } from "react-bootstrap-icons";
 
-export const ExemploTACO = () => {
+export const SelectTACO = () => {
   return (
     <CustomSelect
       endpoint={"alimentos"}

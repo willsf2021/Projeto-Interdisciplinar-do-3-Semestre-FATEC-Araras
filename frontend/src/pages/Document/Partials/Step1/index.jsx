@@ -1,222 +1,217 @@
-import React, { useState } from "react";
-import { Search, PersonPlus } from "react-bootstrap-icons";
-
+import { FormWrapper } from "../../../../components/Forms/FormWrappers/styles";
 import { Input } from "../../../../components/Forms/Input";
-import { SubmitButton } from "../../../../components/Forms/SubmitButton/index.jsx";
-import { CustomSelect } from "../../../../components/Home/CustomSelect";
 import {
-  FormWrapper,
-  InputFlexWrapper,
-} from "../../../../components/Forms/FormWrappers/styles.js";
-import { Container, HeaderWrapper, SelectContainer } from "./style.js";
+  Container,
+  InputFlexWrapperStep1,
+  TextField,
+  TextFieldWrapper,
+  TextFieldLabel,
+  CheckboxWrapper,
+  CheckboxLabel,
+  CheckboxCustom,
+  PrecificacaoFieldset,
+  FieldsetLegend,
+  InputWithTooltip,
+  TooltipIcon,
+  TooltipText
+} from "./style";
 
-import { useApi } from "../../../../hooks/useApi.js";
+export const Step1 = ({ receitaData, onReceitaDataChange }) => {
 
-export const Step1 = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [selectedClient, setSelectedClient] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [selectKey, setSelectKey] = useState(0); // Key para forçar recriação do Select
-  const { apiFetchJson } = useApi();
-
-  const [formData, setFormData] = useState({
-    nome_completo: "",
-    email: "",
-    celular: "",
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (error) setError("");
+  const handleInputChange = (field, value) => {
+    onReceitaDataChange({ [field]: value });
   };
 
-  const handleSelectChange = (selectedOption) => {
-    setSelectedClient(selectedOption);
-    console.log("Cliente selecionado:", selectedOption);
+  const handleCheckboxChange = (field, checked) => {
+    onReceitaDataChange({ [field]: checked });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  /**
+   * Formata uma entrada qualquer em M:SS ou MM:SS.
+   * - aceita números puros (ex: "110" -> 1:10)
+   * - aceita texto com ":" (ex: "1:70" -> 2:10)
+   * - faz carry dos segundos para minutos quando necessário
+   * - retorno "" se input vazio
+   */
+  const formatTempoInput = (raw) => {
+    if (!raw) return "";
 
-    // Validação básica
-    if (!formData.nome_completo.trim() || !formData.email.trim()) {
-      setError("Nome completo e e-mail são obrigatórios");
-      setLoading(false);
-      return;
+    // permite que o usuário cole com ":" ou digite apenas números
+    const onlyDigits = raw.replace(/[^0-9]/g, "");
+
+    if (onlyDigits.length === 0) return "";
+
+    let minutes = 0;
+    let seconds = 0;
+
+    if (raw.includes(":")) {
+      // se o usuário colou "m:ss" ou "mm:ss" etc
+      const parts = raw.split(":").map(p => p.replace(/\D/g, ""));
+      const minPart = parts[0] || "0";
+      const secPart = parts[1] || "0";
+
+      minutes = parseInt(minPart, 10) || 0;
+      seconds = parseInt(secPart, 10) || 0;
+    } else {
+      // se o usuário digitou só números, interpretamos os últimos 2 como segundos
+      if (onlyDigits.length <= 2) {
+        minutes = 0;
+        seconds = parseInt(onlyDigits, 10) || 0;
+      } else {
+        const minPart = onlyDigits.slice(0, -2);
+        const secPart = onlyDigits.slice(-2);
+        minutes = parseInt(minPart, 10) || 0;
+        seconds = parseInt(secPart, 10) || 0;
+      }
     }
 
-    // Validação de email simples
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      setError("Por favor, insira um e-mail válido");
-      setLoading(false);
-      return;
+    // carry: se segundos >= 60, converte para minutos
+    if (seconds >= 60) {
+      const carry = Math.floor(seconds / 60);
+      minutes += carry;
+      seconds = seconds % 60;
     }
 
-    try {
-      const url = `${import.meta.env.VITE_API_URL}/criar-cliente/`;
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-        body: JSON.stringify(formData),
-      };
-
-      const response = await apiFetchJson(url, options);
-
-      console.log("Cliente cadastrado com sucesso:", response);
-
-      // Cria o objeto no formato que o CustomSelect espera
-      const novoClienteOption = {
-        value: response.id,
-        label: response.nome_completo,
-        data: response // Inclui todos os dados para referência futura
-      };
-
-      // Seta o cliente recém-cadastrado como selecionado
-      setSelectedClient(novoClienteOption);
-      
-      // Força a recriação do CustomSelect para garantir que ele atualize
-      setSelectKey(prev => prev + 1);
-
-      // Limpa o formulário e esconde
-      setFormData({
-        nome_completo: "",
-        email: "",
-        celular: "",
-      });
-      setShowForm(false);
-
-      console.log("Cliente selecionado automaticamente:", novoClienteOption);
-
-    } catch (error) {
-      console.error("Erro ao cadastrar cliente:", error);
-      setError(error.message || "Erro ao cadastrar cliente. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
+    return `${minutes}:${String(seconds).padStart(2, "0")}`;
   };
 
-  const handleToggleForm = () => {
-    setShowForm(!showForm);
-    if (showForm) {
-      setFormData({
-        nome_completo: "",
-        email: "",
-        celular: "",
-      });
-      setError("");
-    }
+  const handleTempoChange = (rawValue) => {
+    const formatted = formatTempoInput(rawValue);
+    onReceitaDataChange({ tempoPreparo: formatted });
   };
 
   return (
     <Container>
       <div className="step-content">
-        <h3>Cliente</h3>
       </div>
-      
-      {/* Exibir cliente selecionado quando não estiver no formulário */}
-      {!showForm && selectedClient && (
-        <div className="selected-client-info" style={{ 
-          padding: '10px', 
-          backgroundColor: '#f0f8ff', 
-          borderRadius: '5px', 
-          marginBottom: '10px',
-          border: '1px solid #d1ecf1'
-        }}>
-          <p style={{ margin: 0 }}><strong>Cliente selecionado:</strong> {selectedClient.label}</p>
-          <p style={{ margin: 0, fontSize: '0.9em', color: '#666' }}>
-            {selectedClient.data?.email} {selectedClient.data?.celular && `• ${selectedClient.data.celular}`}
-          </p>
-        </div>
-      )}
+      <FormWrapper>
+        <InputFlexWrapperStep1>
+          <Input
+            label="Nome"
+            type="text"
+            value={receitaData.nome}
+            placeholder="Digite o nome da receita..."
+            onChange={(e) => handleInputChange('nome', e.target.value)}
+            required
+          />
+          <Input
+            label="Categoria"
+            type="text"
+            value={receitaData.categoria}
+            placeholder="Digite a categoria da receita..."
+            onChange={(e) => handleInputChange('categoria', e.target.value)}
+            required
+          />
+          
+          <InputWithTooltip>
+            <Input
+              label="Medida Caseira"
+              type="text"
+              value={receitaData.medidaCaseira}
+              placeholder="Digite a medida caseira da receita..."
+              onChange={(e) => handleInputChange('medidaCaseira', e.target.value)}
+              required
+            />
+            <TooltipIcon>
+              i
+              <TooltipText>Unidade de referência visual (ex: 1 xícara, 1 colher de sopa, 1 fatia)</TooltipText>
+            </TooltipIcon>
+          </InputWithTooltip>
 
-      <HeaderWrapper>
-        <div className="select-container">
-          {!showForm && (
-            <SelectContainer className="select-enter">
-              <CustomSelect
-                key={selectKey} // Key para forçar recriação quando mudar
-                endpoint={"listar-clientes"}
-                placeholder={"clientes"}
-                type={"clients"}
-                onSelectChange={handleSelectChange}
-                value={selectedClient} // Passa o cliente selecionado
-                icon={<Search />}
+          <div className="container-porcoes">
+            <Input
+              label="Tempo de Preparo"
+              type="text"
+              value={receitaData.tempoPreparo ?? ""}
+              placeholder="1:10"
+              onChange={(e) => handleTempoChange(e.target.value)}
+              inputMode="numeric"
+              maxLength={6}
+              required
+            />
+            
+            <InputWithTooltip>
+              <Input
+                label="Valor Porção Individual"
+                type="number"
+                value={receitaData.porcaoIndividual}
+                placeholder="100.00"
+                onChange={(e) => handleInputChange('porcaoIndividual', e.target.value)}
+                step="0.01"
+                required
               />
-            </SelectContainer>
-          )}
-        </div>
+              <TooltipIcon>
+                i
+                <TooltipText>Quantidade em gramas ou ml de uma porção servida</TooltipText>
+              </TooltipIcon>
+            </InputWithTooltip>
 
-        <button 
-          className="btn-add-client fade-in" 
-          onClick={handleToggleForm}
-          disabled={loading}
-        >
-          <PersonPlus className="btn-icon" />
-          {showForm ? "Cancelar" : "Novo Cliente"}
-        </button>
-      </HeaderWrapper>
-
-      {showForm && (
-        <FormWrapper onSubmit={handleSubmit}>
-          <div className="form-header">
-            <h4>Novo Cliente</h4>
+            <InputWithTooltip>
+              <Input
+                label="Unidade de Medida"
+                type="text"
+                value={receitaData.unidadeMedida}
+                placeholder="ml ou g"
+                onChange={(e) => handleInputChange('unidadeMedida', e.target.value)}
+                required
+              />
+              <TooltipIcon>
+                i
+                <TooltipText>Use "g" para sólidos ou "ml" para líquidos</TooltipText>
+              </TooltipIcon>
+            </InputWithTooltip>
           </div>
 
-          {/* Mensagens de feedback */}
-          {error && <div className="error-message">{error}</div>}
-
-          <InputFlexWrapper>
-            <Input
-              name="nome_completo"
-              label="Nome Completo"
-              type="text"
-              value={formData.nome_completo}
-              placeholder="Digite o nome completo..."
-              onChange={handleInputChange}
-              required
-              disabled={loading}
+          <TextFieldWrapper>
+            <TextFieldLabel>Modo de Preparo</TextFieldLabel>
+            <TextField 
+              value={receitaData.modoPreparo}
+              onChange={(e) => handleInputChange('modoPreparo', e.target.value)}
+              placeholder="Descreva o modo de preparo da receita..."
             />
+          </TextFieldWrapper>
 
-            <Input
-              name="email"
-              label="E-mail"
-              type="email"
-              value={formData.email}
-              placeholder="Digite o e-mail..."
-              onChange={handleInputChange}
-              required
-              disabled={loading}
-            />
+          {/* Seção de Precificação com Fieldset */}
+          <PrecificacaoFieldset>
+            <FieldsetLegend>
+              Precificação
+              <TooltipIcon className="legend-tooltip">
+                i
+                <TooltipText>Sistema que calcula o preço de venda baseado nos custos dos ingredientes e margem de lucro</TooltipText>
+              </TooltipIcon>
+            </FieldsetLegend>
 
-            <Input
-              name="celular"
-              label="Celular (Opcional)"
-              type="tel"
-              value={formData.celular}
-              placeholder="Digite o celular..."
-              onChange={handleInputChange}
-              disabled={loading}
-            />
-          </InputFlexWrapper>
-          
-          <SubmitButton
-            title={loading ? "Cadastrando..." : "Cadastrar Cliente"}
-            disabled={loading}
-            type="submit"
-          />
-        </FormWrapper>
-      )}
+            <CheckboxWrapper>
+              <CheckboxCustom
+                type="checkbox"
+                id="habilitar-precificacao"
+                checked={receitaData.habilitarPrecificacao}
+                onChange={(e) => handleCheckboxChange('habilitarPrecificacao', e.target.checked)}
+              />
+              <CheckboxLabel htmlFor="habilitar-precificacao">
+                Habilitar Precificação
+              </CheckboxLabel>
+            </CheckboxWrapper>
+
+            <InputWithTooltip className={!receitaData.habilitarPrecificacao ? 'disabled' : ''}>
+              <Input
+                label="Markup (%)"
+                type="number"
+                value={receitaData.markup}
+                placeholder="Ex: 30"
+                onChange={(e) => handleInputChange('markup', e.target.value)}
+                step="0.01"
+                min="0"
+                disabled={!receitaData.habilitarPrecificacao}
+              />
+              <TooltipIcon>
+                i
+                <TooltipText>Percentual de lucro sobre o custo (ex: 30% = R$10 custo vira R$13 venda)</TooltipText>
+              </TooltipIcon>
+            </InputWithTooltip>
+          </PrecificacaoFieldset>
+        </InputFlexWrapperStep1>
+      </FormWrapper>
     </Container>
   );
 };

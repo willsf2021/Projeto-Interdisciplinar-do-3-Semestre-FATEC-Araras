@@ -5,65 +5,18 @@ export const Container = styled.section`
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  overflow-x:hidden;
-
-  .container-porcoes {
-    display: flex;
-    gap: 8px;
-    label {
-      font-size: 0.8rem;
-    }
-  }
+  overflow-x: hidden;
 `;
 
-export const InputFlexWrapperStep2 = styled.div`
+export const PesoFieldset = styled.fieldset`
   display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.sm} 0;
-  font-weight: 500;
-`;
-
-export const TextFieldWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px 0;
-  width: 100%;
-  color: inherit;
-`;
-
-export const TextFieldLabel = styled.label`
-  margin-left: 4px;
-`;
-
-export const TextField = styled.textarea`
-  font: inherit;
-  color: inherit;
-  border: 1px solid ${({ theme }) => theme.colors.borderColor};
-  padding: ${({ theme }) => theme.spacing.sm};
-  height: 112px;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  transition: all 300ms ease-in-out;
-  width: 100%;
-
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primary + "33"};
-    outline: none;
+  gap: 8px;
+  label {
+    font-size: 0.7rem;
   }
-
-  &:active {
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-export const PrecificacaoFieldset = styled.fieldset`
-  margin-top: 20px;
   padding: 20px 16px 16px;
   border: 1px solid #d0d0d0;
   border-radius: ${({ theme }) => theme.borderRadius.md};
-  background-color: #f9f9f9;
   position: relative;
 `;
 
@@ -75,182 +28,160 @@ export const FieldsetLegend = styled.legend`
   display: flex;
   align-items: center;
   gap: 6px;
+`;
 
-  .legend-tooltip {
-    position: relative;
-    top: 0;
-    right: 0;
+export const IngredientsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-export const CheckboxWrapper = styled.div`
+export const SectionTitle = styled.h4`
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textColor};
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  gap: 8px;
 `;
 
-export const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin-left: 8px;
-  
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-  }
+export const ConditionalFields = styled.div`
+  grid-column: 1 / -1;
+  padding: 1.5rem;
+  border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  background-color: #f9f9f9;
+  margin-top: 0.5rem;
 `;
 
-export const CheckboxCustom = styled.input`
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
+export const FieldRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 
-  &:checked {
-    background-color: ${({ theme }) => theme.colors.primary};
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-
-  &:checked::after {
-    content: '✓';
-    position: absolute;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-export const InputWithTooltip = styled.div`
-  position: relative;
+export const AddButton = styled.button`
   width: 100%;
+  padding: 1rem;
+  background: linear-gradient(
+    to bottom,
+    ${({ theme }) => theme.colors.primaryLinear},
+    ${({ theme }) => theme.colors.primary}
+  );
+  border: none;
+  color: white;
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
 
-  &.disabled {
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primaryHover};
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
     opacity: 0.6;
-    pointer-events: none;
+    cursor: not-allowed;
+    transform: none;
   }
 `;
 
-export const TooltipIcon = styled.span`
-  position: absolute;
-  top: 2px;
-  right: 4px;
-  width: 18px;
-  height: 18px;
-  display: inline-flex;
+export const IngredientsList = styled.div`
+  margin-top: 2rem;
+`;
+
+export const IngredientCard = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  padding: 1.25rem;
+  background: white;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+export const IngredientHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+`;
+
+export const IngredientName = styled.h5`
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textColor};
+  margin: 0;
+  flex: 1;
+`;
+
+export const IngredientDetails = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+`;
+
+export const IngredientMeta = styled.div`
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColor};
+
+  strong {
+    color: ${({ theme }) => theme.colors.textColor};
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
+  }
+`;
+
+export const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  transition: all 0.2s ease;
+  width: 28px;
+  height: 28px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: help;
-  font-size: 12px;
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-  color: ${({ theme }) => theme.colors.primary};
-  background-color: transparent;
-  border: 1.5px solid ${({ theme }) => theme.colors.primary};
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  user-select: none;
-  z-index: 2;
+  flex-shrink: 0;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: white;
-  }
-
-  &:hover > span {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Mobile: mostrar ao tocar */
-  @media (hover: none) and (pointer: coarse) {
-    &:active > span {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
-    }
+    background: #fee2e2;
   }
 `;
 
-export const TooltipText = styled.span`
-  visibility: hidden;
-  opacity: 0;
-  width: 220px;
-  background-color: ${({ theme }) => theme.colors.textColor};
-  color: white;
-  text-align: left;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  padding: 10px 12px;
-  position: absolute;
-  z-index: 1000;
-  bottom: calc(100% + 8px);
-  right: -10px;
-  font-size: 12px;
-  line-height: 1.4;
-  font-weight: ${({ theme }) => theme.fontWeights.normal};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  white-space: normal;
-  word-wrap: break-word;
-  transform: translateY(10px);
+export const EmptyState = styled.div`
+  text-align: center;
+  padding: 3rem 2rem;
+  color: ${({ theme }) => theme.colors.textColorMuted};
 
-  /* Seta do tooltip */
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    right: 12px;
-    border-width: 6px;
-    border-style: solid;
-    border-color: ${({ theme }) => theme.colors.textColor} transparent transparent transparent;
+  p {
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
+    margin-bottom: 0.5rem;
   }
 
-  /* Ajuste ESPECÍFICO para tooltips no legend - CORREÇÃO DO VAZAMENTO */
-  ${FieldsetLegend} & {
-    bottom: calc(100% + 12px);
-    left: 0;
-    right: auto;
-    width: 240px;
-    
-    &::after {
-      left: 20px;
-      right: auto;
-    }
-  }
-
-  /* Ajuste para mobile */
-  @media (max-width: 768px) {
-    width: 200px;
-    font-size: 11px;
-    padding: 8px 10px;
-    
-    ${FieldsetLegend} & {
-      width: 220px;
-      left: -50px;
-      right: auto;
-      
-      &::after {
-        left: 60px;
-      }
-    }
+  span {
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+    font-style: italic;
   }
 `;

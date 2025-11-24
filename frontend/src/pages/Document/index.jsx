@@ -25,10 +25,10 @@ export const Document = () => {
   const { apiFetchJson } = useApi();
 
   const steps = [
-    { number: 1, name: "Cliente" },
-    { number: 2, name: "Receita" },
-    { number: 3, name: "Ingredientes" },
-    { number: 4, name: "Alergênicos" },
+    { number: 1, name: "Receita" },
+    { number: 2, name: "Ingredientes" },
+    { number: 3, name: "Alergênicos" },
+    { number: 4, name: "Cliente" },
   ];
 
   const salvarOuAtualizarReceita = async () => {
@@ -117,8 +117,8 @@ export const Document = () => {
 
   // ... (restante do código permanece igual)
   const handleNext = async () => {
-    if (currentStep === 2) {
-      // Ao avançar do step2 para step3, salva/atualiza a receita
+    if (currentStep === 1) {
+      // Ao avançar do step1 para step2, salva/atualiza a receita
       setLoading(true);
       try {
         await salvarOuAtualizarReceita();
@@ -142,8 +142,8 @@ export const Document = () => {
   };
 
   const handleStepClick = async (stepNumber) => {
-    if (currentStep === 2 && stepNumber === 3) {
-      // Se está no step2 e clicou para ir ao step3, salva primeiro
+    if (currentStep === 1 && stepNumber === 2) {
+      // Se está no step1 e clicou para ir ao step2, salva primeiro
       setLoading(true);
       try {
         await salvarOuAtualizarReceita();
@@ -191,7 +191,7 @@ export const Document = () => {
                   className={`steps-item-name ${
                     currentStep === step.number ? "p-active" : ""
                   }`}
-                ></p>
+                >{step.name}</p>
               </li>
 
               {index < steps.length - 1 && <span className="hr-steps"></span>}
@@ -202,17 +202,17 @@ export const Document = () => {
 
       <div className="step-content">
         <div className="step-content-inner">
-          {currentStep === 1 && <Step1 />}
-          {currentStep === 2 && (
-            <Step2
+          {currentStep === 1 && (
+            <Step1
               receitaData={receitaData}
               onReceitaDataChange={handleReceitaDataChange}
             />
           )}
-          {currentStep === 3 && (
-            <Step3 receitaId={receitaId} receitaData={receitaData} />
+          {currentStep === 2 && (
+            <Step2 receitaId={receitaId} receitaData={receitaData} />
           )}
-          {currentStep === 4 && <Step4 receitaId={receitaId} />}
+          {currentStep === 3 && <Step3 receitaId={receitaId} />}
+          {currentStep === 4 && <Step4 />}
         </div>
 
         <div className="control-buttons">

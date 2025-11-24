@@ -8,7 +8,7 @@ class ReceitaBaseMixin:
     permission_classes = [IsAuthenticated]
     # Adicionado a linha abaixo para garantir a autenticação JWT no arquivo de test test_cliente_views.py
     # e o test possa ser executado com sucesso.
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
 
 class ClienteListView(ReceitaBaseMixin, generics.ListAPIView):
     serializer_class = ClienteSerializer

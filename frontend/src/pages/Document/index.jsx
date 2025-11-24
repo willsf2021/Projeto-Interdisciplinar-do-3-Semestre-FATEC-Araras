@@ -11,15 +11,15 @@ export const Document = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [receitaId, setReceitaId] = useState(null);
   const [receitaData, setReceitaData] = useState({
-    nome: '',
-    categoria: '',
-    medidaCaseira: '',
-    tempoPreparo: '',
-    porcaoIndividual: '',
-    unidadeMedida: '',
-    modoPreparo: '',
+    nome: "",
+    categoria: "",
+    medidaCaseira: "",
+    tempoPreparo: "",
+    porcaoIndividual: "",
+    unidadeMedida: "",
+    modoPreparo: "",
     habilitarPrecificacao: false, // NOVO CAMPO
-    markup: '' // NOVO CAMPO
+    markup: "", // NOVO CAMPO
   });
   const [loading, setLoading] = useState(false);
   const { apiFetchJson } = useApi();
@@ -33,11 +33,17 @@ export const Document = () => {
 
   const salvarOuAtualizarReceita = async () => {
     // Validação básica dos campos obrigatórios
-    if (!receitaData.nome || !receitaData.categoria || !receitaData.medidaCaseira || 
-        !receitaData.tempoPreparo || !receitaData.porcaoIndividual || !receitaData.unidadeMedida || 
-        !receitaData.modoPreparo) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      throw new Error('Campos obrigatórios não preenchidos');
+    if (
+      !receitaData.nome ||
+      !receitaData.categoria ||
+      !receitaData.medidaCaseira ||
+      !receitaData.tempoPreparo ||
+      !receitaData.porcaoIndividual ||
+      !receitaData.unidadeMedida ||
+      !receitaData.modoPreparo
+    ) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      throw new Error("Campos obrigatórios não preenchidos");
     }
 
     // Processar o tempo de preparo
@@ -45,8 +51,8 @@ export const Document = () => {
     let tempoPreparoMinutos = 0;
 
     if (receitaData.tempoPreparo) {
-      if (typeof receitaData.tempoPreparo === 'string') {
-        const tempoParts = receitaData.tempoPreparo.replace('h', '').split(':');
+      if (typeof receitaData.tempoPreparo === "string") {
+        const tempoParts = receitaData.tempoPreparo.replace("h", "").split(":");
         tempoPreparoHoras = parseInt(tempoParts[0]) || 0;
         tempoPreparoMinutos = parseInt(tempoParts[1]) || 0;
       } else {
@@ -66,7 +72,9 @@ export const Document = () => {
       medida: receitaData.unidadeMedida,
       modo_preparo: receitaData.modoPreparo,
       habilitar_precificacao: receitaData.habilitarPrecificacao, // NOVO
-      markup: receitaData.habilitarPrecificacao ? parseFloat(receitaData.markup) : null, // NOVO
+      markup: receitaData.habilitarPrecificacao
+        ? parseFloat(receitaData.markup)
+        : null, // NOVO
       habilitar_rotulo_nutricional: false,
     };
 
@@ -74,29 +82,35 @@ export const Document = () => {
       let response;
       if (receitaId) {
         // Se já existe, faz UPDATE
-        response = await apiFetchJson(`${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dadosParaEnviar),
-        });
-        console.log('Receita atualizada:', response);
+        response = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosParaEnviar),
+          }
+        );
+        console.log("Receita atualizada:", response);
       } else {
         // Se não existe, faz CREATE
-        response = await apiFetchJson(`${import.meta.env.VITE_API_URL}/criar-receita/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dadosParaEnviar),
-        });
+        response = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/criar-receita/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosParaEnviar),
+          }
+        );
         setReceitaId(response.id);
-        console.log('Receita criada com ID:', response.id);
+        console.log("Receita criada com ID:", response.id);
       }
       return response;
     } catch (error) {
-      console.error('Erro ao salvar receita:', error);
+      console.error("Erro ao salvar receita:", error);
       throw error;
     }
   };
@@ -110,7 +124,7 @@ export const Document = () => {
         await salvarOuAtualizarReceita();
         setCurrentStep(currentStep + 1);
       } catch (error) {
-        alert('Erro ao salvar receita. Verifique os campos e tente novamente.');
+        alert("Erro ao salvar receita. Verifique os campos e tente novamente.");
         return; // Não avança se der erro
       } finally {
         setLoading(false);
@@ -135,7 +149,7 @@ export const Document = () => {
         await salvarOuAtualizarReceita();
         setCurrentStep(stepNumber);
       } catch (error) {
-        alert('Erro ao salvar receita. Verifique os campos e tente novamente.');
+        alert("Erro ao salvar receita. Verifique os campos e tente novamente.");
         return;
       } finally {
         setLoading(false);
@@ -150,9 +164,9 @@ export const Document = () => {
   };
 
   const handleReceitaDataChange = (novosDados) => {
-    setReceitaData(prev => ({
+    setReceitaData((prev) => ({
       ...prev,
-      ...novosDados
+      ...novosDados,
     }));
   };
 
@@ -190,12 +204,14 @@ export const Document = () => {
         <div className="step-content-inner">
           {currentStep === 1 && <Step1 />}
           {currentStep === 2 && (
-            <Step2 
+            <Step2
               receitaData={receitaData}
               onReceitaDataChange={handleReceitaDataChange}
             />
           )}
-          {currentStep === 3 && <Step3 receitaId={receitaId} />}
+          {currentStep === 3 && (
+            <Step3 receitaId={receitaId} receitaData={receitaData} />
+          )}
           {currentStep === 4 && <Step4 receitaId={receitaId} />}
         </div>
 
@@ -219,7 +235,11 @@ export const Document = () => {
               onClick={handleNext}
               disabled={currentStep === steps.length || loading}
             >
-              {loading ? 'Salvando...' : currentStep === steps.length ? "Finalizar" : "Avançar"}
+              {loading
+                ? "Salvando..."
+                : currentStep === steps.length
+                ? "Finalizar"
+                : "Avançar"}
             </button>
           </div>
         </div>

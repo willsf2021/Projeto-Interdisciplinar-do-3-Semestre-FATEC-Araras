@@ -5,6 +5,29 @@ export const Container = styled.section`
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
+  overflow-x: hidden;
+`;
+
+export const PesoFieldset = styled.fieldset`
+  display: flex;
+  gap: 8px;
+  label {
+    font-size: 0.7rem;
+  }
+  padding: 20px 16px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  position: relative;
+`;
+
+export const FieldsetLegend = styled.legend`
+  padding: 0 8px;
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textColor};
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
 export const IngredientsGrid = styled.div`

@@ -40,6 +40,7 @@ class ReceitaSerializer(serializers.ModelSerializer):
             'tempo_preparo_minutos',
             'porcao_individual',
             'medida',
+            'medida_caseira',
             'modo_preparo',
             'habilitar_precificacao',
             'markup',

@@ -5,7 +5,6 @@ from decimal import Decimal
 class RotuloNutricionalSerializer(serializers.Serializer):
     porcoes_por_embalagem = serializers.IntegerField()
     porcao = serializers.DecimalField(max_digits=8, decimal_places=2)
-    medida_caseira = serializers.CharField()
     
     # Valores por 100g
     valor_energetico_100g = serializers.DecimalField(max_digits=8, decimal_places=2)

@@ -28,13 +28,21 @@ class Receita(models.Model):
     porcao_individual = models.DecimalField(
         max_digits=8, 
         decimal_places=2, 
-        verbose_name='Porção Individual'
+        verbose_name='Porção Individual (g/ml)'
     )
     medida = models.CharField(
         max_length=2, 
         choices=MEDIDA_CHOICES, 
         verbose_name='Medida da Porção'
     )
+
+    medida_caseira = models.CharField(
+        max_length=100,
+        verbose_name='Medida Caseira',
+        help_text='Ex: 1 xícara de chá, 2 colheres de sopa, 1 fatia, etc.',
+        null=True
+    )
+    
     modo_preparo = models.TextField(verbose_name='Modo de Preparo')
     
     # Precificação (opcional)
@@ -166,7 +174,6 @@ class Receita(models.Model):
 
     def calcular_nutrientes_por_porcao(self):
         """Calcula nutrientes por porção individual"""
-        # ✅ CORREÇÃO: Use nutrientes por 100g e ajuste para o peso da porção
         nutrientes_por_100g = self.calcular_nutrientes_por_100g()
         nutrientes_porcao = {}
 

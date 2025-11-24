@@ -25,11 +25,13 @@ class RotuloNutricionalView(RotuloNutricionalBaseView):
         nutrientes_porcao = receita.calcular_nutrientes_por_porcao()
         valores_diarios = receita.calcular_valores_diarios(nutrientes_porcao)
 
+        porcao_formatada = f"{receita.medida_caseira} ({receita.porcao_individual}{receita.get_medida_display()})"
+
         rotulo_data = {
             'porcoes_por_embalagem': int(receita.rendimento),
-            'porcao': receita.porcao_individual,
-            'medida_caseira': f"{receita.porcao_individual}{receita.medida}",
-
+            'porcao': porcao_formatada, 
+            
+            # Valores por 100g (mantém igual)
             'valor_energetico_100g': nutrientes_por_100g['valor_energetico'],
             'proteinas_100g': nutrientes_por_100g['proteinas'],
             'carboidratos_100g': nutrientes_por_100g['carboidratos'],
@@ -41,6 +43,7 @@ class RotuloNutricionalView(RotuloNutricionalBaseView):
             'fibra_alimentar_100g': nutrientes_por_100g['fibra_alimentar'],
             'sodio_100g': nutrientes_por_100g['sodio'],
 
+            # Valores por porção (mantém igual)
             'valor_energetico_porcao': nutrientes_porcao['valor_energetico'],
             'proteinas_porcao': nutrientes_porcao['proteinas'],
             'carboidratos_porcao': nutrientes_porcao['carboidratos'],
@@ -52,6 +55,7 @@ class RotuloNutricionalView(RotuloNutricionalBaseView):
             'fibra_alimentar_porcao': nutrientes_porcao['fibra_alimentar'],
             'sodio_porcao': nutrientes_porcao['sodio'],
 
+            # % Valores Diários (mantém igual)
             'vd_valor_energetico': valores_diarios['valor_energetico'],
             'vd_carboidratos': valores_diarios['carboidratos'],
             'vd_proteinas': valores_diarios['proteinas'],

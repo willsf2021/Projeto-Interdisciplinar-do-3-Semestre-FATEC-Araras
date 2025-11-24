@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+ 
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/firefox_browser.puml
+!include FONTAWESOME/google.puml
+!include FONTAWESOME/file_invoice.puml
+!include FONTAWESOME/user_cog.puml
+ 
+Person(usuario, "Usuário", "Usuário do sistema Rótus — responsável por gerenciar clientes, receitas e gerar rótulos nutricionais e documentos.")
+ 
+System_Boundary(rotus, "Contexto do Sistema Rótus") {
+  System(web, "Sistema Web Rótus", "Plataforma web para geração de rótulos nutricionais e precificação, com autenticação e gestão de clientes, receitas e documentos.")
+  System_Ext(googleAuth, "Serviço de Autenticação Google", "Serviço externo utilizado para login e cadastro via conta Google.")
+}
+ 
+Rel(usuario, web, "Acessa via navegador e realiza login/cadastro (tradicional ou Google)")
+Rel(web, googleAuth, "Realiza autenticação/cadastro via Google", "OAuth 2.0")
+Rel(usuario, web, "Gerencia perfil (editar/excluir)")
+Rel(usuario, web, "Gerencia clientes (cadastrar/editar/excluir)")
+Rel(usuario, web, "Gerencia documentos")
+Rel(usuario, web, "Cadastra novas receitas e gera rótulos nutricionais e documentos")
+ 
+SHOW_LEGEND()
+@enduml

@@ -133,7 +133,7 @@ export const Step2 = ({ receitaData, onReceitaDataChange }) => {
             
             <InputWithTooltip>
               <Input
-                label="Porção Individual"
+                label="Valor Porção Individual"
                 type="number"
                 value={receitaData.porcaoIndividual}
                 placeholder="100.00"

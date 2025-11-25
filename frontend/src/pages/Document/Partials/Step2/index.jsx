@@ -129,22 +129,24 @@ export const Step2 = ({ receitaId, receitaData }) => {
   const handleAdicionarIngrediente = async () => {
     // Validações básicas
     if (!ingredienteAtual.alimento) {
-      alert("Selecione um alimento");
+      notify("Selecione um alimento", "error");
       return;
     }
 
     if (!ingredienteAtual.pesoBruto || !ingredienteAtual.pesoLiquido) {
-      alert("Preencha os pesos bruto e líquido");
+      notify("Preencha os pesos bruto e líquido", "error");
       return;
     }
 
-    // Se precificação habilitada, valida campos de custo
     if (precificacaoHabilitada) {
       if (
         !ingredienteAtual.quantidadeEmbalagem ||
         !ingredienteAtual.custoEmbalagem
       ) {
-        alert("Preencha os campos de quantidade e custo da embalagem");
+        notify(
+          "Preencha os campos de quantidade e custo da embalagem",
+          "error"
+        );
         return;
       }
     }
@@ -202,7 +204,7 @@ export const Step2 = ({ receitaId, receitaData }) => {
       });
     } catch (error) {
       console.error("Erro ao adicionar ingrediente:", error);
-      alert("Erro ao adicionar ingrediente. Tente novamente.");
+      notify("Erro ao adicionar ingrediente. Tente novamente.", "error");
     } finally {
       setLoading(false);
     }

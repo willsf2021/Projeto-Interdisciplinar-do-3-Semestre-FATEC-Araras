@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Search, PersonPlus } from "react-bootstrap-icons";
-
 import { Input } from "../../../../components/Forms/Input";
 import { SubmitButton } from "../../../../components/Forms/SubmitButton/index.jsx";
 import { CustomSelect } from "../../../../components/Home/CustomSelect";
@@ -9,16 +8,17 @@ import {
   InputFlexWrapper,
 } from "../../../../components/Forms/FormWrappers/styles.js";
 import { Container, HeaderWrapper, SelectContainer } from "./style.js";
-
 import { useApi } from "../../../../hooks/useApi.js";
+import { useNotification } from "../../../../hooks/useNotification";
 
-export const Step4 = () => {
+export const Step4 = ({ documentoData, onDocumentoDataChange }) => {
   const [showForm, setShowForm] = useState(false);
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedClient, setSelectedClient] = useState(null); // Estado local para o select
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectKey, setSelectKey] = useState(0); // Key para forçar recriação do Select
+  const [selectKey, setSelectKey] = useState(0);
   const { apiFetchJson } = useApi();
+  const { notify } = useNotification();
 
   const [formData, setFormData] = useState({
     nome_completo: "",
@@ -35,9 +35,22 @@ export const Step4 = () => {
     if (error) setError("");
   };
 
+  // ALTERADO: Atualizar tanto o estado local quanto o global
   const handleSelectChange = (selectedOption) => {
     setSelectedClient(selectedOption);
-    console.log("Cliente selecionado:", selectedOption);
+    
+    if (selectedOption) {
+      onDocumentoDataChange({ 
+        cliente: {
+          id: selectedOption.value,
+          nome: selectedOption.label,
+          email: selectedOption.data?.email,
+          celular: selectedOption.data?.celular
+        }
+      });
+    } else {
+      onDocumentoDataChange({ cliente: null });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -45,17 +58,17 @@ export const Step4 = () => {
     setLoading(true);
     setError("");
 
-    // Validação básica
     if (!formData.nome_completo.trim() || !formData.email.trim()) {
       setError("Nome completo e e-mail são obrigatórios");
+      notify("Nome completo e e-mail são obrigatórios", "error");
       setLoading(false);
       return;
     }
 
-    // Validação de email simples
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Por favor, insira um e-mail válido");
+      notify("Por favor, insira um e-mail válido", "error");
       setLoading(false);
       return;
     }
@@ -73,22 +86,25 @@ export const Step4 = () => {
 
       const response = await apiFetchJson(url, options);
 
-      console.log("Cliente cadastrado com sucesso:", response);
+      // ALTERADO: Criar objeto completo do cliente
+      const novoCliente = {
+        id: response.id,
+        nome: response.nome_completo,
+        email: response.email,
+        celular: response.celular
+      };
 
-      // Cria o objeto no formato que o CustomSelect espera
       const novoClienteOption = {
         value: response.id,
         label: response.nome_completo,
-        data: response // Inclui todos os dados para referência futura
+        data: response
       };
 
-      // Seta o cliente recém-cadastrado como selecionado
+      // Atualiza ambos os estados
       setSelectedClient(novoClienteOption);
-      
-      // Força a recriação do CustomSelect para garantir que ele atualize
+      onDocumentoDataChange({ cliente: novoCliente });
       setSelectKey(prev => prev + 1);
 
-      // Limpa o formulário e esconde
       setFormData({
         nome_completo: "",
         email: "",
@@ -96,11 +112,12 @@ export const Step4 = () => {
       });
       setShowForm(false);
 
-      console.log("Cliente selecionado automaticamente:", novoClienteOption);
+      notify("Cliente cadastrado com sucesso!", "success");
 
     } catch (error) {
       console.error("Erro ao cadastrar cliente:", error);
       setError(error.message || "Erro ao cadastrar cliente. Tente novamente.");
+      notify("Erro ao cadastrar cliente. Tente novamente.", "error");
     } finally {
       setLoading(false);
     }
@@ -120,9 +137,10 @@ export const Step4 = () => {
 
   return (
     <Container>
-       <div className="step-content">
-      </div>
-      {!showForm && selectedClient && (
+      <div className="step-content"></div>
+      
+      {/* ALTERADO: Mostrar nome do cliente como antes */}
+      {!showForm && documentoData.cliente && (
         <div className="selected-client-info" style={{ 
           padding: '10px', 
           backgroundColor: '#f0f8ff', 
@@ -130,9 +148,9 @@ export const Step4 = () => {
           marginBottom: '10px',
           border: '1px solid #d1ecf1'
         }}>
-          <p style={{ margin: 0 }}><strong>Cliente selecionado:</strong> {selectedClient.label}</p>
+          <p style={{ margin: 0 }}><strong>Cliente selecionado:</strong> {documentoData.cliente.nome}</p>
           <p style={{ margin: 0, fontSize: '0.9em', color: '#666' }}>
-            {selectedClient.data?.email} {selectedClient.data?.celular && `• ${selectedClient.data.celular}`}
+            {documentoData.cliente.email} {documentoData.cliente.celular && `• ${documentoData.cliente.celular}`}
           </p>
         </div>
       )}
@@ -142,12 +160,12 @@ export const Step4 = () => {
           {!showForm && (
             <SelectContainer className="select-enter">
               <CustomSelect
-                key={selectKey} // Key para forçar recriação quando mudar
+                key={selectKey}
                 endpoint={"listar-clientes"}
-                placeholder={"clientes"}
+                placeholder={""}
                 type={"clients"}
                 onSelectChange={handleSelectChange}
-                value={selectedClient} // Passa o cliente selecionado
+                value={selectedClient} // Usa o estado local
                 icon={<Search />}
               />
             </SelectContainer>
@@ -170,7 +188,6 @@ export const Step4 = () => {
             <h4>Novo Cliente</h4>
           </div>
 
-          {/* Mensagens de feedback */}
           {error && <div className="error-message">{error}</div>}
 
           <InputFlexWrapper>

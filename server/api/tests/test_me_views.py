@@ -98,6 +98,19 @@ def test_logout_success(self):
         response = client.post("/api/refresh/")
         self.assertEqual(response.status_code, 401)
 
+def test_refresh_token_sets_domain(self):
+    client = APIClient()
+    client.cookies["refresh"] = self.refresh_token
+
+    response = client.post("/api/refresh/")
+    self.assertEqual(response.status_code, 200)
+
+    # garante que o cookie foi criado
+    self.assertIn("access", response.cookies)
+
+    # garante que o domain definido na view foi aplicado
+    self.assertEqual(response.cookies["access"]["domain"], "192.168.0.5")
+
     # -----------------------------------------------------
     # UPDATE USER
     # -----------------------------------------------------
@@ -160,3 +173,4 @@ def test_logout_success(self):
         client = APIClient()
         response = client.delete("/api/delete-account/")
         self.assertEqual(response.status_code, 401)
+

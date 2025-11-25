@@ -1,0 +1,311 @@
+### ========================================
+### ADMIN ENDPOINTS (requer login admin)
+### ========================================
+
+### Admin Index
+GET http://localhost:8000/admin/
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+### Admin App List
+GET http://localhost:8000/admin/auth/
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+### Admin Login (para obter token, use /api/login/ primeiro)
+POST http://localhost:8000/api/login/
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+### ========================================
+### AUTH & USER ENDPOINTS
+### ========================================
+
+### Registro de Usuário
+POST http://localhost:8000/api/registro/
+Content-Type: application/json
+
+{
+  "email": "teste@example.com",
+  "password": "senha123",
+  "nome": "Teste User"
+}
+
+### Login
+POST http://localhost:8000/api/login/
+Content-Type: application/json
+
+{
+  "email": "teste@example.com",
+  "password": "senha123"
+}
+
+@token = {{login.response.body.$.access}}
+
+### Refresh Token
+POST http://localhost:8000/api/refresh/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "refresh": "{{login.response.body.$.refresh}}"
+}
+
+### Logout
+POST http://localhost:8000/api/logout/
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "refresh": "{{login.response.body.$.refresh}}"
+}
+
+### Get User (Me)
+GET http://localhost:8000/api/get-user/
+Authorization: Bearer {{token}}
+
+### Check Session
+GET http://localhost:8000/api/check-session/
+Authorization: Bearer {{token}}
+
+### Update Avatar
+PATCH http://localhost:8000/api/update-avatar/
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+< ./avatar.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Update User (Me)
+PATCH http://localhost:8000/api/update-user/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Novo Nome",
+  "email": "novo@email.com"
+}
+
+### Alterar Senha
+POST http://localhost:8000/api/alterar-senha/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "old_password": "senha123",
+  "new_password": "novaSenha456"
+}
+
+### Solicitar Recuperação de Senha
+POST http://localhost:8000/api/solicitar-recuperacao/
+Content-Type: application/json
+
+{
+  "email": "teste@example.com"
+}
+
+### Redefinir Senha (com token do email)
+POST http://localhost:8000/api/redefinir-senha/{{uidb64}}/{{token}}/
+Content-Type: application/json
+
+{
+  "new_password": "novaSenha789"
+}
+
+### Deletar Conta
+DELETE http://localhost:8000/api/delete-account/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "password": "senha123"
+}
+
+### Google Auth (redireciona para Google)
+GET http://localhost:8000/api/google-auth/
+
+### ========================================
+### CLIENTES ENDPOINTS
+### ========================================
+
+### Criar Cliente
+POST http://localhost:8000/api/criar-cliente/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "telefone": "11999999999"
+}
+
+@cliente_id = 1
+
+### Listar Clientes
+GET http://localhost:8000/api/listar-clientes/
+Authorization: Bearer {{token}}
+
+### Detalhes do Cliente
+GET http://localhost:8000/api/detalhes-cliente/{{cliente_id}}/
+Authorization: Bearer {{token}}
+
+### Atualizar Cliente
+PUT http://localhost:8000/api/atualizar-cliente/{{cliente_id}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "João Silva Atualizado",
+  "telefone": "11888888888"
+}
+
+### Excluir Cliente
+DELETE http://localhost:8000/api/excluir-cliente/{{cliente_id}}/
+Authorization: Bearer {{token}}
+
+### ========================================
+### RECEITAS ENDPOINTS
+### ========================================
+
+### Criar Receita
+POST http://localhost:8000/api/criar-receita/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Bolo de Chocolate",
+  "modo_preparo": "Misture tudo e asse.",
+  "rendimento": "10 porções"
+}
+
+@receita_id = {{criar-receita.response.body.$.id}}
+
+### Listar Receitas
+GET http://localhost:8000/api/listar-receitas/
+Authorization: Bearer {{token}}
+
+### Atualizar Receita
+PUT http://localhost:8000/api/atualizar-receita/{{receita_id}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Bolo de Chocolate Premium",
+  "rendimento": "12 porções"
+}
+
+### Excluir Receita
+DELETE http://localhost:8000/api/excluir-receita/{{receita_id}}/
+Authorization: Bearer {{token}}
+
+### ========================================
+### INGREDIENTES ENDPOINTS
+### ========================================
+
+### Criar Ingrediente na Receita
+POST http://localhost:8000/api/criar-ingrediente/{{receita_id}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "alimento_taco_id": 1,
+  "quantidade": 200,
+  "unidade": "g"
+}
+
+@ingrediente_id = {{criar-ingrediente.response.body.$.id}}
+
+### Listar Ingredientes da Receita
+GET http://localhost:8000/api/listar-ingredientes/{{receita_id}}/
+Authorization: Bearer {{token}}
+
+### Detalhes do Ingrediente
+GET http://localhost:8000/api/detalhes-ingrediente/{{ingrediente_id}}/
+Authorization: Bearer {{token}}
+
+### Atualizar Ingrediente
+PUT http://localhost:8000/api/atualizar-ingrediente/{{ingrediente_id}}/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantidade": 250,
+  "unidade": "g"
+}
+
+### Excluir Ingrediente
+DELETE http://localhost:8000/api/excluir-ingrediente/{{ingrediente_id}}/
+Authorization: Bearer {{token}}
+
+### ========================================
+### ALIMENTOS TACO
+### ========================================
+
+### Listar Alimentos TACO
+GET http://localhost:8000/api/alimentos/
+Authorization: Bearer {{token}}
+
+### ========================================
+### DOCUMENTOS & RÓTULOS
+### ========================================
+
+### Criar Documento (ex: Ficha Técnica)
+POST http://localhost:8000/api/documentos/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "receita": {{receita_id}},
+  "tipo": "ficha_tecnica",
+  "titulo": "Ficha Técnica - Bolo"
+}
+
+@documento_id = {{documentos.response.body.$.id}}
+
+### Listar Todos os Documentos
+GET http://localhost:8000/api/listar-documentos/
+Authorization: Bearer {{token}}
+
+### Gerar PDF do Documento
+GET http://localhost:8000/api/documentos/{{documento_id}}/pdf/
+Authorization: Bearer {{token}}
+
+### Gerar Rótulo Nutricional (por receita)
+GET http://localhost:8000/api/rotulos/{{receita_id}}/rotulo-nutricional/
+Authorization: Bearer {{token}}
+
+### Gerar PDF do Rótulo
+GET http://localhost:8000/api/rotulos/{{documento_id}}/pdf/
+Authorization: Bearer {{token}}
+
+### ========================================
+### VARIÁVEIS GLOBAIS (salve em settings do REST Client)
+### ========================================
+
+# No VSCode REST Client, crie um arquivo .env ou use o settings:
+# {
+#   "rest-client.environmentVariables": {
+#     "$shared": {
+#       "host": "http://localhost:8000",
+#       "admin_token": "SEU_TOKEN_ADMIN_AQUI",
+#       "token": ""
+#     }
+#   }
+# }
+
+### ========================================
+### DICAS DE USO
+### ========================================
+# 1. Execute o login primeiro para obter o token
+# 2. Use @variavel = {{resposta.response.body.$.campo}} para capturar IDs
+# 3. Use Authorization: Bearer {{token}} em endpoints protegidos
+# 4. Para arquivos (avatar), use o formato multipart acima
+# 5. Teste em ordem: auth → clientes → receitas → ingredientes → documentos

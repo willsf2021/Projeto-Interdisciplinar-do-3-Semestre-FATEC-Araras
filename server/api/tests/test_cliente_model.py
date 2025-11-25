@@ -1,4 +1,3 @@
-# tests/test_cliente_model.py
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.conf import settings

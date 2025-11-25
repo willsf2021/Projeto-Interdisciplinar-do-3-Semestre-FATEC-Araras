@@ -5,7 +5,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useData } from "../../contexts/DataContext";
 import { useApi } from "../../hooks/useApi";
 import { Header } from "../../components/Home/Header";
-import { SearchBar } from "../../components/Home/SearchBar/";
 import { EmptyState } from "../../components/Home/EmptyState/";
 import { ToggleSwitch } from "../../components/Home/ToggleSwicth";
 import { FloatingButton } from "../../components/Home/FloatingButton/";

@@ -138,22 +138,7 @@ export const Step4 = ({ documentoData, onDocumentoDataChange }) => {
   return (
     <Container>
       <div className="step-content"></div>
-      
-      {/* ALTERADO: Mostrar nome do cliente como antes */}
-      {!showForm && documentoData.cliente && (
-        <div className="selected-client-info" style={{ 
-          padding: '10px', 
-          backgroundColor: '#f0f8ff', 
-          borderRadius: '5px', 
-          marginBottom: '10px',
-          border: '1px solid #d1ecf1'
-        }}>
-          <p style={{ margin: 0 }}><strong>Cliente selecionado:</strong> {documentoData.cliente.nome}</p>
-          <p style={{ margin: 0, fontSize: '0.9em', color: '#666' }}>
-            {documentoData.cliente.email} {documentoData.cliente.celular && `• ${documentoData.cliente.celular}`}
-          </p>
-        </div>
-      )}
+
 
       <HeaderWrapper>
         <div className="select-container">
@@ -167,7 +152,7 @@ export const Step4 = ({ documentoData, onDocumentoDataChange }) => {
                 onSelectChange={handleSelectChange}
                 value={selectedClient} // Usa o estado local
                 icon={<Search />}
-              />
+                />
             </SelectContainer>
           )}
         </div>
@@ -182,6 +167,20 @@ export const Step4 = ({ documentoData, onDocumentoDataChange }) => {
         </button>
       </HeaderWrapper>
 
+          {!showForm && documentoData.cliente && (
+            <div className="selected-client-info" style={{ 
+              padding: '10px', 
+              backgroundColor: '#f0f8ff', 
+              borderRadius: '5px', 
+              marginBottom: '10px',
+              border: '1px solid #d1ecf1'
+            }}>
+              <p style={{ margin: 0 }}><strong>Cliente selecionado:</strong> {documentoData.cliente.nome}</p>
+              <p style={{ margin: 0, fontSize: '0.9em', color: '#666' }}>
+                {documentoData.cliente.email} {documentoData.cliente.celular && `• ${documentoData.cliente.celular}`}
+              </p>
+            </div>
+          )}
       {showForm && (
         <FormWrapper onSubmit={handleSubmit}>
           <div className="form-header">

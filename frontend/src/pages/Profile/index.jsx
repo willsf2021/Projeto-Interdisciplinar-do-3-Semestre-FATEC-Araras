@@ -172,7 +172,7 @@ export const Profile = () => {
       const result = await authService.deleteAccount();
 
       if (result.status === 200) {
-        notify("✅ Conta desativada com sucesso! Redirecionando...", "success");
+        notify("Conta desativada com sucesso! Redirecionando...", "success");
         closeDeleteModal();
 
         setTimeout(() => {

@@ -191,7 +191,9 @@ export const Document = () => {
                   className={`steps-item-name ${
                     currentStep === step.number ? "p-active" : ""
                   }`}
-                >{step.name}</p>
+                >
+                  {step.name}
+                </p>
               </li>
 
               {index < steps.length - 1 && <span className="hr-steps"></span>}

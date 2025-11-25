@@ -5,20 +5,30 @@ import { CustomSelect } from "../../../../components/Home/CustomSelect";
 import { EggFried } from "react-bootstrap-icons";
 import { useApi } from "../../../../hooks/useApi";
 import {
+  Egg,
+  Calculator,
+  Box,
+  CurrencyDollar,
+  Trash,
+} from "react-bootstrap-icons";
+import {
   Container,
   IngredientsGrid,
   SectionTitle,
-  AddButton,
-  IngredientsList,
-  IngredientCard,
-  IngredientHeader,
-  IngredientName,
-  IngredientDetails,
-  IngredientMeta,
-  RemoveButton,
   EmptyState,
   ConditionalFields,
   FieldRow,
+  IngredientsListContainer,
+  IngredientsListHeader,
+  IngredientItemCard,
+  IngredientItemIcon,
+  IngredientItemContent,
+  IngredientItemTitle,
+  IngredientItemDescription,
+  IngredientItemMeta,
+  RemoveButton,
+  IngredientsListGrid,
+  IngredientItemHeader,
 } from "./style";
 import { InputWithTooltip, TooltipIcon, TooltipText } from "../Step1/style";
 import { PesoFieldset } from "./style";
@@ -287,7 +297,7 @@ export const Step2 = ({ receitaId, receitaData }) => {
           title={loading ? "Adicionando..." : "Adicionar"}
         />
       </FormWrapper>
-      <IngredientsList>
+      <IngredientsListContainer>
         {ingredientes.length === 0 ? (
           <EmptyState>
             <p>Nenhum ingrediente adicionado ainda.</p>
@@ -296,63 +306,86 @@ export const Step2 = ({ receitaId, receitaData }) => {
             </span>
           </EmptyState>
         ) : (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-          >
-            {ingredientes.map((ingrediente) => (
-              <IngredientCard key={ingrediente.id}>
-                <IngredientHeader>
-                  <IngredientName>
-                    {ingrediente.alimento_nome || "Alimento"}
-                  </IngredientName>
+          <>
+            <IngredientsListHeader>
+              {ingredientes.length}{" "}
+              {ingredientes.length === 1
+                ? "ingrediente adicionado"
+                : "ingredientes adicionados"}
+            </IngredientsListHeader>
+
+            <IngredientsListGrid>
+              {ingredientes.map((ingrediente) => (
+                <IngredientItemCard key={ingrediente.id}>
+                  <IngredientItemHeader>
+                    {/* <IngredientItemIcon>
+                      <EggFried/>
+                    </IngredientItemIcon> */}
+
+                    <IngredientItemContent>
+                      <IngredientItemTitle>
+                        {ingrediente.alimento_nome || "Alimento"}
+                      </IngredientItemTitle>
+
+                      <IngredientItemDescription>
+                        <span>
+                          <strong>Peso Bruto:</strong> {ingrediente.peso_bruto}g
+                        </span>
+                      </IngredientItemDescription>
+                      <IngredientItemDescription>
+                        <span>
+                          <strong>Peso Líquido: </strong>
+                          {ingrediente.peso_liquido}g
+                        </span>
+                      </IngredientItemDescription>
+
+                      {precificacaoHabilitada &&
+                        ingrediente.custo_embalagem && (
+                          <>
+                            <IngredientItemMeta>
+                              <Box size={12} />
+                              <span>
+                                Embalagem: {ingrediente.quantidade_embalagem}g
+                              </span>
+                            </IngredientItemMeta>
+
+                            <IngredientItemMeta>
+                              <CurrencyDollar size={12} />
+                              <span>
+                                Custo: R${" "}
+                                {parseFloat(
+                                  ingrediente.custo_embalagem
+                                ).toFixed(2)}
+                                (R${" "}
+                                {ingrediente.custo_embalagem &&
+                                ingrediente.quantidade_embalagem
+                                  ? (
+                                      parseFloat(ingrediente.custo_embalagem) /
+                                      parseFloat(
+                                        ingrediente.quantidade_embalagem
+                                      )
+                                    ).toFixed(4)
+                                  : "0.0000"}
+                                /g)
+                              </span>
+                            </IngredientItemMeta>
+                          </>
+                        )}
+                    </IngredientItemContent>
+                  </IngredientItemHeader>
+
                   <RemoveButton
                     onClick={() => handleRemoverIngrediente(ingrediente.id)}
                     title="Remover ingrediente"
                   >
-                    ×
+                    <Trash />
                   </RemoveButton>
-                </IngredientHeader>
-
-                <IngredientDetails>
-                  <IngredientMeta>
-                    <strong>Peso Bruto:</strong> {ingrediente.peso_bruto}g
-                  </IngredientMeta>
-                  <IngredientMeta>
-                    <strong>Peso Líquido:</strong> {ingrediente.peso_liquido}g
-                  </IngredientMeta>
-                  <IngredientMeta>
-                    <strong>Peso Processado:</strong>{" "}
-                    {ingrediente.peso_processado || ingrediente.peso_liquido}g
-                  </IngredientMeta>
-
-                  {precificacaoHabilitada && ingrediente.custo_embalagem && (
-                    <>
-                      <IngredientMeta>
-                        <strong>Embalagem:</strong>{" "}
-                        {ingrediente.quantidade_embalagem}g
-                      </IngredientMeta>
-                      <IngredientMeta>
-                        <strong>Custo:</strong> R${" "}
-                        {parseFloat(ingrediente.custo_embalagem).toFixed(2)}
-                      </IngredientMeta>
-                      <IngredientMeta>
-                        <strong>Custo/g:</strong> R${" "}
-                        {ingrediente.custo_embalagem &&
-                        ingrediente.quantidade_embalagem
-                          ? (
-                              parseFloat(ingrediente.custo_embalagem) /
-                              parseFloat(ingrediente.quantidade_embalagem)
-                            ).toFixed(4)
-                          : "0.0000"}
-                      </IngredientMeta>
-                    </>
-                  )}
-                </IngredientDetails>
-              </IngredientCard>
-            ))}
-          </div>
+                </IngredientItemCard>
+              ))}
+            </IngredientsListGrid>
+          </>
         )}
-      </IngredientsList>
+      </IngredientsListContainer>
     </Container>
   );
 };

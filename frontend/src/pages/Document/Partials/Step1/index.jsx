@@ -27,57 +27,35 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
   };
 
   /**
-   * Formata uma entrada qualquer em M:SS ou MM:SS.
-   * - aceita números puros (ex: "110" -> 1:10)
-   * - aceita texto com ":" (ex: "1:70" -> 2:10)
-   * - faz carry dos segundos para minutos quando necessário
-   * - retorno "" se input vazio
+   * Restringe unidade de medida para apenas "ml" ou "g"
    */
-  const formatTempoInput = (raw) => {
-    if (!raw) return "";
-
-    // permite que o usuário cole com ":" ou digite apenas números
-    const onlyDigits = raw.replace(/[^0-9]/g, "");
-
-    if (onlyDigits.length === 0) return "";
-
-    let minutes = 0;
-    let seconds = 0;
-
-    if (raw.includes(":")) {
-      // se o usuário colou "m:ss" ou "mm:ss" etc
-      const parts = raw.split(":").map(p => p.replace(/\D/g, ""));
-      const minPart = parts[0] || "0";
-      const secPart = parts[1] || "0";
-
-      minutes = parseInt(minPart, 10) || 0;
-      seconds = parseInt(secPart, 10) || 0;
-    } else {
-      // se o usuário digitou só números, interpretamos os últimos 2 como segundos
-      if (onlyDigits.length <= 2) {
-        minutes = 0;
-        seconds = parseInt(onlyDigits, 10) || 0;
-      } else {
-        const minPart = onlyDigits.slice(0, -2);
-        const secPart = onlyDigits.slice(-2);
-        minutes = parseInt(minPart, 10) || 0;
-        seconds = parseInt(secPart, 10) || 0;
-      }
+  const handleUnidadeMedidaChange = (value) => {
+    const lowerValue = value.toLowerCase();
+    
+    // Permite digitar "m", "ml", "g" ou vazio durante a digitação
+    if (lowerValue === "m" || lowerValue === "ml" || lowerValue === "g" || value === "") {
+      onReceitaDataChange({ unidadeMedida: lowerValue });
     }
-
-    // carry: se segundos >= 60, converte para minutos
-    if (seconds >= 60) {
-      const carry = Math.floor(seconds / 60);
-      minutes += carry;
-      seconds = seconds % 60;
-    }
-
-    return `${minutes}:${String(seconds).padStart(2, "0")}`;
   };
 
-  const handleTempoChange = (rawValue) => {
-    const formatted = formatTempoInput(rawValue);
-    onReceitaDataChange({ tempoPreparo: formatted });
+  /**
+   * Formata números com vírgula para decimais
+   */
+  const formatNumberInput = (value) => {
+    if (!value) return "";
+    
+    // Remove tudo que não é número ou vírgula
+    let cleaned = value.replace(/[^\d,]/g, "");
+    
+    // Substitui múltiplas vírgulas por uma única
+    cleaned = cleaned.replace(/,+/g, ",");
+    
+    return cleaned;
+  };
+
+  const handleNumberChange = (field, value) => {
+    const formatted = formatNumberInput(value);
+    onReceitaDataChange({ [field]: formatted });
   };
 
   return (
@@ -121,23 +99,20 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
           <div className="container-porcoes">
             <Input
               label="Tempo de Preparo"
-              type="text"
-              value={receitaData.tempoPreparo ?? ""}
-              placeholder="1:10"
-              onChange={(e) => handleTempoChange(e.target.value)}
-              inputMode="numeric"
-              maxLength={6}
+              type="time"
+              value={receitaData.tempoPreparo || ""}
+              placeholder="HH:MM"
+              onChange={(e) => handleInputChange('tempoPreparo', e.target.value)}
               required
             />
             
             <InputWithTooltip>
               <Input
                 label="Valor Porção Individual"
-                type="number"
+                type="text"
                 value={receitaData.porcaoIndividual}
-                placeholder="100.00"
-                onChange={(e) => handleInputChange('porcaoIndividual', e.target.value)}
-                step="0.01"
+                placeholder="Ex: 100,00"
+                onChange={(e) => handleNumberChange('porcaoIndividual', e.target.value)}
                 required
               />
               <TooltipIcon>
@@ -151,8 +126,9 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
                 label="Unidade de Medida"
                 type="text"
                 value={receitaData.unidadeMedida}
-                placeholder="ml ou g"
-                onChange={(e) => handleInputChange('unidadeMedida', e.target.value)}
+                placeholder="Ex: ml ou g"
+                onChange={(e) => handleUnidadeMedidaChange(e.target.value)}
+                maxLength={2}
                 required
               />
               <TooltipIcon>
@@ -196,12 +172,10 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
             <InputWithTooltip className={!receitaData.habilitarPrecificacao ? 'disabled' : ''}>
               <Input
                 label="Markup (%)"
-                type="number"
+                type="text"
                 value={receitaData.markup}
-                placeholder="Ex: 30"
-                onChange={(e) => handleInputChange('markup', e.target.value)}
-                step="0.01"
-                min="0"
+                placeholder="Ex: 30,00"
+                onChange={(e) => handleNumberChange('markup', e.target.value)}
                 disabled={!receitaData.habilitarPrecificacao}
               />
               <TooltipIcon>

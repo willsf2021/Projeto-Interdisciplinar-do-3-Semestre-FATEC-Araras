@@ -99,16 +99,59 @@ export const AddButton = styled.button`
   }
 `;
 
-export const IngredientsList = styled.div`
-  margin-top: 2rem;
+export const IngredientsListContainer = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.md};
+  padding: 0 ${({ theme }) => theme.spacing.md};
 `;
 
-export const IngredientCard = styled.div`
+export const IngredientsListHeader = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColorMuted};
+  padding: 0 ${({ theme }) => theme.spacing.sm};
+`;
+
+export const IngredientsListGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.sm} 0;
+  padding-right: ${({ theme }) => theme.spacing.sm};
+  max-height: 400px;
+  overflow-y: auto;
+
+  /* Scrollbar customizada - igual ao exemplo de ingredientes e lista da home */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.primaryHover};
+  }
+`;
+
+export const IngredientItemCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.borderColor};
+  border-left: 4px solid ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
-  padding: 1.25rem;
   background: white;
   transition: all 0.2s ease;
+  cursor: default;
+  gap: ${({ theme }) => theme.spacing.md};
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
@@ -116,63 +159,98 @@ export const IngredientCard = styled.div`
   }
 `;
 
-export const IngredientHeader = styled.div`
+export const IngredientItemHeader = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
-`;
-
-export const IngredientName = styled.h5`
-  font-size: ${({ theme }) => theme.fontSizes.base};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  color: ${({ theme }) => theme.colors.textColor};
-  margin: 0;
+  gap: ${({ theme }) => theme.spacing.md};
   flex: 1;
 `;
 
-export const IngredientDetails = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.75rem;
+export const IngredientItemIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f3f4f6;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 1.2rem;
+  flex-shrink: 0;
 `;
 
-export const IngredientMeta = styled.div`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textColor};
+export const IngredientItemContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
 
-  strong {
-    color: ${({ theme }) => theme.colors.textColor};
-    font-weight: ${({ theme }) => theme.fontWeights.medium};
+export const IngredientItemTitle = styled.h3`
+  margin: 0;
+  font-size: ${({ theme }) => theme.fontSizes.sm} !important;
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textColor};
+  font-family: ${({ theme }) => theme.fontFamilies.inter};
+  text-align: left !important;
+`;
+
+export const IngredientItemDescription = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColorMuted};
+  line-height: 1.4;
+
+  svg {
+    flex-shrink: 0;
+    color: ${({ theme }) => theme.colors.textColorMuted};
   }
 `;
 
+export const IngredientItemMeta = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColorMuted};
+
+  svg {
+    flex-shrink: 0;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+// RemoveButton já existe, mas vamos ajustar para ficar igual ao da lista
 export const RemoveButton = styled.button`
   background: none;
   border: none;
   color: #dc2626;
-  font-size: 1.5rem;
-  font-weight: bold;
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  transition: all 0.2s ease;
-  width: 28px;
-  height: 28px;
+  padding: ${({ theme }) => theme.spacing.xs};
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  transition: all 0.2s;
   flex-shrink: 0;
+  align-self: flex-start;
 
   &:hover {
     background: #fee2e2;
   }
+
+  svg {
+    color: #dc2626;
+  }
 `;
 
 export const EmptyState = styled.div`
+  padding: ${({ theme }) => theme.spacing.xl};
   text-align: center;
-  padding: 3rem 2rem;
   color: ${({ theme }) => theme.colors.textColorMuted};
+  font-style: italic;
 
   p {
     font-size: ${({ theme }) => theme.fontSizes.base};
@@ -182,6 +260,5 @@ export const EmptyState = styled.div`
 
   span {
     font-size: ${({ theme }) => theme.fontSizes.sm};
-    font-style: italic;
   }
 `;

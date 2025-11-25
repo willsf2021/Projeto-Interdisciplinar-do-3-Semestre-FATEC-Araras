@@ -58,31 +58,6 @@ export const TextField = styled.textarea`
   }
 `;
 
-export const PrecificacaoFieldset = styled.fieldset`
-  margin-top: 20px;
-  padding: 20px 16px 16px;
-  border: 1px solid #d0d0d0;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  background-color: #f9f9f9;
-  position: relative;
-`;
-
-export const FieldsetLegend = styled.legend`
-  padding: 0 8px;
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: ${({ theme }) => theme.fontWeights.semibold};
-  color: ${({ theme }) => theme.colors.textColor};
-  display: flex;
-  align-items: center;
-  gap: 6px;
-
-  .legend-tooltip {
-    position: relative;
-    top: 0;
-    right: 0;
-  }
-`;
-
 export const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -225,7 +200,7 @@ export const TooltipText = styled.span`
   }
 
   /* Ajuste ESPECÍFICO para tooltips no legend - CORREÇÃO DO VAZAMENTO */
-  ${FieldsetLegend} & {
+  legend & {
     bottom: calc(100% + 12px);
     left: 0;
     right: auto;
@@ -243,7 +218,7 @@ export const TooltipText = styled.span`
     font-size: 11px;
     padding: 8px 10px;
     
-    ${FieldsetLegend} & {
+    legend & {
       width: 220px;
       left: -50px;
       right: auto;

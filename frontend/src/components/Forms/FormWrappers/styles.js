@@ -166,3 +166,30 @@ export const InputFlexWrapper = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md} 0;
 `;
+
+export const Fieldset = styled.fieldset`
+  gap: 8px;
+  padding: 20px 16px 16px;
+  border: 1px solid #d0d0d0;
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  position: relative;
+  label {
+    font-size: 0.7rem;
+  }
+`;
+
+export const FieldsetLegend = styled.legend`
+  padding: 0 8px;
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.textColor};
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .legend-tooltip {
+    position: relative;
+    top: 0;
+    right: 0;
+  }
+`;

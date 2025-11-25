@@ -9,15 +9,17 @@ import {
   CheckboxWrapper,
   CheckboxLabel,
   CheckboxCustom,
-  PrecificacaoFieldset,
-  FieldsetLegend,
   InputWithTooltip,
   TooltipIcon,
-  TooltipText
+  TooltipText,
 } from "./style";
 
-export const Step1 = ({ receitaData, onReceitaDataChange }) => {
+import {
+  Fieldset,
+  FieldsetLegend,
+} from "../../../../components/Forms/FormWrappers/styles";
 
+export const Step1 = ({ receitaData, onReceitaDataChange }) => {
   const handleInputChange = (field, value) => {
     onReceitaDataChange({ [field]: value });
   };
@@ -31,9 +33,14 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
    */
   const handleUnidadeMedidaChange = (value) => {
     const lowerValue = value.toLowerCase();
-    
+
     // Permite digitar "m", "ml", "g" ou vazio durante a digitação
-    if (lowerValue === "m" || lowerValue === "ml" || lowerValue === "g" || value === "") {
+    if (
+      lowerValue === "m" ||
+      lowerValue === "ml" ||
+      lowerValue === "g" ||
+      value === ""
+    ) {
       onReceitaDataChange({ unidadeMedida: lowerValue });
     }
   };
@@ -43,13 +50,13 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
    */
   const formatNumberInput = (value) => {
     if (!value) return "";
-    
+
     // Remove tudo que não é número ou vírgula
     let cleaned = value.replace(/[^\d,]/g, "");
-    
+
     // Substitui múltiplas vírgulas por uma única
     cleaned = cleaned.replace(/,+/g, ",");
-    
+
     return cleaned;
   };
 
@@ -60,8 +67,7 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
 
   return (
     <Container>
-      <div className="step-content">
-      </div>
+      <div className="step-content"></div>
       <FormWrapper>
         <InputFlexWrapperStep1>
           <Input
@@ -69,7 +75,7 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
             type="text"
             value={receitaData.nome}
             placeholder="Digite o nome da receita..."
-            onChange={(e) => handleInputChange('nome', e.target.value)}
+            onChange={(e) => handleInputChange("nome", e.target.value)}
             required
           />
           <Input
@@ -77,22 +83,27 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
             type="text"
             value={receitaData.categoria}
             placeholder="Digite a categoria da receita..."
-            onChange={(e) => handleInputChange('categoria', e.target.value)}
+            onChange={(e) => handleInputChange("categoria", e.target.value)}
             required
           />
-          
+
           <InputWithTooltip>
             <Input
               label="Medida Caseira"
               type="text"
               value={receitaData.medidaCaseira}
               placeholder="Digite a medida caseira da receita..."
-              onChange={(e) => handleInputChange('medidaCaseira', e.target.value)}
+              onChange={(e) =>
+                handleInputChange("medidaCaseira", e.target.value)
+              }
               required
             />
             <TooltipIcon>
               i
-              <TooltipText>Unidade de referência visual (ex: 1 xícara, 1 colher de sopa, 1 fatia)</TooltipText>
+              <TooltipText>
+                Unidade de referência visual (ex: 1 xícara, 1 colher de sopa, 1
+                fatia)
+              </TooltipText>
             </TooltipIcon>
           </InputWithTooltip>
 
@@ -102,22 +113,28 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
               type="time"
               value={receitaData.tempoPreparo || ""}
               placeholder="HH:MM"
-              onChange={(e) => handleInputChange('tempoPreparo', e.target.value)}
+              onChange={(e) =>
+                handleInputChange("tempoPreparo", e.target.value)
+              }
               required
             />
-            
+
             <InputWithTooltip>
               <Input
                 label="Valor Porção Individual"
                 type="text"
                 value={receitaData.porcaoIndividual}
                 placeholder="Ex: 100,00"
-                onChange={(e) => handleNumberChange('porcaoIndividual', e.target.value)}
+                onChange={(e) =>
+                  handleNumberChange("porcaoIndividual", e.target.value)
+                }
                 required
               />
               <TooltipIcon>
                 i
-                <TooltipText>Quantidade em gramas ou ml de uma porção servida</TooltipText>
+                <TooltipText>
+                  Quantidade em gramas ou ml de uma porção servida
+                </TooltipText>
               </TooltipIcon>
             </InputWithTooltip>
 
@@ -133,27 +150,32 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
               />
               <TooltipIcon>
                 i
-                <TooltipText>Use "g" para sólidos ou "ml" para líquidos</TooltipText>
+                <TooltipText>
+                  Use "g" para sólidos ou "ml" para líquidos
+                </TooltipText>
               </TooltipIcon>
             </InputWithTooltip>
           </div>
 
           <TextFieldWrapper>
             <TextFieldLabel>Modo de Preparo</TextFieldLabel>
-            <TextField 
+            <TextField
               value={receitaData.modoPreparo}
-              onChange={(e) => handleInputChange('modoPreparo', e.target.value)}
+              onChange={(e) => handleInputChange("modoPreparo", e.target.value)}
               placeholder="Descreva o modo de preparo da receita..."
             />
           </TextFieldWrapper>
 
           {/* Seção de Precificação com Fieldset */}
-          <PrecificacaoFieldset>
+          <Fieldset>
             <FieldsetLegend>
               Precificação
               <TooltipIcon className="legend-tooltip">
                 i
-                <TooltipText>Sistema que calcula o preço de venda baseado nos custos dos ingredientes e margem de lucro</TooltipText>
+                <TooltipText>
+                  Sistema que calcula o preço de venda baseado nos custos dos
+                  ingredientes e margem de lucro
+                </TooltipText>
               </TooltipIcon>
             </FieldsetLegend>
 
@@ -162,28 +184,38 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
                 type="checkbox"
                 id="habilitar-precificacao"
                 checked={receitaData.habilitarPrecificacao}
-                onChange={(e) => handleCheckboxChange('habilitarPrecificacao', e.target.checked)}
+                onChange={(e) =>
+                  handleCheckboxChange(
+                    "habilitarPrecificacao",
+                    e.target.checked
+                  )
+                }
               />
               <CheckboxLabel htmlFor="habilitar-precificacao">
                 Habilitar Precificação
               </CheckboxLabel>
             </CheckboxWrapper>
 
-            <InputWithTooltip className={!receitaData.habilitarPrecificacao ? 'disabled' : ''}>
+            <InputWithTooltip
+              className={!receitaData.habilitarPrecificacao ? "disabled" : ""}
+            >
               <Input
                 label="Markup (%)"
                 type="text"
                 value={receitaData.markup}
                 placeholder="Ex: 30,00"
-                onChange={(e) => handleNumberChange('markup', e.target.value)}
+                onChange={(e) => handleNumberChange("markup", e.target.value)}
                 disabled={!receitaData.habilitarPrecificacao}
               />
               <TooltipIcon>
                 i
-                <TooltipText>Percentual de lucro sobre o custo (ex: 30% = R$10 custo vira R$13 venda)</TooltipText>
+                <TooltipText>
+                  Percentual de lucro sobre o custo (ex: 30% = R$10 custo vira
+                  R$13 venda)
+                </TooltipText>
               </TooltipIcon>
             </InputWithTooltip>
-          </PrecificacaoFieldset>
+          </Fieldset>
         </InputFlexWrapperStep1>
       </FormWrapper>
     </Container>

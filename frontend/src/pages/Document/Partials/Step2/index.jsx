@@ -14,14 +14,10 @@ import {
 import {
   Container,
   IngredientsGrid,
-  SectionTitle,
   EmptyState,
-  ConditionalFields,
-  FieldRow,
   IngredientsListContainer,
   IngredientsListHeader,
   IngredientItemCard,
-  IngredientItemIcon,
   IngredientItemContent,
   IngredientItemTitle,
   IngredientItemDescription,
@@ -30,9 +26,12 @@ import {
   IngredientsListGrid,
   IngredientItemHeader,
 } from "./style";
-import { InputWithTooltip, TooltipIcon, TooltipText } from "../Step1/style";
-import { PesoFieldset } from "./style";
-import { FieldsetLegend } from "./style";
+
+import {
+  Fieldset,
+  FieldsetLegend,
+} from "../../../../components/Forms/FormWrappers/styles";
+
 import { SubmitButton } from "../../../../components/Forms/SubmitButton";
 
 export const Step2 = ({ receitaId, receitaData }) => {
@@ -72,10 +71,51 @@ export const Step2 = ({ receitaId, receitaData }) => {
     }
   };
 
+  /**
+   * Formata números inteiros (sem decimais) para campos de peso
+   */
+  const formatIntegerInput = (value) => {
+    if (!value) return "";
+
+    // Remove tudo que não é número
+    let cleaned = value.replace(/\D/g, "");
+
+    return cleaned;
+  };
+
+  /**
+   * Formata números com vírgula para decimais (campos de dinheiro)
+   */
+  const formatCurrencyInput = (value) => {
+    if (!value) return "";
+
+    // Remove tudo que não é número ou vírgula
+    let cleaned = value.replace(/[^\d,]/g, "");
+
+    // Substitui múltiplas vírgulas por uma única
+    cleaned = cleaned.replace(/,+/g, ",");
+
+    return cleaned;
+  };
+
   const handleInputChange = (field, value) => {
+    let formattedValue = value;
+
+    // Aplica formatação específica baseada no campo
+    if (
+      field === "pesoBruto" ||
+      field === "pesoLiquido" ||
+      field === "pesoProcessado" ||
+      field === "quantidadeEmbalagem"
+    ) {
+      formattedValue = formatIntegerInput(value);
+    } else if (field === "custoEmbalagem") {
+      formattedValue = formatCurrencyInput(value);
+    }
+
     setIngredienteAtual((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: formattedValue,
     }));
   };
 
@@ -111,23 +151,23 @@ export const Step2 = ({ receitaId, receitaData }) => {
 
     setLoading(true);
 
+    // Prepara dados para envio
     const dadosIngrediente = {
       alimento: ingredienteAtual.alimento.value,
-      peso_bruto: parseFloat(ingredienteAtual.pesoBruto),
-      peso_liquido: parseFloat(ingredienteAtual.pesoLiquido),
+      peso_bruto: parseInt(ingredienteAtual.pesoBruto) || 0,
+      peso_liquido: parseInt(ingredienteAtual.pesoLiquido) || 0,
       peso_processado: ingredienteAtual.pesoProcessado
-        ? parseFloat(ingredienteAtual.pesoProcessado)
+        ? parseInt(ingredienteAtual.pesoProcessado)
         : null,
     };
 
     // Adiciona campos de precificação apenas se habilitada
     if (precificacaoHabilitada) {
-      dadosIngrediente.quantidade_embalagem = parseFloat(
-        ingredienteAtual.quantidadeEmbalagem
-      );
-      dadosIngrediente.custo_embalagem = parseFloat(
-        ingredienteAtual.custoEmbalagem
-      );
+      dadosIngrediente.quantidade_embalagem =
+        parseInt(ingredienteAtual.quantidadeEmbalagem) || 0;
+      // Converte vírgula para ponto para o backend
+      dadosIngrediente.custo_embalagem =
+        parseFloat(ingredienteAtual.custoEmbalagem.replace(",", ".")) || 0;
     }
 
     try {
@@ -185,20 +225,40 @@ export const Step2 = ({ receitaId, receitaData }) => {
     }
   };
 
+  /**
+   * Formata valores para exibição na lista
+   */
+  const formatarParaExibicao = (valor, tipo = "inteiro") => {
+    if (valor === null || valor === undefined) return "-";
+
+    if (tipo === "inteiro") {
+      return parseInt(valor).toLocaleString("pt-BR");
+    } else if (tipo === "moeda") {
+      return parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    } else if (tipo === "moedaPorGrama") {
+      return parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+    }
+
+    return valor;
+  };
+
   return (
     <Container>
       <div className="step-content"></div>
       <FormWrapper>
         <IngredientsGrid>
           {/* Seletor de Alimento - usando CustomSelect diretamente */}
-          <div style={{ gridColumn: "1 / -1" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
             <label
               style={{
-                display: "block",
-                marginBottom: "8px",
+                marginLeft: "4px",
                 fontWeight: "500",
-                fontSize: "14px",
-                color: "#333",
               }}
             >
               Alimento
@@ -216,78 +276,71 @@ export const Step2 = ({ receitaId, receitaData }) => {
 
           {/* Pesos */}
           <div className="container-pesos">
-            <PesoFieldset>
+            <Fieldset style={{ display: "flex" }}>
               <FieldsetLegend>Pesos</FieldsetLegend>
               <Input
                 label="Bruto (g)"
-                type="number"
+                type="text"
                 value={ingredienteAtual.pesoBruto}
-                placeholder="0.00"
+                placeholder="Ex: 500"
                 onChange={(e) => handleInputChange("pesoBruto", e.target.value)}
-                step="0.01"
-                min="0"
+                inputMode="numeric"
                 required
               />
 
               <Input
                 label="Líquido (g)"
-                type="number"
+                type="text"
                 value={ingredienteAtual.pesoLiquido}
-                placeholder="0.00"
+                placeholder="Ex: 450"
                 onChange={(e) =>
                   handleInputChange("pesoLiquido", e.target.value)
                 }
-                step="0.01"
-                min="0"
+                inputMode="numeric"
                 required
               />
 
               <Input
                 label="Processado (g)"
-                type="number"
+                type="text"
                 value={ingredienteAtual.pesoProcessado}
-                placeholder="0.00"
+                placeholder="Ex: 400"
                 onChange={(e) =>
                   handleInputChange("pesoProcessado", e.target.value)
                 }
-                step="0.01"
-                min="0"
+                inputMode="numeric"
               />
-            </PesoFieldset>
+            </Fieldset>
           </div>
 
           {/* Campos Condicionais - Precificação */}
           {precificacaoHabilitada && (
-            <ConditionalFields style={{ gridColumn: "1 / -1" }}>
-              <SectionTitle>Informações de Custo</SectionTitle>
-              <FieldRow>
-                <Input
-                  label="Quantidade por Embalagem (g)"
-                  type="number"
-                  value={ingredienteAtual.quantidadeEmbalagem}
-                  placeholder="Ex: 1000"
-                  onChange={(e) =>
-                    handleInputChange("quantidadeEmbalagem", e.target.value)
-                  }
-                  step="0.01"
-                  min="0"
-                  required
-                />
+            <Fieldset style={{ display: "flex" }}>
+              <FieldsetLegend>Informações de Custo</FieldsetLegend>
+              <Input
+                label="Quantidade por Embalagem (g)"
+                type="text"
+                value={ingredienteAtual.quantidadeEmbalagem}
+                placeholder="Ex: 1000"
+                onChange={(e) =>
+                  handleInputChange("quantidadeEmbalagem", e.target.value)
+                }
+                inputMode="numeric"
+                required
+              />
 
-                <Input
-                  label="Custo por Embalagem (R$)"
-                  type="number"
-                  value={ingredienteAtual.custoEmbalagem}
-                  placeholder="Ex: 15.90"
-                  onChange={(e) =>
-                    handleInputChange("custoEmbalagem", e.target.value)
-                  }
-                  step="0.01"
-                  min="0"
-                  required
-                />
-              </FieldRow>
-            </ConditionalFields>
+              <Input
+                label="Custo por uma Embalagem (R$)"
+                type="text"
+                value={ingredienteAtual.custoEmbalagem}
+                placeholder="Ex: 15,90"
+                onChange={(e) =>
+                  handleInputChange("custoEmbalagem", e.target.value)
+                }
+                inputMode="decimal"
+                required
+              />
+            </Fieldset>
           )}
         </IngredientsGrid>
 
@@ -318,10 +371,6 @@ export const Step2 = ({ receitaId, receitaData }) => {
               {ingredientes.map((ingrediente) => (
                 <IngredientItemCard key={ingrediente.id}>
                   <IngredientItemHeader>
-                    {/* <IngredientItemIcon>
-                      <EggFried/>
-                    </IngredientItemIcon> */}
-
                     <IngredientItemContent>
                       <IngredientItemTitle>
                         {ingrediente.alimento_nome || "Alimento"}
@@ -329,15 +378,25 @@ export const Step2 = ({ receitaId, receitaData }) => {
 
                       <IngredientItemDescription>
                         <span>
-                          <strong>Peso Bruto:</strong> {ingrediente.peso_bruto}g
+                          <strong>Peso Bruto:</strong>{" "}
+                          {formatarParaExibicao(ingrediente.peso_bruto)}g
                         </span>
                       </IngredientItemDescription>
                       <IngredientItemDescription>
                         <span>
                           <strong>Peso Líquido: </strong>
-                          {ingrediente.peso_liquido}g
+                          {formatarParaExibicao(ingrediente.peso_liquido)}g
                         </span>
                       </IngredientItemDescription>
+
+                      {ingrediente.peso_processado && (
+                        <IngredientItemDescription>
+                          <span>
+                            <strong>Peso Processado: </strong>
+                            {formatarParaExibicao(ingrediente.peso_processado)}g
+                          </span>
+                        </IngredientItemDescription>
+                      )}
 
                       {precificacaoHabilitada &&
                         ingrediente.custo_embalagem && (
@@ -345,7 +404,11 @@ export const Step2 = ({ receitaId, receitaData }) => {
                             <IngredientItemMeta>
                               <Box size={12} />
                               <span>
-                                Embalagem: {ingrediente.quantidade_embalagem}g
+                                Embalagem:{" "}
+                                {formatarParaExibicao(
+                                  ingrediente.quantidade_embalagem
+                                )}
+                                g
                               </span>
                             </IngredientItemMeta>
 
@@ -353,20 +416,20 @@ export const Step2 = ({ receitaId, receitaData }) => {
                               <CurrencyDollar size={12} />
                               <span>
                                 Custo: R${" "}
-                                {parseFloat(
-                                  ingrediente.custo_embalagem
-                                ).toFixed(2)}
-                                (R${" "}
+                                {formatarParaExibicao(
+                                  ingrediente.custo_embalagem,
+                                  "moeda"
+                                )}
                                 {ingrediente.custo_embalagem &&
                                 ingrediente.quantidade_embalagem
-                                  ? (
+                                  ? ` (R$ ${formatarParaExibicao(
                                       parseFloat(ingrediente.custo_embalagem) /
-                                      parseFloat(
-                                        ingrediente.quantidade_embalagem
-                                      )
-                                    ).toFixed(4)
-                                  : "0.0000"}
-                                /g)
+                                        parseFloat(
+                                          ingrediente.quantidade_embalagem
+                                        ),
+                                      "moedaPorGrama"
+                                    )}/g)`
+                                  : ""}
                               </span>
                             </IngredientItemMeta>
                           </>

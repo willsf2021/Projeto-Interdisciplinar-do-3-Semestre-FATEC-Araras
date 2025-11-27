@@ -65,7 +65,7 @@ class DocumentoModelTest(TestCase):
         self.assertTrue(documento.arquivo_pdf)
 
     def test_criacao_documento_sem_cliente(self):
-        """Testa criação de documento sem cliente (opcional)"""
+        """Testa criação de documento sem cliente """
         documento = Documento.objects.create(
             usuario=self.usuario,
             receita=self.receita,

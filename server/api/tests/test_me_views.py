@@ -173,4 +173,3 @@ def test_refresh_token_sets_domain(self):
         client = APIClient()
         response = client.delete("/api/delete-account/")
         self.assertEqual(response.status_code, 401)
-

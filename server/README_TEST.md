@@ -6,7 +6,11 @@ Para testar apenas um model específico, use o caminho completo do arquivo de te
 
 ```bash
 python manage.py test api.tests.test_usuario_model.UsuarioIntegrationTest
+# Ou use o Coverage
+coverage run manage.py test api.tests.test_usuario_model.UsuarioIntegrationTest
 ```
+
+
 
 
 
@@ -73,8 +77,10 @@ em apps do core:
     'django_extensions',
 
 Ver todas as rotas:
-python manage.py show_urls
 
+```bash
+python manage.py show_urls
+```
 
 - Criar ambiente virtual
 

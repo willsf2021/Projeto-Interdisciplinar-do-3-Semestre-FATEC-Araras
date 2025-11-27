@@ -4,7 +4,6 @@ from rest_framework.test import APIClient
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from api.models import Cliente
-from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
@@ -14,19 +13,17 @@ class ClienteViewsTest(TestCase):
     def setUp(self):
         self.client = APIClient()
 
-        # Cria usuário e token JWT
+        # Cria usuário
         self.user = User.objects.create_user(
             email="user@example.com",
             password="123456",
             name="Usuario Teste"
         )
-        refresh = RefreshToken.for_user(self.user)
-        self.access_token = str(refresh.access_token)
 
-        # Autentica o cliente
-        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {self.access_token}")
+        # Autentica sem JWT, usando force_authenticate
+        self.client.force_authenticate(user=self.user)
 
-        # Cria um cliente para operar nos testes
+        # Cria um cliente para os testes
         self.cliente = Cliente.objects.create(
             usuario=self.user,
             nome_completo="João da Silva",
@@ -39,7 +36,6 @@ class ClienteViewsTest(TestCase):
     # ------------------------------------------------------
 
     def test_cliente_list(self):
-        """Deve retornar lista de clientes do usuário autenticado"""
         url = reverse("clientes-list")
         response = self.client.get(url)
 
@@ -48,7 +44,6 @@ class ClienteViewsTest(TestCase):
         self.assertEqual(response.data[0]["nome_completo"], "João da Silva")
 
     def test_cliente_list_search(self):
-        """Testa busca usando search"""
         Cliente.objects.create(
             usuario=self.user,
             nome_completo="Maria Fernanda",
@@ -64,7 +59,6 @@ class ClienteViewsTest(TestCase):
         self.assertEqual(response.data[0]["nome_completo"], "Maria Fernanda")
 
     def test_cliente_list_limit_results(self):
-        """Testa limite de 10 registros"""
         for i in range(15):
             Cliente.objects.create(
                 usuario=self.user,
@@ -83,7 +77,6 @@ class ClienteViewsTest(TestCase):
     # ------------------------------------------------------
 
     def test_cliente_create(self):
-        """Criação de cliente vinculada ao usuário autenticado"""
         url = reverse("clientes-create")
         data = {
             "nome_completo": "Novo Cliente",

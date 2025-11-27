@@ -6,7 +6,13 @@ Para testar apenas um model específico, use o caminho completo do arquivo de te
 
 ```bash
 python manage.py test api.tests.test_usuario_model.UsuarioIntegrationTest
+# Ou use o Coverage
+coverage run manage.py test api.tests.test_usuario_model.UsuarioIntegrationTest
 ```
+
+
+
+
 
 > **Dica:** cada model deve ter seu próprio arquivo de teste, seguindo o padrão:
 > `test_nome_model_model.py`
@@ -24,14 +30,31 @@ python manage.py test -v 2
 Para gerar um relatório de cobertura:
 
 ```bash
+# Rodar testes com cobertura
 coverage run manage.py test
-coverage report
+# Ou
+# Rodar todos os testes e informar detalhes
+python manage.py test --verbosity 2
+
+# Gerar relatório de cobertura
+coverage report -m
+
+# Gerar relatório HTML
 coverage html
 
+# Ou rode os  comandos juntos
+coverage run manage.py test && coverage report -m && coverage html
+
+# Abrir relatório HTML no navegador
 start htmlcov/index.html
 ```
 
 Isso mostrará quais partes do código foram cobertas pelos testes.
+
+
+```bash
+python manage.py test --verbosity 2
+```
 
 ---
 
@@ -54,4 +77,30 @@ em apps do core:
     'django_extensions',
 
 Ver todas as rotas:
+
+```bash
 python manage.py show_urls
+```
+
+- Criar ambiente virtual
+
+```bash
+python -m venv venv
+```
+
+- Ativar ambiente virtual do python
+
+```bash
+source venv/Scripts/Activate
+```
+
+- Executar servidor da api
+
+```bash
+python manage.py runserver 0.0.0.0:8000
+```
+
+- Executar servidor do front-end (Vite)
+```bash
+npm run dev -- --host
+```

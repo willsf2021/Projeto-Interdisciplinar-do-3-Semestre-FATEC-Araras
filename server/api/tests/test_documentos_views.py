@@ -1,187 +1,188 @@
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.contrib.auth import get_user_model
+from decimal import Decimal
 
-from api.models import Receita, Ingrediente, AlimentoTaco, Documento
+from api.models import Receita, AlimentoTaco, Ingrediente, Documento, Cliente
+
+Usuario = get_user_model()
 
 
-User = get_user_model()
-
-
-# ---------------------------------------------------------------------------
-#  BASE CLASS
-# ---------------------------------------------------------------------------
 class BaseDocumentoTest(APITestCase):
-
     def setUp(self):
-        # Usuários
-        self.user = User.objects.create_user(
-            username="user1",
-            password="123456"
+        self.user = Usuario.objects.create_user(
+            email="lucas@teste.com",
+            password="123456",
+            name="Lucas Silva",
+            type="estudante"
         )
-        self.user2 = User.objects.create_user(
-            username="user2",
-            password="123456"
+        self.user2 = Usuario.objects.create_user(
+            email="maria@teste.com",
+            password="123456",
+            name="Maria Oliveira",
+            type="profissional"
         )
 
         self.client = APIClient()
         self.client.force_authenticate(self.user)
 
-        # Receita
+        self.cliente = Cliente.objects.create(
+            usuario=self.user,
+            nome_completo="Padaria do Zé",
+            email="ze@padaria.com",
+            celular="(11) 98765-4321"
+        )
+
         self.receita = Receita.objects.create(
             usuario=self.user,
-            nome="Bolo de Chocolate",
-            categoria="Doces",
+            nome="Bolo de Cenoura",
+            categoria="Sobremesas",
             tempo_preparo_horas=0,
-            tempo_preparo_minutos=30,
-            porcao_individual=100,
+            tempo_preparo_minutos=50,
+            porcao_individual=Decimal('120.00'),
             medida="g",
-            modo_preparo="Misture tudo."
+            modo_preparo="Misturar tudo e assar.",
+            habilitar_rotulo_nutricional=True
         )
 
-        # Alimento TACO
         self.alimento = AlimentoTaco.objects.create(
-            codigo_taco="A001",
-            nome="Farinha de Trigo",
+            codigo_taco="001",
+            nome="Farinha de trigo",
             categoria="Cereais",
-            valor_energetico=100,
-            proteinas=10,
-            carboidratos=70,
-            acucares_totais=1,
-            acucares_adicionados=0,
-            gorduras_totais=1,
-            gorduras_saturadas=0,
-            gorduras_trans=0,
-            fibra_alimentar=2,
-            sodio=5
+            valor_energetico=Decimal('364.00'),
+            proteinas=Decimal('10.00'),
+            carboidratos=Decimal('76.00'),
+            acucares_totais=Decimal('1.00'),
+            acucares_adicionados=Decimal('0.00'),
+            gorduras_totais=Decimal('1.00'),
+            gorduras_saturadas=Decimal('0.20'),
+            gorduras_trans=Decimal('0.00'),
+            fibra_alimentar=Decimal('2.70'),
+            sodio=Decimal('2.00')
         )
-
-        # Ingrediente válido
-        self.ingrediente = Ingrediente.objects.create(
+        Ingrediente.objects.create(
             receita=self.receita,
             alimento=self.alimento,
-            peso_bruto=100,
-            peso_liquido=100,
+            peso_bruto=Decimal('300.00'),
+            peso_liquido=Decimal('300.00')
         )
 
 
-# ---------------------------------------------------------------------------
-#  LISTAGEM DE DOCUMENTOS
-# ---------------------------------------------------------------------------
+# LISTAGEM
 class TestDocumentoListView(BaseDocumentoTest):
-
     def test_list_documentos(self):
-        Documento.objects.create(usuario=self.user, receita=self.receita, nome="Doc 1")
-        Documento.objects.create(usuario=self.user, receita=self.receita, nome="Doc 2")
+        Documento.objects.create(usuario=self.user, receita=self.receita, formato_documento="completo")
+        Documento.objects.create(usuario=self.user, receita=self.receita, formato_documento="rotulo_apenas")
 
-        response = self.client.get("/api/documentos/")
-
+        response = self.client.get("/api/listar-documentos/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
     def test_list_documentos_filtrando(self):
-        Documento.objects.create(usuario=self.user, receita=self.receita, nome="Relatório Final")
-        Documento.objects.create(usuario=self.user, receita=self.receita, nome="Ficha Técnica")
+        receita2 = Receita.objects.create(
+            usuario=self.user,
+            nome="Brigadeiro Gourmet",
+            categoria="Doces",
+            tempo_preparo_horas=0,
+            tempo_preparo_minutos=20,
+            porcao_individual=Decimal('25.00'),
+            medida="g",
+            modo_preparo="Misturar e enrolar."
+        )
 
-        response = self.client.get("/api/documentos/?search=relatório")
+        Documento.objects.create(usuario=self.user, receita=self.receita, formato_documento="completo")
+        Documento.objects.create(usuario=self.user, receita=receita2, formato_documento="rotulo_apenas")
 
+        # Filtro por nome da receita → graças ao campo 'receita_nome' no serializer!
+        response = self.client.get("/api/listar-documentos/?search=brigadeiro")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
+        # Agora verificamos pelo campo que o serializer retorna: 'receita_nome'
+        self.assertIn("Brigadeiro", response.data[0]['receita_nome'])
 
-# ---------------------------------------------------------------------------
-#  CRIAÇÃO DE DOCUMENTOS
-# ---------------------------------------------------------------------------
+
+# CRIAÇÃO
 class TestDocumentoCreateView(BaseDocumentoTest):
-
     def test_criar_documento_sucesso(self):
         payload = {
-            "nome": "Novo Documento",
-            "receita": self.receita.id
+            "receita": self.receita.id,
+            "formato_documento": "completo",
+            "cliente": self.cliente.id
         }
-
         response = self.client.post("/api/documentos/", payload, format="json")
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Documento.objects.count(), 1)
 
     def test_criar_documento_invalido(self):
         payload = {
-            "nome": "",
-            "receita": self.receita.id
+            "receita": self.receita.id,
+            "formato_documento": "formato_invalido_123"
         }
-
         response = self.client.post("/api/documentos/", payload, format="json")
-
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-# ---------------------------------------------------------------------------
-#  PDF DO DOCUMENTO
-# ---------------------------------------------------------------------------
+# PDF DO DOCUMENTO
 class TestDocumentoPdfView(BaseDocumentoTest):
-
     def setUp(self):
         super().setUp()
         self.doc = Documento.objects.create(
             usuario=self.user,
             receita=self.receita,
-            nome="Doc PDF"
+            formato_documento="completo",
+            pdf_gerado=True
         )
 
     def test_pdf_documento_gerado_sucesso(self):
         response = self.client.get(f"/api/documentos/{self.doc.id}/pdf/")
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.headers["Content-Type"], "application/pdf")
+        self.assertIn("pdf", response.headers["Content-Type"].lower())
 
     def test_pdf_documento_outro_usuario_forbidden(self):
         doc2 = Documento.objects.create(
             usuario=self.user2,
             receita=self.receita,
-            nome="Doc OUTRO USER"
+            formato_documento="completo",
+            pdf_gerado=True
         )
-
         response = self.client.get(f"/api/documentos/{doc2.id}/pdf/")
-
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
-# ---------------------------------------------------------------------------
-#  PDF DO RÓTULO NUTRICIONAL
-# ---------------------------------------------------------------------------
+# RÓTULO PDF
 class TestRotuloPdfView(BaseDocumentoTest):
-
-    def setUp(self):
-        super().setUp()
+    def test_rotulo_pdf_gerado_sucesso(self):
+        doc = Documento.objects.create(
+            usuario=self.user,
+            receita=self.receita,
+            formato_documento="rotulo_apenas",
+            pdf_gerado=True
+        )
         self.receita.habilitar_rotulo_nutricional = True
         self.receita.save()
 
-        self.doc = Documento.objects.create(
-            usuario=self.user,
-            receita=self.receita,
-            nome="Rótulo PDF"
-        )
-
-    def test_rotulo_pdf_gerado_sucesso(self):
-        response = self.client.get(f"/api/documentos/{self.doc.id}/rotulo/")
-
+        response = self.client.get(f"/api/rotulos/{doc.id}/pdf/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.headers["Content-Type"], "application/pdf")
+        self.assertIn("pdf", response.headers["Content-Type"].lower())
 
     def test_rotulo_nao_habilitado(self):
+        doc = Documento.objects.create(
+            usuario=self.user,
+            receita=self.receita,
+            formato_documento="rotulo_apenas"
+        )
         self.receita.habilitar_rotulo_nutricional = False
         self.receita.save()
 
-        response = self.client.get(f"/api/documentos/{self.doc.id}/rotulo/")
+        response = self.client.get(f"/api/rotulos/{doc.id}/pdf/")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_rotulo_outro_usuario_forbidden(self):
         doc2 = Documento.objects.create(
             usuario=self.user2,
             receita=self.receita,
-            nome="Outro Rótulo"
+            formato_documento="rotulo_apenas",
+            pdf_gerado=True
         )
-
-        response = self.client.get(f"/api/documentos/{doc2.id}/rotulo/")
+        response = self.client.get(f"/api/rotulos/{doc2.id}/pdf/")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

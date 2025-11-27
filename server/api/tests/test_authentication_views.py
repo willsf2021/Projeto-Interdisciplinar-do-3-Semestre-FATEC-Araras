@@ -1,4 +1,3 @@
-# server/api/tests/test_cookie_jwt_auth.py
 import importlib
 import unittest
 from unittest.mock import MagicMock, patch

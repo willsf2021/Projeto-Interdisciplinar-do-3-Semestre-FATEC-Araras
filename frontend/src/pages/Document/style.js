@@ -33,7 +33,7 @@ export const Container = styled.main`
     padding-top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.fontSizes.base};
     transition: all 0.2s ease-in-out;
     white-space: nowrap;
     color: #9ca3af;

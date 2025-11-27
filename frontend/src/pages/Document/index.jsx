@@ -6,47 +6,61 @@ import { Step3 } from "./Partials/Step3";
 import { Step4 } from "./Partials/Step4";
 import { HouseFill } from "react-bootstrap-icons";
 import { useApi } from "../../hooks/useApi";
+import { useNotification } from "../../hooks/useNotification"; // NOVO
 
 export const Document = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [receitaId, setReceitaId] = useState(null);
   const [receitaData, setReceitaData] = useState({
-    nome: '',
-    categoria: '',
-    medidaCaseira: '',
-    tempoPreparo: '',
-    porcaoIndividual: '',
-    unidadeMedida: '',
-    modoPreparo: '',
-    habilitarPrecificacao: false, // NOVO CAMPO
-    markup: '' // NOVO CAMPO
+    nome: "",
+    categoria: "",
+    medidaCaseira: "",
+    tempoPreparo: "",
+    porcaoIndividual: "",
+    unidadeMedida: "",
+    modoPreparo: "",
+    habilitarPrecificacao: false,
+    markup: "",
   });
   const [loading, setLoading] = useState(false);
   const { apiFetchJson } = useApi();
+  const { notify } = useNotification(); // NOVO
+
+  const [documentoData, setDocumentoData] = useState({
+    declaracaoAlergenicos: "",
+    cliente: null, // mudou de clienteId para cliente (objeto completo)
+    formatoDocumento: "completo",
+  });
 
   const steps = [
-    { number: 1, name: "Cliente" },
-    { number: 2, name: "Receita" },
-    { number: 3, name: "Ingredientes" },
-    { number: 4, name: "Alergênicos" },
+    { number: 1, name: "Receita" },
+    { number: 2, name: "Ingredientes" },
+    { number: 3, name: "Alergênicos" },
+    { number: 4, name: "Cliente" },
   ];
 
   const salvarOuAtualizarReceita = async () => {
     // Validação básica dos campos obrigatórios
-    if (!receitaData.nome || !receitaData.categoria || !receitaData.medidaCaseira || 
-        !receitaData.tempoPreparo || !receitaData.porcaoIndividual || !receitaData.unidadeMedida || 
-        !receitaData.modoPreparo) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      throw new Error('Campos obrigatórios não preenchidos');
+    if (
+      !receitaData.nome ||
+      !receitaData.categoria ||
+      !receitaData.medidaCaseira ||
+      !receitaData.tempoPreparo ||
+      !receitaData.porcaoIndividual ||
+      !receitaData.unidadeMedida ||
+      !receitaData.modoPreparo
+    ) {
+      notify("Por favor, preencha todos os campos obrigatórios.", "error");
+      throw new Error("Campos obrigatórios não preenchidos");
     }
 
-    // Processar o tempo de preparo
+    // Processar o tempo de preparo (código existente mantido)
     let tempoPreparoHoras = 0;
     let tempoPreparoMinutos = 0;
 
     if (receitaData.tempoPreparo) {
-      if (typeof receitaData.tempoPreparo === 'string') {
-        const tempoParts = receitaData.tempoPreparo.replace('h', '').split(':');
+      if (typeof receitaData.tempoPreparo === "string") {
+        const tempoParts = receitaData.tempoPreparo.replace("h", "").split(":");
         tempoPreparoHoras = parseInt(tempoParts[0]) || 0;
         tempoPreparoMinutos = parseInt(tempoParts[1]) || 0;
       } else {
@@ -62,61 +76,111 @@ export const Document = () => {
       medida_caseira: receitaData.medidaCaseira,
       tempo_preparo_horas: tempoPreparoHoras,
       tempo_preparo_minutos: tempoPreparoMinutos,
-      porcao_individual: parseFloat(receitaData.porcaoIndividual),
+      porcao_individual:
+        parseFloat(receitaData.porcaoIndividual.replace(",", ".")) || 0,
       medida: receitaData.unidadeMedida,
       modo_preparo: receitaData.modoPreparo,
-      habilitar_precificacao: receitaData.habilitarPrecificacao, // NOVO
-      markup: receitaData.habilitarPrecificacao ? parseFloat(receitaData.markup) : null, // NOVO
+      habilitar_precificacao: receitaData.habilitarPrecificacao,
+      markup: receitaData.habilitarPrecificacao
+        ? parseFloat(receitaData.markup.replace(",", "."))
+        : null,
       habilitar_rotulo_nutricional: false,
     };
 
     try {
       let response;
       if (receitaId) {
-        // Se já existe, faz UPDATE
-        response = await apiFetchJson(`${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dadosParaEnviar),
-        });
-        console.log('Receita atualizada:', response);
+        response = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosParaEnviar),
+          }
+        );
+        notify("Receita atualizada com sucesso!", "success");
       } else {
-        // Se não existe, faz CREATE
-        response = await apiFetchJson(`${import.meta.env.VITE_API_URL}/criar-receita/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dadosParaEnviar),
-        });
+        response = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/criar-receita/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosParaEnviar),
+          }
+        );
         setReceitaId(response.id);
-        console.log('Receita criada com ID:', response.id);
+        notify("Receita criada com sucesso!", "success");
       }
       return response;
     } catch (error) {
-      console.error('Erro ao salvar receita:', error);
+      console.error("Erro ao salvar receita:", error);
+      notify("Erro ao salvar receita. Tente novamente.", "error");
       throw error;
     }
   };
 
-  // ... (restante do código permanece igual)
+  // NOVO: Função para criar o documento final
+  const criarDocumentoFinal = async () => {
+    if (!receitaId) {
+      notify("Erro: Receita não encontrada.", "error");
+      return;
+    }
+
+    if (!documentoData.cliente) {
+      // mudou a verificação
+      notify("Selecione um cliente para gerar o documento.", "error");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const dadosDocumento = {
+        receita: receitaId,
+        cliente: documentoData.cliente.id, // envia apenas o ID
+        declaracao_alergenicos: documentoData.declaracaoAlergenicos,
+        formato_documento: documentoData.formatoDocumento,
+      };
+
+      const response = await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/documentos/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dadosDocumento),
+        }
+      );
+
+      notify("Documento criado com sucesso!", "success");
+      console.log("Documento criado:", response);
+    } catch (error) {
+      console.error("Erro ao criar documento:", error);
+      notify("Erro ao criar documento. Tente novamente.", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleNext = async () => {
-    if (currentStep === 2) {
-      // Ao avançar do step2 para step3, salva/atualiza a receita
+    if (currentStep === 1) {
       setLoading(true);
       try {
         await salvarOuAtualizarReceita();
         setCurrentStep(currentStep + 1);
       } catch (error) {
-        alert('Erro ao salvar receita. Verifique os campos e tente novamente.');
         return; // Não avança se der erro
       } finally {
         setLoading(false);
       }
+    } else if (currentStep === 4) {
+      // NOVO: No último passo, cria o documento
+      await criarDocumentoFinal();
     } else {
-      // Para outros steps, apenas avança
       setCurrentStep(currentStep + 1);
     }
   };
@@ -127,15 +191,20 @@ export const Document = () => {
     }
   };
 
+  // NOVO: Restrição para navegação sequencial
   const handleStepClick = async (stepNumber) => {
-    if (currentStep === 2 && stepNumber === 3) {
-      // Se está no step2 e clicou para ir ao step3, salva primeiro
+    // Só permite navegar para steps sequenciais
+    if (stepNumber > currentStep + 1) {
+      notify("Complete o passo atual antes de avançar.", "warning");
+      return;
+    }
+
+    if (currentStep === 1 && stepNumber === 2) {
       setLoading(true);
       try {
         await salvarOuAtualizarReceita();
         setCurrentStep(stepNumber);
       } catch (error) {
-        alert('Erro ao salvar receita. Verifique os campos e tente novamente.');
         return;
       } finally {
         setLoading(false);
@@ -150,9 +219,17 @@ export const Document = () => {
   };
 
   const handleReceitaDataChange = (novosDados) => {
-    setReceitaData(prev => ({
+    setReceitaData((prev) => ({
       ...prev,
-      ...novosDados
+      ...novosDados,
+    }));
+  };
+
+  // NOVO: Atualizar dados do documento
+  const handleDocumentoDataChange = (novosDados) => {
+    setDocumentoData((prev) => ({
+      ...prev,
+      ...novosDados,
     }));
   };
 
@@ -177,7 +254,9 @@ export const Document = () => {
                   className={`steps-item-name ${
                     currentStep === step.number ? "p-active" : ""
                   }`}
-                ></p>
+                >
+                  {step.name}
+                </p>
               </li>
 
               {index < steps.length - 1 && <span className="hr-steps"></span>}
@@ -188,15 +267,27 @@ export const Document = () => {
 
       <div className="step-content">
         <div className="step-content-inner">
-          {currentStep === 1 && <Step1 />}
-          {currentStep === 2 && (
-            <Step2 
+          {currentStep === 1 && (
+            <Step1
               receitaData={receitaData}
               onReceitaDataChange={handleReceitaDataChange}
             />
           )}
-          {currentStep === 3 && <Step3 receitaId={receitaId} />}
-          {currentStep === 4 && <Step4 receitaId={receitaId} />}
+          {currentStep === 2 && (
+            <Step2 receitaId={receitaId} receitaData={receitaData} />
+          )}
+          {currentStep === 3 && (
+            <Step3
+              documentoData={documentoData}
+              onDocumentoDataChange={handleDocumentoDataChange}
+            />
+          )}
+          {currentStep === 4 && (
+            <Step4
+              documentoData={documentoData}
+              onDocumentoDataChange={handleDocumentoDataChange}
+            />
+          )}
         </div>
 
         <div className="control-buttons">
@@ -217,9 +308,15 @@ export const Document = () => {
           <div className="container-control-button">
             <button
               onClick={handleNext}
-              disabled={currentStep === steps.length || loading}
+              disabled={
+                loading || (currentStep === 4 && !documentoData.cliente)
+              } // mudou a verificação
             >
-              {loading ? 'Salvando...' : currentStep === steps.length ? "Finalizar" : "Avançar"}
+              {loading
+                ? "Salvando..."
+                : currentStep === 4
+                ? "Finalizar"
+                : "Avançar"}
             </button>
           </div>
         </div>

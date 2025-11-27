@@ -1,218 +1,456 @@
+import React, { useState, useEffect } from "react";
 import { FormWrapper } from "../../../../components/Forms/FormWrappers/styles";
 import { Input } from "../../../../components/Forms/Input";
+import { CustomSelect } from "../../../../components/Home/CustomSelect";
+import { EggFried } from "react-bootstrap-icons";
+import { useApi } from "../../../../hooks/useApi";
+import {
+  Egg,
+  Calculator,
+  Box,
+  CurrencyDollar,
+  Trash,
+} from "react-bootstrap-icons";
 import {
   Container,
-  InputFlexWrapperStep2,
-  TextField,
-  TextFieldWrapper,
-  TextFieldLabel,
-  CheckboxWrapper,
-  CheckboxLabel,
-  CheckboxCustom,
-  PrecificacaoFieldset,
-  FieldsetLegend,
-  InputWithTooltip,
-  TooltipIcon,
-  TooltipText
+  IngredientsGrid,
+  EmptyState,
+  IngredientsListContainer,
+  IngredientsListHeader,
+  IngredientItemCard,
+  IngredientItemContent,
+  IngredientItemTitle,
+  IngredientItemDescription,
+  IngredientItemMeta,
+  RemoveButton,
+  IngredientsListGrid,
+  IngredientItemHeader,
 } from "./style";
 
-export const Step2 = ({ receitaData, onReceitaDataChange }) => {
+import {
+  Fieldset,
+  FieldsetLegend,
+} from "../../../../components/Forms/FormWrappers/styles";
 
-  const handleInputChange = (field, value) => {
-    onReceitaDataChange({ [field]: value });
-  };
+import { SubmitButton } from "../../../../components/Forms/SubmitButton";
 
-  const handleCheckboxChange = (field, checked) => {
-    onReceitaDataChange({ [field]: checked });
+export const Step2 = ({ receitaId, receitaData }) => {
+  const [ingredientes, setIngredientes] = useState([]);
+  const [ingredienteAtual, setIngredienteAtual] = useState({
+    alimento: null,
+    pesoBruto: "",
+    pesoLiquido: "",
+    pesoProcessado: "",
+    quantidadeEmbalagem: "",
+    custoEmbalagem: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const { apiFetchJson } = useApi();
+
+  // Verifica se precificação está habilitada
+  const precificacaoHabilitada = receitaData?.habilitarPrecificacao || false;
+
+  console.log("Precificação habilitada:", precificacaoHabilitada);
+  console.log("Receita ID:", receitaId);
+
+  // Carregar ingredientes existentes
+  useEffect(() => {
+    if (receitaId) {
+      carregarIngredientes();
+    }
+  }, [receitaId]);
+
+  const carregarIngredientes = async () => {
+    try {
+      const response = await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/listar-ingredientes/${receitaId}/`
+      );
+      setIngredientes(response.ingredientes || []);
+    } catch (error) {
+      console.error("Erro ao carregar ingredientes:", error);
+    }
   };
 
   /**
-   * Formata uma entrada qualquer em M:SS ou MM:SS.
-   * - aceita números puros (ex: "110" -> 1:10)
-   * - aceita texto com ":" (ex: "1:70" -> 2:10)
-   * - faz carry dos segundos para minutos quando necessário
-   * - retorno "" se input vazio
+   * Formata números inteiros (sem decimais) para campos de peso
    */
-  const formatTempoInput = (raw) => {
-    if (!raw) return "";
+  const formatIntegerInput = (value) => {
+    if (!value) return "";
 
-    // permite que o usuário cole com ":" ou digite apenas números
-    const onlyDigits = raw.replace(/[^0-9]/g, "");
+    // Remove tudo que não é número
+    let cleaned = value.replace(/\D/g, "");
 
-    if (onlyDigits.length === 0) return "";
+    return cleaned;
+  };
 
-    let minutes = 0;
-    let seconds = 0;
+  /**
+   * Formata números com vírgula para decimais (campos de dinheiro)
+   */
+  const formatCurrencyInput = (value) => {
+    if (!value) return "";
 
-    if (raw.includes(":")) {
-      // se o usuário colou "m:ss" ou "mm:ss" etc
-      const parts = raw.split(":").map(p => p.replace(/\D/g, ""));
-      const minPart = parts[0] || "0";
-      const secPart = parts[1] || "0";
+    // Remove tudo que não é número ou vírgula
+    let cleaned = value.replace(/[^\d,]/g, "");
 
-      minutes = parseInt(minPart, 10) || 0;
-      seconds = parseInt(secPart, 10) || 0;
-    } else {
-      // se o usuário digitou só números, interpretamos os últimos 2 como segundos
-      if (onlyDigits.length <= 2) {
-        minutes = 0;
-        seconds = parseInt(onlyDigits, 10) || 0;
-      } else {
-        const minPart = onlyDigits.slice(0, -2);
-        const secPart = onlyDigits.slice(-2);
-        minutes = parseInt(minPart, 10) || 0;
-        seconds = parseInt(secPart, 10) || 0;
+    // Substitui múltiplas vírgulas por uma única
+    cleaned = cleaned.replace(/,+/g, ",");
+
+    return cleaned;
+  };
+
+  const handleInputChange = (field, value) => {
+    let formattedValue = value;
+
+    // Aplica formatação específica baseada no campo
+    if (
+      field === "pesoBruto" ||
+      field === "pesoLiquido" ||
+      field === "pesoProcessado" ||
+      field === "quantidadeEmbalagem"
+    ) {
+      formattedValue = formatIntegerInput(value);
+    } else if (field === "custoEmbalagem") {
+      formattedValue = formatCurrencyInput(value);
+    }
+
+    setIngredienteAtual((prev) => ({
+      ...prev,
+      [field]: formattedValue,
+    }));
+  };
+
+  const handleAlimentoSelect = (selectedOption) => {
+    setIngredienteAtual((prev) => ({
+      ...prev,
+      alimento: selectedOption,
+    }));
+  };
+
+  const handleAdicionarIngrediente = async () => {
+    // Validações básicas
+    if (!ingredienteAtual.alimento) {
+      notify("Selecione um alimento", "error");
+      return;
+    }
+
+    if (!ingredienteAtual.pesoBruto || !ingredienteAtual.pesoLiquido) {
+      notify("Preencha os pesos bruto e líquido", "error");
+      return;
+    }
+
+    if (precificacaoHabilitada) {
+      if (
+        !ingredienteAtual.quantidadeEmbalagem ||
+        !ingredienteAtual.custoEmbalagem
+      ) {
+        notify(
+          "Preencha os campos de quantidade e custo da embalagem",
+          "error"
+        );
+        return;
       }
     }
 
-    // carry: se segundos >= 60, converte para minutos
-    if (seconds >= 60) {
-      const carry = Math.floor(seconds / 60);
-      minutes += carry;
-      seconds = seconds % 60;
+    setLoading(true);
+
+    // Prepara dados para envio
+    const dadosIngrediente = {
+      alimento: ingredienteAtual.alimento.value,
+      peso_bruto: parseInt(ingredienteAtual.pesoBruto) || 0,
+      peso_liquido: parseInt(ingredienteAtual.pesoLiquido) || 0,
+      peso_processado: ingredienteAtual.pesoProcessado
+        ? parseInt(ingredienteAtual.pesoProcessado)
+        : null,
+    };
+
+    // Adiciona campos de precificação apenas se habilitada
+    if (precificacaoHabilitada) {
+      dadosIngrediente.quantidade_embalagem =
+        parseInt(ingredienteAtual.quantidadeEmbalagem) || 0;
+      // Converte vírgula para ponto para o backend
+      dadosIngrediente.custo_embalagem =
+        parseFloat(ingredienteAtual.custoEmbalagem.replace(",", ".")) || 0;
     }
 
-    return `${minutes}:${String(seconds).padStart(2, "0")}`;
+    try {
+      const response = await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/criar-ingrediente/${receitaId}/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dadosIngrediente),
+        }
+      );
+
+      // Adiciona à lista local
+      setIngredientes((prev) => [
+        ...prev,
+        {
+          ...response,
+          alimento_nome: ingredienteAtual.alimento.label,
+        },
+      ]);
+
+      // Limpa o formulário
+      setIngredienteAtual({
+        alimento: null,
+        pesoBruto: "",
+        pesoLiquido: "",
+        pesoProcessado: "",
+        quantidadeEmbalagem: "",
+        custoEmbalagem: "",
+      });
+    } catch (error) {
+      console.error("Erro ao adicionar ingrediente:", error);
+      notify("Erro ao adicionar ingrediente. Tente novamente.", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleTempoChange = (rawValue) => {
-    const formatted = formatTempoInput(rawValue);
-    onReceitaDataChange({ tempoPreparo: formatted });
+  const handleRemoverIngrediente = async (ingredienteId) => {
+    try {
+      await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/excluir-ingrediente/${ingredienteId}/`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      // Remove da lista local
+      setIngredientes((prev) => prev.filter((ing) => ing.id !== ingredienteId));
+    } catch (error) {
+      console.error("Erro ao remover ingrediente:", error);
+      alert("Erro ao remover ingrediente. Tente novamente.");
+    }
+  };
+
+  /**
+   * Formata valores para exibição na lista
+   */
+  const formatarParaExibicao = (valor, tipo = "inteiro") => {
+    if (valor === null || valor === undefined) return "-";
+
+    if (tipo === "inteiro") {
+      return parseInt(valor).toLocaleString("pt-BR");
+    } else if (tipo === "moeda") {
+      return parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    } else if (tipo === "moedaPorGrama") {
+      return parseFloat(valor).toLocaleString("pt-BR", {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      });
+    }
+
+    return valor;
   };
 
   return (
     <Container>
-      <div className="step-content">
-        <h3>Receita</h3>
-      </div>
+      <div className="step-content"></div>
       <FormWrapper>
-        <InputFlexWrapperStep2>
-          <Input
-            label="Nome"
-            type="text"
-            value={receitaData.nome}
-            placeholder="Digite o nome da receita..."
-            onChange={(e) => handleInputChange('nome', e.target.value)}
-            required
-          />
-          <Input
-            label="Categoria"
-            type="text"
-            value={receitaData.categoria}
-            placeholder="Digite a categoria da receita..."
-            onChange={(e) => handleInputChange('categoria', e.target.value)}
-            required
-          />
-          
-          <InputWithTooltip>
-            <Input
-              label="Medida Caseira"
-              type="text"
-              value={receitaData.medidaCaseira}
-              placeholder="Digite a medida caseira da receita..."
-              onChange={(e) => handleInputChange('medidaCaseira', e.target.value)}
-              required
+        <IngredientsGrid>
+          {/* Seletor de Alimento - usando CustomSelect diretamente */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <label
+              style={{
+                marginLeft: "4px",
+                fontWeight: "500",
+              }}
+            >
+              Alimento
+            </label>
+            <CustomSelect
+              endpoint={"alimentos"}
+              placeholder={"alimentos"}
+              type="foods"
+              variant="modern"
+              icon={<EggFried />}
+              onSelectChange={handleAlimentoSelect}
+              value={ingredienteAtual.alimento}
             />
-            <TooltipIcon>
-              i
-              <TooltipText>Unidade de referência visual (ex: 1 xícara, 1 colher de sopa, 1 fatia)</TooltipText>
-            </TooltipIcon>
-          </InputWithTooltip>
-
-          <div className="container-porcoes">
-            <Input
-              label="Tempo de Preparo"
-              type="text"
-              value={receitaData.tempoPreparo ?? ""}
-              placeholder="1:10"
-              onChange={(e) => handleTempoChange(e.target.value)}
-              inputMode="numeric"
-              maxLength={6}
-              required
-            />
-            
-            <InputWithTooltip>
-              <Input
-                label="Porção Individual"
-                type="number"
-                value={receitaData.porcaoIndividual}
-                placeholder="100.00"
-                onChange={(e) => handleInputChange('porcaoIndividual', e.target.value)}
-                step="0.01"
-                required
-              />
-              <TooltipIcon>
-                i
-                <TooltipText>Quantidade em gramas ou ml de uma porção servida</TooltipText>
-              </TooltipIcon>
-            </InputWithTooltip>
-
-            <InputWithTooltip>
-              <Input
-                label="Unidade de Medida"
-                type="text"
-                value={receitaData.unidadeMedida}
-                placeholder="ml ou g"
-                onChange={(e) => handleInputChange('unidadeMedida', e.target.value)}
-                required
-              />
-              <TooltipIcon>
-                i
-                <TooltipText>Use "g" para sólidos ou "ml" para líquidos</TooltipText>
-              </TooltipIcon>
-            </InputWithTooltip>
           </div>
 
-          <TextFieldWrapper>
-            <TextFieldLabel>Modo de Preparo</TextFieldLabel>
-            <TextField 
-              value={receitaData.modoPreparo}
-              onChange={(e) => handleInputChange('modoPreparo', e.target.value)}
-              placeholder="Descreva o modo de preparo da receita..."
-            />
-          </TextFieldWrapper>
-
-          {/* Seção de Precificação com Fieldset */}
-          <PrecificacaoFieldset>
-            <FieldsetLegend>
-              Precificação
-              <TooltipIcon className="legend-tooltip">
-                i
-                <TooltipText>Sistema que calcula o preço de venda baseado nos custos dos ingredientes e margem de lucro</TooltipText>
-              </TooltipIcon>
-            </FieldsetLegend>
-
-            <CheckboxWrapper>
-              <CheckboxCustom
-                type="checkbox"
-                id="habilitar-precificacao"
-                checked={receitaData.habilitarPrecificacao}
-                onChange={(e) => handleCheckboxChange('habilitarPrecificacao', e.target.checked)}
-              />
-              <CheckboxLabel htmlFor="habilitar-precificacao">
-                Habilitar Precificação
-              </CheckboxLabel>
-            </CheckboxWrapper>
-
-            <InputWithTooltip className={!receitaData.habilitarPrecificacao ? 'disabled' : ''}>
+          {/* Pesos */}
+          <div className="container-pesos">
+            <Fieldset style={{ display: "flex" }}>
+              <FieldsetLegend>Pesos</FieldsetLegend>
               <Input
-                label="Markup (%)"
-                type="number"
-                value={receitaData.markup}
-                placeholder="Ex: 30"
-                onChange={(e) => handleInputChange('markup', e.target.value)}
-                step="0.01"
-                min="0"
-                disabled={!receitaData.habilitarPrecificacao}
+                label="Bruto (g)"
+                type="text"
+                value={ingredienteAtual.pesoBruto}
+                placeholder="Ex: 500"
+                onChange={(e) => handleInputChange("pesoBruto", e.target.value)}
+                inputMode="numeric"
+                required
               />
-              <TooltipIcon>
-                i
-                <TooltipText>Percentual de lucro sobre o custo (ex: 30% = R$10 custo vira R$13 venda)</TooltipText>
-              </TooltipIcon>
-            </InputWithTooltip>
-          </PrecificacaoFieldset>
-        </InputFlexWrapperStep2>
+
+              <Input
+                label="Líquido (g)"
+                type="text"
+                value={ingredienteAtual.pesoLiquido}
+                placeholder="Ex: 450"
+                onChange={(e) =>
+                  handleInputChange("pesoLiquido", e.target.value)
+                }
+                inputMode="numeric"
+                required
+              />
+
+              <Input
+                label="Processado (g)"
+                type="text"
+                value={ingredienteAtual.pesoProcessado}
+                placeholder="Ex: 400"
+                onChange={(e) =>
+                  handleInputChange("pesoProcessado", e.target.value)
+                }
+                inputMode="numeric"
+              />
+            </Fieldset>
+          </div>
+
+          {/* Campos Condicionais - Precificação */}
+          {precificacaoHabilitada && (
+            <Fieldset style={{ display: "flex" }}>
+              <FieldsetLegend>Informações de Custo</FieldsetLegend>
+              <Input
+                label="Quantidade por Embalagem (g)"
+                type="text"
+                value={ingredienteAtual.quantidadeEmbalagem}
+                placeholder="Ex: 1000"
+                onChange={(e) =>
+                  handleInputChange("quantidadeEmbalagem", e.target.value)
+                }
+                inputMode="numeric"
+                required
+              />
+
+              <Input
+                label="Custo por uma Embalagem (R$)"
+                type="text"
+                value={ingredienteAtual.custoEmbalagem}
+                placeholder="Ex: 15,90"
+                onChange={(e) =>
+                  handleInputChange("custoEmbalagem", e.target.value)
+                }
+                inputMode="decimal"
+                required
+              />
+            </Fieldset>
+          )}
+        </IngredientsGrid>
+
+        <SubmitButton
+          onClick={handleAdicionarIngrediente}
+          disabled={loading}
+          title={loading ? "Adicionando..." : "Adicionar"}
+        />
       </FormWrapper>
+      <IngredientsListContainer>
+        {ingredientes.length === 0 ? (
+          <EmptyState>
+            <p>Nenhum ingrediente adicionado ainda.</p>
+            <span>
+              Use o formulário acima para adicionar ingredientes à receita.
+            </span>
+          </EmptyState>
+        ) : (
+          <>
+            <IngredientsListHeader>
+              {ingredientes.length}{" "}
+              {ingredientes.length === 1
+                ? "ingrediente adicionado"
+                : "ingredientes adicionados"}
+            </IngredientsListHeader>
+
+            <IngredientsListGrid>
+              {ingredientes.map((ingrediente) => (
+                <IngredientItemCard key={ingrediente.id}>
+                  <IngredientItemHeader>
+                    <IngredientItemContent>
+                      <IngredientItemTitle>
+                        {ingrediente.alimento_nome || "Alimento"}
+                      </IngredientItemTitle>
+
+                      <IngredientItemDescription>
+                        <span>
+                          <strong>Peso Bruto:</strong>{" "}
+                          {formatarParaExibicao(ingrediente.peso_bruto)}g
+                        </span>
+                      </IngredientItemDescription>
+                      <IngredientItemDescription>
+                        <span>
+                          <strong>Peso Líquido: </strong>
+                          {formatarParaExibicao(ingrediente.peso_liquido)}g
+                        </span>
+                      </IngredientItemDescription>
+
+                      {ingrediente.peso_processado && (
+                        <IngredientItemDescription>
+                          <span>
+                            <strong>Peso Processado: </strong>
+                            {formatarParaExibicao(ingrediente.peso_processado)}g
+                          </span>
+                        </IngredientItemDescription>
+                      )}
+
+                      {precificacaoHabilitada &&
+                        ingrediente.custo_embalagem && (
+                          <>
+                            <IngredientItemMeta>
+                              <Box size={12} />
+                              <span>
+                                Embalagem:{" "}
+                                {formatarParaExibicao(
+                                  ingrediente.quantidade_embalagem
+                                )}
+                                g
+                              </span>
+                            </IngredientItemMeta>
+
+                            <IngredientItemMeta>
+                              <CurrencyDollar size={12} />
+                              <span>
+                                Custo: R${" "}
+                                {formatarParaExibicao(
+                                  ingrediente.custo_embalagem,
+                                  "moeda"
+                                )}
+                                {ingrediente.custo_embalagem &&
+                                ingrediente.quantidade_embalagem
+                                  ? ` (R$ ${formatarParaExibicao(
+                                      parseFloat(ingrediente.custo_embalagem) /
+                                        parseFloat(
+                                          ingrediente.quantidade_embalagem
+                                        ),
+                                      "moedaPorGrama"
+                                    )}/g)`
+                                  : ""}
+                              </span>
+                            </IngredientItemMeta>
+                          </>
+                        )}
+                    </IngredientItemContent>
+                  </IngredientItemHeader>
+
+                  <RemoveButton
+                    onClick={() => handleRemoverIngrediente(ingrediente.id)}
+                    title="Remover ingrediente"
+                  >
+                    <Trash />
+                  </RemoveButton>
+                </IngredientItemCard>
+              ))}
+            </IngredientsListGrid>
+          </>
+        )}
+      </IngredientsListContainer>
     </Container>
   );
 };

@@ -5,252 +5,209 @@ export const Container = styled.section`
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  overflow-x:hidden;
+  overflow-x: hidden;
+`;
 
-  .container-porcoes {
-    display: flex;
-    gap: 8px;
-    label {
-      font-size: 0.8rem;
-    }
+export const IngredientsGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
   }
 `;
 
-export const InputFlexWrapperStep2 = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.sm} 0;
-  font-weight: 500;
-`;
-
-export const TextFieldWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px 0;
+export const AddButton = styled.button`
   width: 100%;
-  color: inherit;
+  padding: 1rem;
+  background: linear-gradient(
+    to bottom,
+    ${({ theme }) => theme.colors.primaryLinear},
+    ${({ theme }) => theme.colors.primary}
+  );
+  border: none;
+  color: white;
+  font-size: ${({ theme }) => theme.fontSizes.base};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primaryHover};
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
 `;
 
-export const TextFieldLabel = styled.label`
-  margin-left: 4px;
+export const IngredientsListContainer = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.md};
+  padding: 0 ${({ theme }) => theme.spacing.md};
 `;
 
-export const TextField = styled.textarea`
-  font: inherit;
-  color: inherit;
+export const IngredientsListHeader = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColorMuted};
+  padding: 0 ${({ theme }) => theme.spacing.sm};
+`;
+
+export const IngredientsListGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.sm} 0;
+  padding-right: ${({ theme }) => theme.spacing.sm};
+  max-height: 400px;
+  overflow-y: auto;
+
+  /* Scrollbar customizada - igual ao exemplo de ingredientes e lista da home */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${({ theme }) => theme.colors.primaryHover};
+  }
+`;
+
+export const IngredientItemCard = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: ${({ theme }) => theme.spacing.md};
   border: 1px solid ${({ theme }) => theme.colors.borderColor};
-  padding: ${({ theme }) => theme.spacing.sm};
-  height: 112px;
+  border-left: 4px solid ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  transition: all 300ms ease-in-out;
-  width: 100%;
+  background: white;
+  transition: all 0.2s ease;
+  cursor: default;
+  gap: ${({ theme }) => theme.spacing.md};
 
-  &:focus {
+  &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.primary + "33"};
-    outline: none;
-  }
-
-  &:active {
-    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 `;
 
-export const PrecificacaoFieldset = styled.fieldset`
-  margin-top: 20px;
-  padding: 20px 16px 16px;
-  border: 1px solid #d0d0d0;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  background-color: #f9f9f9;
-  position: relative;
+export const IngredientItemHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: ${({ theme }) => theme.spacing.md};
+  flex: 1;
 `;
 
-export const FieldsetLegend = styled.legend`
-  padding: 0 8px;
-  font-size: ${({ theme }) => theme.fontSizes.sm};
+export const IngredientItemIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #f3f4f6;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 1.2rem;
+  flex-shrink: 0;
+`;
+
+export const IngredientItemContent = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const IngredientItemTitle = styled.h3`
+  margin: 0;
+  font-size: ${({ theme }) => theme.fontSizes.sm} !important;
   font-weight: ${({ theme }) => theme.fontWeights.semibold};
   color: ${({ theme }) => theme.colors.textColor};
+  font-family: ${({ theme }) => theme.fontFamilies.inter};
+  text-align: left !important;
+`;
+
+export const IngredientItemDescription = styled.div`
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColorMuted};
+  line-height: 1.4;
 
-  .legend-tooltip {
-    position: relative;
-    top: 0;
-    right: 0;
+  svg {
+    flex-shrink: 0;
+    color: ${({ theme }) => theme.colors.textColorMuted};
   }
 `;
 
-export const CheckboxWrapper = styled.div`
+export const IngredientItemMeta = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
-`;
+  gap: ${({ theme }) => theme.spacing.sm};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  color: ${({ theme }) => theme.colors.textColorMuted};
 
-export const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  margin-left: 8px;
-  
-  &:hover {
+  svg {
+    flex-shrink: 0;
     color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
-export const CheckboxCustom = styled.input`
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  outline: none;
+// RemoveButton já existe, mas vamos ajustar para ficar igual ao da lista
+export const RemoveButton = styled.button`
+  background: none;
+  border: none;
+  color: #dc2626;
   cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
-
-  &:checked {
-    background-color: ${({ theme }) => theme.colors.primary};
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-
-  &:checked::after {
-    content: '✓';
-    position: absolute;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px ${({ theme }) => theme.colors.primary}33;
-  }
-`;
-
-export const InputWithTooltip = styled.div`
-  position: relative;
-  width: 100%;
-
-  &.disabled {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-`;
-
-export const TooltipIcon = styled.span`
-  position: absolute;
-  top: 2px;
-  right: 4px;
-  width: 18px;
-  height: 18px;
-  display: inline-flex;
+  padding: ${({ theme }) => theme.spacing.xs};
+  display: flex;
   align-items: center;
   justify-content: center;
-  cursor: help;
-  font-size: 12px;
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-  color: ${({ theme }) => theme.colors.primary};
-  background-color: transparent;
-  border: 1.5px solid ${({ theme }) => theme.colors.primary};
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  user-select: none;
-  z-index: 2;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  transition: all 0.2s;
+  flex-shrink: 0;
+  align-self: flex-start;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: white;
+    background: #fee2e2;
   }
 
-  &:hover > span {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Mobile: mostrar ao tocar */
-  @media (hover: none) and (pointer: coarse) {
-    &:active > span {
-      visibility: visible;
-      opacity: 1;
-      transform: translateY(0);
-    }
+  svg {
+    color: #dc2626;
   }
 `;
 
-export const TooltipText = styled.span`
-  visibility: hidden;
-  opacity: 0;
-  width: 220px;
-  background-color: ${({ theme }) => theme.colors.textColor};
-  color: white;
-  text-align: left;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  padding: 10px 12px;
-  position: absolute;
-  z-index: 1000;
-  bottom: calc(100% + 8px);
-  right: -10px;
-  font-size: 12px;
-  line-height: 1.4;
-  font-weight: ${({ theme }) => theme.fontWeights.normal};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  white-space: normal;
-  word-wrap: break-word;
-  transform: translateY(10px);
+export const EmptyState = styled.div`
+  padding: ${({ theme }) => theme.spacing.xl};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.textColorMuted};
+  font-style: italic;
 
-  /* Seta do tooltip */
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    right: 12px;
-    border-width: 6px;
-    border-style: solid;
-    border-color: ${({ theme }) => theme.colors.textColor} transparent transparent transparent;
+  p {
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    font-weight: ${({ theme }) => theme.fontWeights.medium};
+    margin-bottom: 0.5rem;
   }
 
-  /* Ajuste ESPECÍFICO para tooltips no legend - CORREÇÃO DO VAZAMENTO */
-  ${FieldsetLegend} & {
-    bottom: calc(100% + 12px);
-    left: 0;
-    right: auto;
-    width: 240px;
-    
-    &::after {
-      left: 20px;
-      right: auto;
-    }
-  }
-
-  /* Ajuste para mobile */
-  @media (max-width: 768px) {
-    width: 200px;
-    font-size: 11px;
-    padding: 8px 10px;
-    
-    ${FieldsetLegend} & {
-      width: 220px;
-      left: -50px;
-      right: auto;
-      
-      &::after {
-        left: 60px;
-      }
-    }
+  span {
+    font-size: ${({ theme }) => theme.fontSizes.sm};
   }
 `;

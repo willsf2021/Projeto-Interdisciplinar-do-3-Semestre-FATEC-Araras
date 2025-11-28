@@ -488,7 +488,6 @@ class DocumentoPdfView(DocumentoBaseView):
         documento.pdf_gerado = True
         documento.data_geracao_pdf = timezone.now()
         documento.save()
-
         response = HttpResponse(pdf_file, content_type='application/pdf')
         response['Content-Disposition'] = f'inline; filename="{filename}"'
         return response

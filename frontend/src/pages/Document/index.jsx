@@ -4,13 +4,16 @@ import { Step1 } from "./Partials/Step1";
 import { Step2 } from "./Partials/Step2";
 import { Step3 } from "./Partials/Step3";
 import { Step4 } from "./Partials/Step4";
+import { Final } from "./Partials/Final";
 import { HouseFill } from "react-bootstrap-icons";
 import { useApi } from "../../hooks/useApi";
-import { useNotification } from "../../hooks/useNotification"; // NOVO
+import { useNotification } from "../../hooks/useNotification";
 
 export const Document = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [receitaId, setReceitaId] = useState(null);
+  const [documentoId, setDocumentoId] = useState(null);
+  const [showFinal, setShowFinal] = useState(false); // NOVO: Controla se mostra a tela final
   const [receitaData, setReceitaData] = useState({
     nome: "",
     categoria: "",
@@ -21,14 +24,15 @@ export const Document = () => {
     modoPreparo: "",
     habilitarPrecificacao: false,
     markup: "",
+    formatoRotulo: "vertical",
   });
   const [loading, setLoading] = useState(false);
   const { apiFetchJson } = useApi();
-  const { notify } = useNotification(); // NOVO
+  const { notify } = useNotification();
 
   const [documentoData, setDocumentoData] = useState({
     declaracaoAlergenicos: "",
-    cliente: null, // mudou de clienteId para cliente (objeto completo)
+    cliente: null,
     formatoDocumento: "completo",
   });
 
@@ -40,7 +44,7 @@ export const Document = () => {
   ];
 
   const salvarOuAtualizarReceita = async () => {
-    // Validação básica dos campos obrigatórios
+    // ... (código existente mantido igual)
     if (
       !receitaData.nome ||
       !receitaData.categoria ||
@@ -54,7 +58,6 @@ export const Document = () => {
       throw new Error("Campos obrigatórios não preenchidos");
     }
 
-    // Processar o tempo de preparo (código existente mantido)
     let tempoPreparoHoras = 0;
     let tempoPreparoMinutos = 0;
 
@@ -123,24 +126,22 @@ export const Document = () => {
     }
   };
 
-  // NOVO: Função para criar o documento final
   const criarDocumentoFinal = async () => {
     if (!receitaId) {
       notify("Erro: Receita não encontrada.", "error");
-      return;
+      return null;
     }
 
     if (!documentoData.cliente) {
-      // mudou a verificação
       notify("Selecione um cliente para gerar o documento.", "error");
-      return;
+      return null;
     }
 
     setLoading(true);
     try {
       const dadosDocumento = {
         receita: receitaId,
-        cliente: documentoData.cliente.id, // envia apenas o ID
+        cliente: documentoData.cliente.id,
         declaracao_alergenicos: documentoData.declaracaoAlergenicos,
         formato_documento: documentoData.formatoDocumento,
       };
@@ -158,9 +159,13 @@ export const Document = () => {
 
       notify("Documento criado com sucesso!", "success");
       console.log("Documento criado:", response);
+
+      setDocumentoId(response.id);
+      return response.id;
     } catch (error) {
       console.error("Erro ao criar documento:", error);
       notify("Erro ao criar documento. Tente novamente.", "error");
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -173,13 +178,21 @@ export const Document = () => {
         await salvarOuAtualizarReceita();
         setCurrentStep(currentStep + 1);
       } catch (error) {
-        return; // Não avança se der erro
+        return;
       } finally {
         setLoading(false);
       }
     } else if (currentStep === 4) {
-      // NOVO: No último passo, cria o documento
-      await criarDocumentoFinal();
+      // NOVO: Cria o documento e mostra a tela final
+      setLoading(true);
+      try {
+        await criarDocumentoFinal();
+        setShowFinal(true); // Mostra a tela final
+      } catch (error) {
+        return; // Mantém no passo 4 em caso de erro
+      } finally {
+        setLoading(false);
+      }
     } else {
       setCurrentStep(currentStep + 1);
     }
@@ -191,9 +204,7 @@ export const Document = () => {
     }
   };
 
-  // NOVO: Restrição para navegação sequencial
   const handleStepClick = async (stepNumber) => {
-    // Só permite navegar para steps sequenciais
     if (stepNumber > currentStep + 1) {
       notify("Complete o passo atual antes de avançar.", "warning");
       return;
@@ -225,13 +236,31 @@ export const Document = () => {
     }));
   };
 
-  // NOVO: Atualizar dados do documento
   const handleDocumentoDataChange = (novosDados) => {
     setDocumentoData((prev) => ({
       ...prev,
       ...novosDados,
     }));
   };
+
+  // NOVO: Se mostrar final, exibe apenas o componente Final
+  if (showFinal) {
+    return (
+      <Final
+        documentoId={documentoId}
+        receitaId={receitaId}
+        documentoData={documentoData}
+        receitaData={{
+          ...receitaData,
+          onFormatoRotuloChange: (formato) => {
+            setReceitaData((prev) => ({ ...prev, formatoRotulo: formato }));
+          },
+        }}
+        apiFetchJson={apiFetchJson}
+        notify={notify}
+      />
+    );
+  }
 
   return (
     <Container>
@@ -310,7 +339,7 @@ export const Document = () => {
               onClick={handleNext}
               disabled={
                 loading || (currentStep === 4 && !documentoData.cliente)
-              } // mudou a verificação
+              }
             >
               {loading
                 ? "Salvando..."

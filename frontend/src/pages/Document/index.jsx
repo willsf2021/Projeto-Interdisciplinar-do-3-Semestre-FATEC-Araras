@@ -256,7 +256,6 @@ export const Document = () => {
             setReceitaData((prev) => ({ ...prev, formatoRotulo: formato }));
           },
         }}
-        apiFetchJson={apiFetchJson}
         notify={notify}
       />
     );

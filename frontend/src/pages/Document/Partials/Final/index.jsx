@@ -1,20 +1,28 @@
 import { Container } from "./style";
 import { SubmitButton } from "../../../../components/Forms/SubmitButton";
 import { HouseFill } from "react-bootstrap-icons";
+import { useApi } from "../../../../hooks/useApi";
 
 // Opções de formato do rótulo
 const FORMATO_ROTULO_OPCOES = [
-  { valor: 'vertical', label: 'Vertical' },
-  { valor: 'horizontal', label: 'Horizontal' },
-  { valor: 'quebrado_vertical', label: 'Quebrado Vertical' },
-  { valor: 'quebrado_horizontal', label: 'Quebrado Horizontal' },
+  { valor: "vertical", label: "Vertical" },
+  { valor: "horizontal", label: "Horizontal" },
+  { valor: "quebrado_vertical", label: "Quebrado Vertical" },
+  { valor: "quebrado_horizontal", label: "Quebrado Horizontal" },
 ];
 
-export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiFetchJson, notify }) => {
+export const Final = ({
+  documentoId,
+  receitaId,
+  documentoData,
+  receitaData,
+  notify,
+}) => {
   // Função para atualizar o formato do rótulo
+  const { apiFetch } = useApi();
   const atualizarFormatoRotulo = async (formato) => {
     try {
-      await apiFetchJson(
+      await apiFetch(
         `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
         {
           method: "PUT",
@@ -22,11 +30,11 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            formato_rotulo: formato
+            formato_rotulo: formato,
           }),
         }
       );
-      
+
       notify("Formato do rótulo atualizado com sucesso!", "success");
       // Atualiza o estado local se necessário
       if (receitaData.onFormatoRotuloChange) {
@@ -43,7 +51,7 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
     try {
       // Primeiro, habilita o rótulo nutricional na receita se ainda não estiver habilitado
       if (!receitaData.habilitarRotuloNutricional) {
-        await apiFetchJson(
+        await apiFetch(
           `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
           {
             method: "PUT",
@@ -51,7 +59,7 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              habilitar_rotulo_nutricional: true
+              habilitar_rotulo_nutricional: true,
             }),
           }
         );
@@ -59,24 +67,24 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
       }
 
       // Gera o documento completo (que agora incluirá o rótulo)
-      const response = await fetch(
+      const response = await apiFetch(
         `${import.meta.env.VITE_API_URL}/documentos/${documentoId}/pdf/`,
         {
           method: "GET",
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
 
       if (!response.ok) {
-        throw new Error('Erro ao gerar PDF');
+        throw new Error("Erro ao gerar PDF");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
+      const a = document.createElement("a");
+      a.style.display = "none";
       a.href = url;
       a.download = `documento_completo_${documentoId}.pdf`;
       document.body.appendChild(a);
@@ -84,7 +92,7 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
       window.URL.revokeObjectURL(url);
       notify("PDF gerado com sucesso!", "success");
     } catch (error) {
-      console.error('Erro ao baixar PDF:', error);
+      console.error("Erro ao baixar PDF:", error);
       notify("Erro ao gerar PDF. Tente novamente.", "error");
     }
   };
@@ -94,7 +102,7 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
     try {
       // Primeiro habilita o rótulo se necessário
       if (!receitaData.habilitarRotuloNutricional) {
-        await apiFetchJson(
+        await apiFetch(
           `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
           {
             method: "PUT",
@@ -102,31 +110,28 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              habilitar_rotulo_nutricional: true
+              habilitar_rotulo_nutricional: true,
             }),
           }
         );
       }
 
       // Gera apenas o rótulo nutricional
-      const response = await fetch(
+      const response =  await apiFetch(
         `${import.meta.env.VITE_API_URL}/rotulos/${documentoId}/pdf/`,
         {
           method: "GET",
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
         }
       );
 
       if (!response.ok) {
-        throw new Error('Erro ao gerar rótulo');
+        throw new Error("Erro ao gerar rótulo");
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
+      const a = document.createElement("a");
+      a.style.display = "none";
       a.href = url;
       a.download = `rotulo_nutricional_${documentoId}.pdf`;
       document.body.appendChild(a);
@@ -134,7 +139,7 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
       window.URL.revokeObjectURL(url);
       notify("Rótulo nutricional gerado com sucesso!", "success");
     } catch (error) {
-      console.error('Erro ao baixar rótulo:', error);
+      console.error("Erro ao baixar rótulo:", error);
       notify("Erro ao gerar rótulo nutricional. Tente novamente.", "error");
     }
   };
@@ -148,13 +153,27 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
       <div className="final-content">
         <h2>Documento Finalizado com Sucesso!</h2>
         <p>Seu documento foi criado e está pronto para download.</p>
-        
+
         <div className="document-info">
-          <p><strong>ID do Documento:</strong> {documentoId}</p>
-          <p><strong>ID da Receita:</strong> {receitaId}</p>
-          <p><strong>Cliente:</strong> {documentoData.cliente?.name}</p>
-          <p><strong>Formato do Documento:</strong> {documentoData.formatoDocumento}</p>
-          <p><strong>Rótulo Nutricional:</strong> {receitaData.habilitarRotuloNutricional ? 'Habilitado' : 'Desabilitado'}</p>
+          <p>
+            <strong>ID do Documento:</strong> {documentoId}
+          </p>
+          <p>
+            <strong>ID da Receita:</strong> {receitaId}
+          </p>
+          <p>
+            <strong>Cliente:</strong> {documentoData.cliente?.name}
+          </p>
+          <p>
+            <strong>Formato do Documento:</strong>{" "}
+            {documentoData.formatoDocumento}
+          </p>
+          <p>
+            <strong>Rótulo Nutricional:</strong>{" "}
+            {receitaData.habilitarRotuloNutricional
+              ? "Habilitado"
+              : "Desabilitado"}
+          </p>
         </div>
 
         <div className="rotulo-options">
@@ -166,7 +185,9 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
                 {FORMATO_ROTULO_OPCOES.map((opcao) => (
                   <button
                     key={opcao.valor}
-                    className={`rotulo-btn ${receitaData.formatoRotulo === opcao.valor ? 'active' : ''}`}
+                    className={`rotulo-btn ${
+                      receitaData.formatoRotulo === opcao.valor ? "active" : ""
+                    }`}
                     onClick={() => atualizarFormatoRotulo(opcao.valor)}
                   >
                     {opcao.label}
@@ -174,10 +195,10 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
                 ))}
               </div>
             </div>
-            
+
             <div className="rotulo-actions">
               <SubmitButton
-                title="🏷️ Baixar Apenas Rótulo"
+                title="Baixar Rótulo"
                 onClick={handleDownloadRotulo}
                 variant="secondary"
               />
@@ -194,7 +215,7 @@ export const Final = ({ documentoId, receitaId, documentoData, receitaData, apiF
         </div>
         <div className="container-control-button">
           <SubmitButton
-            title="📋 Baixar PDF Completo"
+            title="Baixar PDF Completo"
             onClick={handleDownloadPDF}
             variant="submit"
           />

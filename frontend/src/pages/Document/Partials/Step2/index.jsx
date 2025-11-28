@@ -332,7 +332,7 @@ export const Step2 = ({ receitaId, receitaData }) => {
               />
 
               <Input
-                label="Custo por uma Embalagem (R$)"
+                label="Custo por Embalagem (R$)"
                 type="text"
                 value={ingredienteAtual.custoEmbalagem}
                 placeholder="Ex: 15,90"

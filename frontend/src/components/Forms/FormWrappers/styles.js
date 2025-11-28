@@ -174,7 +174,8 @@ export const Fieldset = styled.fieldset`
   border-radius: ${({ theme }) => theme.borderRadius.md};
   position: relative;
   label {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    max-width: 102px;
   }
 `;
 
@@ -186,7 +187,7 @@ export const FieldsetLegend = styled.legend`
   display: flex;
   align-items: center;
   gap: 6px;
-
+  
   .legend-tooltip {
     position: relative;
     top: 0;

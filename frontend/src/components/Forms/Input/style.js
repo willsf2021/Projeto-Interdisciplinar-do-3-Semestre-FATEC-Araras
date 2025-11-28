@@ -11,6 +11,10 @@ export const InputWrapper = styled.div`
 
 export const InputLabel = styled.label`
   margin-left: 4px;
+  .specific {
+    display: flex;
+    gap: 8px;
+  }
 `;
 
 export const InputField = styled.input`

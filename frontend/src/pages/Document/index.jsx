@@ -13,7 +13,8 @@ export const Document = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [receitaId, setReceitaId] = useState(null);
   const [documentoId, setDocumentoId] = useState(null);
-  const [showFinal, setShowFinal] = useState(false); // NOVO: Controla se mostra a tela final
+  const [showFinal, setShowFinal] = useState(false);
+  const [ultimaReceitaSalva, setUltimaReceitaSalva] = useState(null); // NOVO: Controla a última versão salva
   const [receitaData, setReceitaData] = useState({
     nome: "",
     categoria: "",
@@ -44,7 +45,26 @@ export const Document = () => {
   ];
 
   const salvarOuAtualizarReceita = async () => {
-    // ... (código existente mantido igual)
+    // NOVO: Verifica se a receita já existe e não houve alterações
+    if (receitaId && ultimaReceitaSalva) {
+      const dadosAtuais = {
+        nome: receitaData.nome,
+        categoria: receitaData.categoria,
+        medidaCaseira: receitaData.medidaCaseira,
+        tempoPreparo: receitaData.tempoPreparo,
+        porcaoIndividual: receitaData.porcaoIndividual,
+        unidadeMedida: receitaData.unidadeMedida,
+        modoPreparo: receitaData.modoPreparo,
+        habilitarPrecificacao: receitaData.habilitarPrecificacao,
+        markup: receitaData.markup
+      };
+
+      // Se não há alterações, retorna sem fazer a requisição
+      if (JSON.stringify(dadosAtuais) === JSON.stringify(ultimaReceitaSalva)) {
+        return { id: receitaId };
+      }
+    }
+
     if (
       !receitaData.nome ||
       !receitaData.categoria ||
@@ -118,6 +138,20 @@ export const Document = () => {
         setReceitaId(response.id);
         notify("Receita criada com sucesso!", "success");
       }
+
+      // NOVO: Guarda os dados atuais após salvar
+      setUltimaReceitaSalva({
+        nome: receitaData.nome,
+        categoria: receitaData.categoria,
+        medidaCaseira: receitaData.medidaCaseira,
+        tempoPreparo: receitaData.tempoPreparo,
+        porcaoIndividual: receitaData.porcaoIndividual,
+        unidadeMedida: receitaData.unidadeMedida,
+        modoPreparo: receitaData.modoPreparo,
+        habilitarPrecificacao: receitaData.habilitarPrecificacao,
+        markup: receitaData.markup
+      });
+
       return response;
     } catch (error) {
       console.error("Erro ao salvar receita:", error);
@@ -183,13 +217,12 @@ export const Document = () => {
         setLoading(false);
       }
     } else if (currentStep === 4) {
-      // NOVO: Cria o documento e mostra a tela final
       setLoading(true);
       try {
         await criarDocumentoFinal();
-        setShowFinal(true); // Mostra a tela final
+        setShowFinal(true);
       } catch (error) {
-        return; // Mantém no passo 4 em caso de erro
+        return;
       } finally {
         setLoading(false);
       }
@@ -243,7 +276,6 @@ export const Document = () => {
     }));
   };
 
-  // NOVO: Se mostrar final, exibe apenas o componente Final
   if (showFinal) {
     return (
       <Final

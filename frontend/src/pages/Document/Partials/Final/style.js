@@ -10,7 +10,10 @@ export const Container = styled.main`
   .final-content {
     flex: 1;
     overflow-y: auto;
-    padding: 2rem 0;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 
   h2 {
@@ -21,33 +24,55 @@ export const Container = styled.main`
     text-align: center;
   }
 
-  p {
-    color: ${({ theme }) => theme.colors.textColor};
-    font-size: ${({ theme }) => theme.fontSizes.base};
-    text-align: center;
-    margin-bottom: ${({ theme }) => theme.spacing.lg};
+  .rotulo-preview-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .document-info {
+  .preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    border: 2px dashed #dee2e6;
+    min-height: 300px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .modelo-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .preview-image {
+    max-width: 250px;
+    max-height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .preview-label {
+    font-weight: 600;
+    color: #495057;
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .rotulo-config-section {
     background: ${({ theme }) => theme.colors.background || "#f8f9fa"};
     padding: ${({ theme }) => theme.spacing.lg};
     border-radius: ${({ theme }) => theme.borderRadius.md};
-    margin: ${({ theme }) => theme.spacing.lg} 0;
     border: 1px solid ${({ theme }) => theme.colors.borderColor};
   }
 
-  .document-info p {
-    margin: ${({ theme }) => theme.spacing.sm} 0;
-    color: ${({ theme }) => theme.colors.textColor};
-    font-size: ${({ theme }) => theme.fontSizes.base};
-    text-align: left;
-  }
-
-  .rotulo-options {
-    margin: ${({ theme }) => theme.spacing.xl} 0;
-  }
-
-  .rotulo-options h3 {
+  .rotulo-config-section h3 {
     color: ${({ theme }) => theme.colors.textColor};
     margin-bottom: ${({ theme }) => theme.spacing.lg};
     font-size: ${({ theme }) => theme.fontSizes.lg};
@@ -55,25 +80,11 @@ export const Container = styled.main`
     text-align: center;
   }
 
-  .rotulo-config {
-    background: ${({ theme }) => theme.colors.background || "#f8f9fa"};
-    padding: ${({ theme }) => theme.spacing.lg};
-    border-radius: ${({ theme }) => theme.borderRadius.md};
-    border: 1px solid ${({ theme }) => theme.colors.borderColor};
-  }
-
-  .rotulo-format h4 {
-    color: ${({ theme }) => theme.colors.textColor};
-    margin-bottom: ${({ theme }) => theme.spacing.md};
-    font-size: ${({ theme }) => theme.fontSizes.base};
-    font-weight: ${({ theme }) => theme.fontWeights.medium};
-  }
-
-  .rotulo-buttons {
+  .rotulo-buttons-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: ${({ theme }) => theme.spacing.md};
-    margin-bottom: ${({ theme }) => theme.spacing.lg};
   }
 
   .rotulo-btn {
@@ -81,15 +92,16 @@ export const Container = styled.main`
     border: 2px solid ${({ theme }) => theme.colors.primary};
     background: white;
     color: ${({ theme }) => theme.colors.primary};
-    border-radius: ${({ theme }) => theme.borderRadius.md};
+    border-radius: ${({ theme }) => theme.borderRadius.xl};
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: ${({ theme }) => theme.fontSizes.sm};
     font-weight: ${({ theme }) => theme.fontWeights.medium};
+    min-height: 60px;
   }
 
   .rotulo-btn:hover {
-    background: #f0fdf4;
+    background: #f0f8ff;
     transform: translateY(-2px);
   }
 
@@ -98,7 +110,7 @@ export const Container = styled.main`
     color: white;
   }
 
-  .rotulo-actions {
+  .download-buttons {
     display: flex;
     flex-direction: column;
     gap: ${({ theme }) => theme.spacing.md};
@@ -114,13 +126,18 @@ export const Container = styled.main`
     position: relative;
     z-index: 10;
     margin-top: auto;
+    
+  }
+
+  .container-control-home {
+    width: 100%;
   }
 
   .container-control-home button {
     font-size: 24px;
     color: ${({ theme }) => theme.colors.grayButton};
-    border-radius: 50%;
-    width: 48px;
+    border-radius: ${({ theme }) => theme.borderRadius.xl};
+    width: 100%;
     height: 48px;
     border: 1px solid ${({ theme }) => theme.colors.grayButton};
     background-color: transparent;
@@ -130,24 +147,57 @@ export const Container = styled.main`
     transition: all 0.3s ease;
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.02);
       background-color: #f0fdf4;
     }
 
     &:active {
-      transform: scale(0.95);
+      transform: scale(0.98);
     }
-  }
 
-  .container-control-button {
-    flex: 1;
+    .rotulo-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: ${({ theme }) => theme.spacing.md};
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
+      .rotulo-buttons-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr;
+      }
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+      .rotulo-buttons-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+
+      .rotulo-btn {
+        min-height: 50px;
+        font-size: ${({ theme }) => theme.fontSizes.xs};
+        border-radius: ${({ theme }) => theme.borderRadius.xl};
+      }
+    }
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    .rotulo-buttons {
-      grid-template-columns: 1fr;
-    }
-    
     padding: 0px 16px;
+
+    .preview-container {
+      min-height: 250px;
+      padding: 1.5rem;
+    }
+
+    .preview-image {
+      max-width: 200px;
+      max-height: 150px;
+    }
+
+    .rotulo-btn {
+      min-height: 50px;
+    }
   }
 `;

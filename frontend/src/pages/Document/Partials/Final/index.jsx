@@ -2,13 +2,22 @@ import { Container } from "./style";
 import { SubmitButton } from "../../../../components/Forms/SubmitButton";
 import { HouseFill } from "react-bootstrap-icons";
 import { useApi } from "../../../../hooks/useApi";
+import { useState, useEffect } from "react";
 
 // Opções de formato do rótulo
 const FORMATO_ROTULO_OPCOES = [
-  { valor: "vertical", label: "Vertical" },
-  { valor: "horizontal", label: "Horizontal" },
-  { valor: "quebrado_vertical", label: "Quebrado Vertical" },
-  { valor: "quebrado_horizontal", label: "Quebrado Horizontal" },
+  { valor: "vertical", label: "Vertical", imagem: "vertical.png" },
+  { valor: "horizontal", label: "Horizontal", imagem: "horizontal.png" },
+  {
+    valor: "quebrado_vertical",
+    label: "Quebrado Vertical",
+    imagem: "vertical_quebrado.png",
+  },
+  {
+    valor: "quebrado_horizontal",
+    label: "Quebrado Horizontal",
+    imagem: "horizontal_quebrado.png",
+  },
 ];
 
 export const Final = ({
@@ -18,10 +27,28 @@ export const Final = ({
   receitaData,
   notify,
 }) => {
-  // Função para atualizar o formato do rótulo
+  const [formatoSelecionado, setFormatoSelecionado] = useState(
+    receitaData.formatoRotulo || "vertical"
+  );
   const { apiFetch } = useApi();
+
+  // Notificar ao entrar na página
+  useEffect(() => {
+    notify("Documento criado com sucesso!", "success");
+  }, []);
+
+  // Atualiza o formato local quando receitaData muda
+  useEffect(() => {
+    if (receitaData.formatoRotulo) {
+      setFormatoSelecionado(receitaData.formatoRotulo);
+    }
+  }, [receitaData.formatoRotulo]);
+
+  // Função para atualizar o formato do rótulo
   const atualizarFormatoRotulo = async (formato) => {
     try {
+      setFormatoSelecionado(formato);
+
       await apiFetch(
         `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
         {
@@ -35,14 +62,14 @@ export const Final = ({
         }
       );
 
-      notify("Formato do rótulo atualizado com sucesso!", "success");
       // Atualiza o estado local se necessário
       if (receitaData.onFormatoRotuloChange) {
         receitaData.onFormatoRotuloChange(formato);
       }
     } catch (error) {
       console.error("Erro ao atualizar formato do rótulo:", error);
-      notify("Erro ao atualizar formato do rótulo. Tente novamente.", "error");
+      // Reverte em caso de erro
+      setFormatoSelecionado(receitaData.formatoRotulo);
     }
   };
 
@@ -63,7 +90,6 @@ export const Final = ({
             }),
           }
         );
-        notify("Rótulo nutricional habilitado para este documento.", "success");
       }
 
       // Gera o documento completo (que agora incluirá o rótulo)
@@ -90,10 +116,10 @@ export const Final = ({
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
-      notify("PDF gerado com sucesso!", "success");
+      notify("Documento completo gerado com sucesso!", "success");
     } catch (error) {
       console.error("Erro ao baixar PDF:", error);
-      notify("Erro ao gerar PDF. Tente novamente.", "error");
+      notify("Erro ao gerar documento. Tente novamente.", "error");
     }
   };
 
@@ -117,7 +143,7 @@ export const Final = ({
       }
 
       // Gera apenas o rótulo nutricional
-      const response =  await apiFetch(
+      const response = await apiFetch(
         `${import.meta.env.VITE_API_URL}/rotulos/${documentoId}/pdf/`,
         {
           method: "GET",
@@ -148,77 +174,74 @@ export const Final = ({
     window.location.href = "/home";
   };
 
+  // Encontra a opção selecionada atual
+  const opcaoSelecionada = FORMATO_ROTULO_OPCOES.find(
+    (opcao) => opcao.valor === formatoSelecionado
+  );
+
   return (
     <Container>
       <div className="final-content">
-        <h2>Documento Finalizado com Sucesso!</h2>
-        <p>Seu documento foi criado e está pronto para download.</p>
+        <h2>{receitaData.nome}</h2>
 
-        <div className="document-info">
-          <p>
-            <strong>ID do Documento:</strong> {documentoId}
-          </p>
-          <p>
-            <strong>ID da Receita:</strong> {receitaId}
-          </p>
-          <p>
-            <strong>Cliente:</strong> {documentoData.cliente?.name}
-          </p>
-          <p>
-            <strong>Formato do Documento:</strong>{" "}
-            {documentoData.formatoDocumento}
-          </p>
-          <p>
-            <strong>Rótulo Nutricional:</strong>{" "}
-            {receitaData.habilitarRotuloNutricional
-              ? "Habilitado"
-              : "Desabilitado"}
-          </p>
+        {/* Visualização do modelo do rótulo */}
+        <div className="rotulo-preview-section">
+          <div className="preview-container">
+            {opcaoSelecionada && (
+              <div className="modelo-preview">
+                <img
+                  src={`./rotulos/${opcaoSelecionada.imagem}`}
+                  alt={`Modelo de rótulo ${opcaoSelecionada.label}`}
+                  className="preview-image"
+                />
+                <p className="preview-label">
+                  Visualização: {opcaoSelecionada.label}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="rotulo-options">
-          <h3>Configurações do Rótulo Nutricional</h3>
-          <div className="rotulo-config">
-            <div className="rotulo-format">
-              <h4>Formato do Rótulo:</h4>
-              <div className="rotulo-buttons">
-                {FORMATO_ROTULO_OPCOES.map((opcao) => (
-                  <button
-                    key={opcao.valor}
-                    className={`rotulo-btn ${
-                      receitaData.formatoRotulo === opcao.valor ? "active" : ""
-                    }`}
-                    onClick={() => atualizarFormatoRotulo(opcao.valor)}
-                  >
-                    {opcao.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Configurações do rótulo */}
+        <div className="rotulo-config-section">
+          <h3>Orientação do Rótulo</h3>
 
-            <div className="rotulo-actions">
-              <SubmitButton
-                title="Baixar Rótulo"
-                onClick={handleDownloadRotulo}
-                variant="secondary"
-              />
-            </div>
+          <div className="rotulo-buttons-grid">
+            {FORMATO_ROTULO_OPCOES.map((opcao) => (
+              <button
+                key={opcao.valor}
+                className={`rotulo-btn ${
+                  formatoSelecionado === opcao.valor ? "active" : ""
+                }`}
+                onClick={() => atualizarFormatoRotulo(opcao.valor)}
+              >
+                {opcao.label}
+              </button>
+            ))}
           </div>
+        </div>
+
+        {/* Botões de download */}
+        <div className="download-buttons">
+          <SubmitButton
+            title="Baixar Rótulo Nutricional"
+            onClick={handleDownloadRotulo}
+            variant="secondary"
+          />
+          <SubmitButton
+            title="Baixar Documento Completo"
+            onClick={handleDownloadPDF}
+            variant="submit"
+          />
         </div>
       </div>
 
+      {/* Botão Home */}
       <div className="control-buttons">
         <div className="container-control-home">
           <button onClick={handleHome}>
             <HouseFill />
           </button>
-        </div>
-        <div className="container-control-button">
-          <SubmitButton
-            title="Baixar PDF Completo"
-            onClick={handleDownloadPDF}
-            variant="submit"
-          />
         </div>
       </div>
     </Container>

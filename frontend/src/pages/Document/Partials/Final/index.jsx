@@ -9,12 +9,12 @@ const FORMATO_ROTULO_OPCOES = [
   { valor: "vertical", label: "Vertical", imagem: "vertical.png" },
   { valor: "horizontal", label: "Horizontal", imagem: "horizontal.png" },
   {
-    valor: "quebrado_vertical",
+    valor: "vertical_quebrado", 
     label: "Quebrado Vertical",
     imagem: "vertical_quebrado.png",
   },
   {
-    valor: "quebrado_horizontal",
+    valor: "horizontal_quebrado",
     label: "Quebrado Horizontal",
     imagem: "horizontal_quebrado.png",
   },

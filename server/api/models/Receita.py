@@ -11,8 +11,8 @@ class Receita(models.Model):
     FORMATO_ROTULO_CHOICES = [
         ('vertical', 'Vertical'),
         ('horizontal', 'Horizontal'),
-        ('quebrado_vertical', 'Quebrado Vertical'),
-        ('quebrado_horizontal', 'Quebrado Horizontal'),
+        ('vertical_quebrado', 'Quebrado Vertical'),
+        ('horizontal_quebrado', 'Quebrado Horizontal'),
     ]
 
     usuario = models.ForeignKey(

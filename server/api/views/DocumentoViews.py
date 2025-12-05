@@ -488,7 +488,6 @@ class DocumentoPdfView(DocumentoBaseView):
         documento.pdf_gerado = True
         documento.data_geracao_pdf = timezone.now()
         documento.save()
-
         response = HttpResponse(pdf_file, content_type='application/pdf')
         response['Content-Disposition'] = f'inline; filename="{filename}"'
         return response
@@ -672,3 +671,93 @@ class DocumentoListView(DocumentoBaseView):
 
        serializer = DocumentoSerializer(documentos, many=True)
        return Response(serializer.data)
+     
+     
+     
+class DocumentoDetailView(DocumentoBaseView):
+    """
+    Retorna os detalhes completos de um documento para edição no frontend.
+    """
+    def get(self, request, documento_id):
+        documento = get_object_or_404(Documento, id=documento_id)
+
+        if documento.usuario != request.user:
+            return Response({"error": "Sem permissão"}, status=status.HTTP_403_FORBIDDEN)
+
+        receita = documento.receita
+        
+        # Formatar o tempo de preparo para HH:MM
+        tempo_preparo_str = ""
+        if receita.tempo_preparo_horas is not None and receita.tempo_preparo_minutos is not None:
+            tempo_preparo_str = f"{receita.tempo_preparo_horas:02d}:{receita.tempo_preparo_minutos:02d}"
+        
+        # Serializar os dados do documento
+        data = {
+            'documento': {
+                'id': documento.id,
+                'declaracao_alergenicos': documento.declaracao_alergenicos,
+                'formato_documento': documento.formato_documento,
+                'pdf_gerado': documento.pdf_gerado,
+                'cliente': {
+                    'id': documento.cliente.id,
+                    'nome': documento.cliente.nome_completo,
+                    'email': documento.cliente.email,
+                    'celular': documento.cliente.celular,
+                } if documento.cliente else None,
+                'created_at': documento.created_at,
+                'updated_at': documento.updated_at,
+            },
+            'receita': {
+                'id': receita.id,
+                'nome': receita.nome,
+                'categoria': receita.categoria,
+                'medida_caseira': receita.medida_caseira,
+                'tempo_preparo': tempo_preparo_str,
+                'porcao_individual': str(receita.porcao_individual).replace('.', ','),
+                'unidade_medida': receita.medida,  # Campo 'medida' no model
+                'modo_preparo': receita.modo_preparo,
+                'habilitar_precificacao': receita.habilitar_precificacao,
+                'markup': str(receita.markup).replace('.', ',') if receita.markup else "",
+                'habilitar_rotulo_nutricional': receita.habilitar_rotulo_nutricional,
+                'formato_rotulo': receita.formato_rotulo,
+            },
+            'ingredientes': [
+                {
+                    'id': ing.id,
+                    'alimento_id': ing.alimento.id,
+                    'alimento_nome': ing.alimento.nome,
+                    'peso_bruto': ing.peso_bruto,
+                    'peso_liquido': ing.peso_liquido,
+                    'peso_processado': ing.peso_processado,
+                    'quantidade_embalagem': ing.quantidade_embalagem,
+                    'custo_embalagem': str(ing.custo_embalagem).replace('.', ',') if ing.custo_embalagem else "",
+                }
+                for ing in receita.ingredientes.all()
+            ]
+        }
+
+        return Response(data)
+      
+class DocumentoUpdateView(DocumentoBaseView):
+    """
+    Atualiza um documento existente.
+    """
+    def put(self, request, documento_id):
+        documento = get_object_or_404(Documento, id=documento_id)
+
+        if documento.usuario != request.user:
+            return Response({"error": "Sem permissão"}, status=status.HTTP_403_FORBIDDEN)
+
+        # Criar um serializer para atualização
+        serializer = DocumentoCreateSerializer(
+            documento, 
+            data=request.data, 
+            context={'request': request},
+            partial=True  # Permite atualização parcial
+        )
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

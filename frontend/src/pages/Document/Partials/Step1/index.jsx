@@ -11,6 +11,7 @@ import {
   CheckboxCustom,
   InputWithTooltip,
   TooltipIcon,
+  TooltipIconSpecific,
   TooltipText,
 } from "./style";
 
@@ -121,7 +122,7 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
 
             <InputWithTooltip>
               <Input
-                label="Valor Porção Individual"
+                label="Porção Individual"
                 type="text"
                 value={receitaData.porcaoIndividual}
                 placeholder="Ex: 100,00"
@@ -200,20 +201,24 @@ export const Step1 = ({ receitaData, onReceitaDataChange }) => {
               className={!receitaData.habilitarPrecificacao ? "disabled" : ""}
             >
               <Input
-                label="Markup (%)"
+                label={
+                  <div className="specific">
+                    Markup (%)
+                    <TooltipIconSpecific>
+                      i
+                      <TooltipText>
+                        Percentual de lucro sobre o custo (ex: 30% = R$10 custo
+                        vira R$13 venda)
+                      </TooltipText>
+                    </TooltipIconSpecific>
+                  </div>
+                }
                 type="text"
                 value={receitaData.markup}
                 placeholder="Ex: 30,00"
                 onChange={(e) => handleNumberChange("markup", e.target.value)}
                 disabled={!receitaData.habilitarPrecificacao}
               />
-              <TooltipIcon>
-                i
-                <TooltipText>
-                  Percentual de lucro sobre o custo (ex: 30% = R$10 custo vira
-                  R$13 venda)
-                </TooltipText>
-              </TooltipIcon>
             </InputWithTooltip>
           </Fieldset>
         </InputFlexWrapperStep1>

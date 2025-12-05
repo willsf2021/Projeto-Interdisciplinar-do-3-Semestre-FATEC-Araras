@@ -12,6 +12,7 @@ export const Container = styled.section`
     gap: 8px;
     label {
       font-size: 0.8rem;
+      max-width: 80px;
     }
   }
 `;
@@ -118,17 +119,55 @@ export const CheckboxCustom = styled.input`
 export const InputWithTooltip = styled.div`
   position: relative;
   width: 100%;
-
+  
   &.disabled {
     opacity: 0.6;
     pointer-events: none;
   }
 `;
 
+
 export const TooltipIcon = styled.span`
   position: absolute;
   top: 2px;
   right: 4px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  font-size: 12px;
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  color: ${({ theme }) => theme.colors.primary};
+  background-color: transparent;
+  border: 1.5px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: 2;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: white;
+  }
+
+  &:hover > span {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile: mostrar ao tocar */
+  @media (hover: none) and (pointer: coarse) {
+    &:active > span {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+export const TooltipIconSpecific = styled.span`
   width: 18px;
   height: 18px;
   display: inline-flex;

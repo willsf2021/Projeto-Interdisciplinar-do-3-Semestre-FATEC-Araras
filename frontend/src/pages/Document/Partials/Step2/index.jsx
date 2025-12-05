@@ -4,6 +4,7 @@ import { Input } from "../../../../components/Forms/Input";
 import { CustomSelect } from "../../../../components/Home/CustomSelect";
 import { EggFried } from "react-bootstrap-icons";
 import { useApi } from "../../../../hooks/useApi";
+import { useNotification } from "../../../../hooks/useNotification";
 import {
   Egg,
   Calculator,
@@ -34,7 +35,7 @@ import {
 
 import { SubmitButton } from "../../../../components/Forms/SubmitButton";
 
-export const Step2 = ({ receitaId, receitaData }) => {
+export const Step2 = ({ receitaId, receitaData, isEditMode }) => {
   const [ingredientes, setIngredientes] = useState([]);
   const [ingredienteAtual, setIngredienteAtual] = useState({
     alimento: null,
@@ -46,6 +47,7 @@ export const Step2 = ({ receitaId, receitaData }) => {
   });
   const [loading, setLoading] = useState(false);
   const { apiFetchJson } = useApi();
+  const { notify } = useNotification();
 
   // Verifica se precificação está habilitada
   const precificacaoHabilitada = receitaData?.habilitarPrecificacao || false;
@@ -332,7 +334,7 @@ export const Step2 = ({ receitaId, receitaData }) => {
               />
 
               <Input
-                label="Custo por uma Embalagem (R$)"
+                label="Custo por Embalagem (R$)"
                 type="text"
                 value={ingredienteAtual.custoEmbalagem}
                 placeholder="Ex: 15,90"

@@ -7,6 +7,7 @@ from api.serializers import ClienteSerializer
 class ReceitaBaseMixin:
     permission_classes = [IsAuthenticated]
 
+
 class ClienteListView(ReceitaBaseMixin, generics.ListAPIView):
     serializer_class = ClienteSerializer
 

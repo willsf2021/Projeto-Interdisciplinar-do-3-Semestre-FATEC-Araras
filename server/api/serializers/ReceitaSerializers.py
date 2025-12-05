@@ -100,9 +100,5 @@ class ReceitaSerializer(serializers.ModelSerializer):
         # Se habilitada mas markup não informado, define None (ou você pode setar 0)
         elif data.get('habilitar_precificacao') and data.get('markup') is None:
             data['markup'] = None
-        
-        # Garantir formato de rótulo apenas se rótulo nutricional habilitado
-        if not data.get('habilitar_rotulo_nutricional', False):
-            data['formato_rotulo'] = 'vertical'  # default
 
         return data

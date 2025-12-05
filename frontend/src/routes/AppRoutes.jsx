@@ -21,7 +21,7 @@ export default function AppRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/recovery-password" element={<RecoveryPassword />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/document" element={<Document />} />
+        <Route path="/document/:documentoId?" element={<Document />} />
         <Route path="/client" element={<Client />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>

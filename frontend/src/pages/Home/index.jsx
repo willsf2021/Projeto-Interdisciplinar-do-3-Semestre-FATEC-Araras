@@ -24,7 +24,7 @@ export const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { user, isAuthenticated, loading } = useAuth();
   const { apiFetch, apiFetchJson } = useApi();
-  
+
   // Estados para o modal do cliente
   const [showClientModal, setShowClientModal] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
@@ -52,9 +52,11 @@ export const Home = () => {
   const fetchClientData = async (clientId) => {
     setClientLoading(true);
     setClientError(null);
-    
+
     try {
-      const clientData = await apiFetchJson(`${import.meta.env.VITE_API_URL}/detalhes-cliente/${clientId}/`);
+      const clientData = await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/detalhes-cliente/${clientId}/`
+      );
       setSelectedClient(clientData);
       setShowClientModal(true);
     } catch (error) {
@@ -68,16 +70,19 @@ export const Home = () => {
   // Função para atualizar dados do cliente
   const handleUpdateClient = async (clientId, updatedData) => {
     try {
-      const response = await apiFetch(`${import.meta.env.VITE_API_URL}/atualizar-cliente/${clientId}/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      });
+      const response = await apiFetch(
+        `${import.meta.env.VITE_API_URL}/atualizar-cliente/${clientId}/`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        }
+      );
 
       if (response.ok) {
-        await refreshData('clients');
+        await refreshData("clients");
         return { success: true };
       } else {
         throw new Error("Erro ao atualizar cliente");
@@ -90,6 +95,7 @@ export const Home = () => {
 
   const handleItemClick = async (item) => {
     if (activeTab === "documents") {
+      // Navega para a edição do documento com o ID
       navigate(`/document/${item.id}`);
     } else {
       // Para clientes, busca dados atualizados e abre modal

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "./style.js";
 import { Step1 } from "./Partials/Step1";
 import { Step2 } from "./Partials/Step2";
@@ -8,13 +8,22 @@ import { Final } from "./Partials/Final";
 import { HouseFill } from "react-bootstrap-icons";
 import { useApi } from "../../hooks/useApi";
 import { useNotification } from "../../hooks/useNotification";
+import { useParams, useNavigate } from "react-router-dom"; // Adicione isso
 
 export const Document = () => {
+  const { documentoId } = useParams(); // Para capturar o ID da URL
+  const navigate = useNavigate();
+  const [isEditMode, setIsEditMode] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [receitaId, setReceitaId] = useState(null);
-  const [documentoId, setDocumentoId] = useState(null);
+  const [documentoIdState, setDocumentoIdState] = useState(null);
   const [showFinal, setShowFinal] = useState(false);
-  const [ultimaReceitaSalva, setUltimaReceitaSalva] = useState(null); // NOVO: Controla a última versão salva
+  const [ultimaReceitaSalva, setUltimaReceitaSalva] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { apiFetchJson } = useApi();
+  const { notify } = useNotification();
+
+  // Estados iniciais
   const [receitaData, setReceitaData] = useState({
     nome: "",
     categoria: "",
@@ -27,9 +36,6 @@ export const Document = () => {
     markup: "",
     formatoRotulo: "vertical",
   });
-  const [loading, setLoading] = useState(false);
-  const { apiFetchJson } = useApi();
-  const { notify } = useNotification();
 
   const [documentoData, setDocumentoData] = useState({
     declaracaoAlergenicos: "",
@@ -44,130 +50,65 @@ export const Document = () => {
     { number: 4, name: "Cliente" },
   ];
 
-  const salvarOuAtualizarReceita = async () => {
-    // NOVO: Verifica se a receita já existe e não houve alterações
-    if (receitaId && ultimaReceitaSalva) {
-      const dadosAtuais = {
-        nome: receitaData.nome,
-        categoria: receitaData.categoria,
-        medidaCaseira: receitaData.medidaCaseira,
-        tempoPreparo: receitaData.tempoPreparo,
-        porcaoIndividual: receitaData.porcaoIndividual,
-        unidadeMedida: receitaData.unidadeMedida,
-        modoPreparo: receitaData.modoPreparo,
-        habilitarPrecificacao: receitaData.habilitarPrecificacao,
-        markup: receitaData.markup
-      };
-
-      // Se não há alterações, retorna sem fazer a requisição
-      if (JSON.stringify(dadosAtuais) === JSON.stringify(ultimaReceitaSalva)) {
-        return { id: receitaId };
-      }
+  // Carregar dados do documento existente se estiver em modo de edição
+  useEffect(() => {
+    if (documentoId) {
+      carregarDocumentoExistente(documentoId);
     }
+  }, [documentoId]);
 
-    if (
-      !receitaData.nome ||
-      !receitaData.categoria ||
-      !receitaData.medidaCaseira ||
-      !receitaData.tempoPreparo ||
-      !receitaData.porcaoIndividual ||
-      !receitaData.unidadeMedida ||
-      !receitaData.modoPreparo
-    ) {
-      notify("Por favor, preencha todos os campos obrigatórios.", "error");
-      throw new Error("Campos obrigatórios não preenchidos");
-    }
-
-    let tempoPreparoHoras = 0;
-    let tempoPreparoMinutos = 0;
-
-    if (receitaData.tempoPreparo) {
-      if (typeof receitaData.tempoPreparo === "string") {
-        const tempoParts = receitaData.tempoPreparo.replace("h", "").split(":");
-        tempoPreparoHoras = parseInt(tempoParts[0]) || 0;
-        tempoPreparoMinutos = parseInt(tempoParts[1]) || 0;
-      } else {
-        const minutosTotais = parseInt(receitaData.tempoPreparo);
-        tempoPreparoHoras = Math.floor(minutosTotais / 60);
-        tempoPreparoMinutos = minutosTotais % 60;
-      }
-    }
-
-    const dadosParaEnviar = {
-      nome: receitaData.nome,
-      categoria: receitaData.categoria,
-      medida_caseira: receitaData.medidaCaseira,
-      tempo_preparo_horas: tempoPreparoHoras,
-      tempo_preparo_minutos: tempoPreparoMinutos,
-      porcao_individual:
-        parseFloat(receitaData.porcaoIndividual.replace(",", ".")) || 0,
-      medida: receitaData.unidadeMedida,
-      modo_preparo: receitaData.modoPreparo,
-      habilitar_precificacao: receitaData.habilitarPrecificacao,
-      markup: receitaData.habilitarPrecificacao
-        ? parseFloat(receitaData.markup.replace(",", "."))
-        : null,
-      habilitar_rotulo_nutricional: false,
-    };
-
+  const carregarDocumentoExistente = async (id) => {
+    setLoading(true);
     try {
-      let response;
-      if (receitaId) {
-        response = await apiFetchJson(
-          `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dadosParaEnviar),
-          }
-        );
-        notify("Receita atualizada com sucesso!", "success");
-      } else {
-        response = await apiFetchJson(
-          `${import.meta.env.VITE_API_URL}/criar-receita/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dadosParaEnviar),
-          }
-        );
-        setReceitaId(response.id);
-        notify("Receita criada com sucesso!", "success");
-      }
+      const response = await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/documentos/${id}/detalhes/`
+      );
 
-      // NOVO: Guarda os dados atuais após salvar
-      setUltimaReceitaSalva({
-        nome: receitaData.nome,
-        categoria: receitaData.categoria,
-        medidaCaseira: receitaData.medidaCaseira,
-        tempoPreparo: receitaData.tempoPreparo,
-        porcaoIndividual: receitaData.porcaoIndividual,
-        unidadeMedida: receitaData.unidadeMedida,
-        modoPreparo: receitaData.modoPreparo,
-        habilitarPrecificacao: receitaData.habilitarPrecificacao,
-        markup: receitaData.markup
+      // Preencher dados da receita
+      setReceitaData({
+        nome: response.receita.nome,
+        categoria: response.receita.categoria,
+        medidaCaseira: response.receita.medida_caseira,
+        tempoPreparo: response.receita.tempo_preparo,
+        porcaoIndividual: response.receita.porcao_individual,
+        unidadeMedida: response.receita.unidade_medida,
+        modoPreparo: response.receita.modo_preparo,
+        habilitarPrecificacao: response.receita.habilitar_precificacao,
+        markup: response.receita.markup,
+        formatoRotulo: response.receita.formato_rotulo,
       });
 
-      return response;
+      // Preencher dados do documento
+      setDocumentoData({
+        declaracaoAlergenicos: response.documento.declaracao_alergenicos || "",
+        cliente: response.documento.cliente,
+        formatoDocumento: response.documento.formato_documento,
+      });
+
+      // Setar IDs
+      setReceitaId(response.receita.id);
+      setDocumentoIdState(response.documento.id);
+      setIsEditMode(true);
+
+      notify("Documento carregado para edição!", "success");
     } catch (error) {
-      console.error("Erro ao salvar receita:", error);
-      notify("Erro ao salvar receita. Tente novamente.", "error");
-      throw error;
+      console.error("Erro ao carregar documento:", error);
+      notify("Erro ao carregar documento. Tente novamente.", "error");
+      navigate("/home"); // Voltar para home em caso de erro
+    } finally {
+      setLoading(false);
     }
   };
 
-  const criarDocumentoFinal = async () => {
-    if (!receitaId) {
-      notify("Erro: Receita não encontrada.", "error");
+  // Função para atualizar documento existente
+  const atualizarDocumentoExistente = async () => {
+    if (!documentoIdState) {
+      notify("Erro: Documento não encontrado.", "error");
       return null;
     }
 
     if (!documentoData.cliente) {
-      notify("Selecione um cliente para gerar o documento.", "error");
+      notify("Selecione um cliente para o documento.", "error");
       return null;
     }
 
@@ -181,9 +122,9 @@ export const Document = () => {
       };
 
       const response = await apiFetchJson(
-        `${import.meta.env.VITE_API_URL}/documentos/`,
+        `${import.meta.env.VITE_API_URL}/documentos/${documentoIdState}/`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -191,18 +132,27 @@ export const Document = () => {
         }
       );
 
-      notify("Documento criado com sucesso!", "success");
-      console.log("Documento criado:", response);
+      notify("Documento atualizado com sucesso!", "success");
+      console.log("Documento atualizado:", response);
 
-      setDocumentoId(response.id);
-      return response.id;
+      return response;
     } catch (error) {
-      console.error("Erro ao criar documento:", error);
-      notify("Erro ao criar documento. Tente novamente.", "error");
+      console.error("Erro ao atualizar documento:", error);
+      notify("Erro ao atualizar documento. Tente novamente.", "error");
       throw error;
     } finally {
       setLoading(false);
     }
+  };
+
+  // Função para salvar ou atualizar receita (já existente)
+  const salvarOuAtualizarReceita = async () => {
+    // ... (mantenha a função existente, ela já funciona para ambos os casos)
+  };
+
+  // Função para criar novo documento
+  const criarDocumentoFinal = async () => {
+    // ... (mantenha a função existente)
   };
 
   const handleNext = async () => {
@@ -219,7 +169,11 @@ export const Document = () => {
     } else if (currentStep === 4) {
       setLoading(true);
       try {
-        await criarDocumentoFinal();
+        if (isEditMode) {
+          await atualizarDocumentoExistente();
+        } else {
+          await criarDocumentoFinal();
+        }
         setShowFinal(true);
       } catch (error) {
         return;
@@ -259,7 +213,7 @@ export const Document = () => {
   };
 
   const handleHome = () => {
-    window.location.href = "/home";
+    navigate("/home");
   };
 
   const handleReceitaDataChange = (novosDados) => {
@@ -276,10 +230,24 @@ export const Document = () => {
     }));
   };
 
+  // Loading enquanto carrega dados
+  if (loading && documentoId && !receitaId) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <div>Carregando documento...</div>
+      </div>
+    );
+  }
+
   if (showFinal) {
     return (
       <Final
-        documentoId={documentoId}
+        documentoId={documentoIdState}
         receitaId={receitaId}
         documentoData={documentoData}
         receitaData={{
@@ -334,7 +302,11 @@ export const Document = () => {
             />
           )}
           {currentStep === 2 && (
-            <Step2 receitaId={receitaId} receitaData={receitaData} />
+            <Step2 
+              receitaId={receitaId} 
+              receitaData={receitaData}
+              isEditMode={isEditMode} // Passe esta prop para o Step2
+            />
           )}
           {currentStep === 3 && (
             <Step3
@@ -374,9 +346,9 @@ export const Document = () => {
             >
               {loading
                 ? "Salvando..."
-                : currentStep === 4
-                ? "Finalizar"
-                : "Avançar"}
+                : isEditMode
+                ? (currentStep === 4 ? "Atualizar" : "Avançar")
+                : (currentStep === 4 ? "Finalizar" : "Avançar")}
             </button>
           </div>
         </div>

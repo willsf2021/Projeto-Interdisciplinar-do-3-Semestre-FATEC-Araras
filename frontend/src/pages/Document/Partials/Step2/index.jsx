@@ -34,7 +34,7 @@ import {
 
 import { SubmitButton } from "../../../../components/Forms/SubmitButton";
 
-export const Step2 = ({ receitaId, receitaData }) => {
+export const Step2 = ({ receitaId, receitaData, isEditMode  }) => {
   const [ingredientes, setIngredientes] = useState([]);
   const [ingredienteAtual, setIngredienteAtual] = useState({
     alimento: null,

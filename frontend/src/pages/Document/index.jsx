@@ -145,14 +145,165 @@ export const Document = () => {
     }
   };
 
-  // Função para salvar ou atualizar receita (já existente)
-  const salvarOuAtualizarReceita = async () => {
-    // ... (mantenha a função existente, ela já funciona para ambos os casos)
+const salvarOuAtualizarReceita = async () => {
+    // NOVO: Verifica se a receita já existe e não houve alterações
+    if (receitaId && ultimaReceitaSalva) {
+      const dadosAtuais = {
+        nome: receitaData.nome,
+        categoria: receitaData.categoria,
+        medidaCaseira: receitaData.medidaCaseira,
+        tempoPreparo: receitaData.tempoPreparo,
+        porcaoIndividual: receitaData.porcaoIndividual,
+        unidadeMedida: receitaData.unidadeMedida,
+        modoPreparo: receitaData.modoPreparo,
+        habilitarPrecificacao: receitaData.habilitarPrecificacao,
+        markup: receitaData.markup
+      };
+
+      // Se não há alterações, retorna sem fazer a requisição
+      if (JSON.stringify(dadosAtuais) === JSON.stringify(ultimaReceitaSalva)) {
+        return { id: receitaId };
+      }
+    }
+
+    if (
+      !receitaData.nome ||
+      !receitaData.categoria ||
+      !receitaData.medidaCaseira ||
+      !receitaData.tempoPreparo ||
+      !receitaData.porcaoIndividual ||
+      !receitaData.unidadeMedida ||
+      !receitaData.modoPreparo
+    ) {
+      notify("Por favor, preencha todos os campos obrigatórios.", "error");
+      throw new Error("Campos obrigatórios não preenchidos");
+    }
+
+    let tempoPreparoHoras = 0;
+    let tempoPreparoMinutos = 0;
+
+    if (receitaData.tempoPreparo) {
+      if (typeof receitaData.tempoPreparo === "string") {
+        const tempoParts = receitaData.tempoPreparo.replace("h", "").split(":");
+        tempoPreparoHoras = parseInt(tempoParts[0]) || 0;
+        tempoPreparoMinutos = parseInt(tempoParts[1]) || 0;
+      } else {
+        const minutosTotais = parseInt(receitaData.tempoPreparo);
+        tempoPreparoHoras = Math.floor(minutosTotais / 60);
+        tempoPreparoMinutos = minutosTotais % 60;
+      }
+    }
+
+    const dadosParaEnviar = {
+      nome: receitaData.nome,
+      categoria: receitaData.categoria,
+      medida_caseira: receitaData.medidaCaseira,
+      tempo_preparo_horas: tempoPreparoHoras,
+      tempo_preparo_minutos: tempoPreparoMinutos,
+      porcao_individual:
+        parseFloat(receitaData.porcaoIndividual.replace(",", ".")) || 0,
+      medida: receitaData.unidadeMedida,
+      modo_preparo: receitaData.modoPreparo,
+      habilitar_precificacao: receitaData.habilitarPrecificacao,
+      markup: receitaData.habilitarPrecificacao
+        ? parseFloat(receitaData.markup.replace(",", "."))
+        : null,
+      habilitar_rotulo_nutricional: false,
+    };
+
+    try {
+      let response;
+      if (receitaId) {
+        response = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/atualizar-receita/${receitaId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosParaEnviar),
+          }
+        );
+        notify("Receita atualizada com sucesso!", "success");
+      } else {
+        response = await apiFetchJson(
+          `${import.meta.env.VITE_API_URL}/criar-receita/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dadosParaEnviar),
+          }
+        );
+        setReceitaId(response.id);
+        notify("Receita criada com sucesso!", "success");
+      }
+
+      // NOVO: Guarda os dados atuais após salvar
+      setUltimaReceitaSalva({
+        nome: receitaData.nome,
+        categoria: receitaData.categoria,
+        medidaCaseira: receitaData.medidaCaseira,
+        tempoPreparo: receitaData.tempoPreparo,
+        porcaoIndividual: receitaData.porcaoIndividual,
+        unidadeMedida: receitaData.unidadeMedida,
+        modoPreparo: receitaData.modoPreparo,
+        habilitarPrecificacao: receitaData.habilitarPrecificacao,
+        markup: receitaData.markup
+      });
+
+      return response;
+    } catch (error) {
+      console.error("Erro ao salvar receita:", error);
+      notify("Erro ao salvar receita. Tente novamente.", "error");
+      throw error;
+    }
   };
 
-  // Função para criar novo documento
   const criarDocumentoFinal = async () => {
-    // ... (mantenha a função existente)
+    if (!receitaId) {
+      notify("Erro: Receita não encontrada.", "error");
+      return null;
+    }
+
+    if (!documentoData.cliente) {
+      notify("Selecione um cliente para gerar o documento.", "error");
+      return null;
+    }
+
+    setLoading(true);
+    try {
+      const dadosDocumento = {
+        receita: receitaId,
+        cliente: documentoData.cliente.id,
+        declaracao_alergenicos: documentoData.declaracaoAlergenicos,
+        formato_documento: documentoData.formatoDocumento,
+      };
+
+      const response = await apiFetchJson(
+        `${import.meta.env.VITE_API_URL}/documentos/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dadosDocumento),
+        }
+      );
+
+      notify("Documento criado com sucesso!", "success");
+      console.log("Documento criado:", response);
+
+      setDocumentoIdState(response.id);
+      return response.id;
+    } catch (error) {
+      console.error("Erro ao criar documento:", error);
+      notify("Erro ao criar documento. Tente novamente.", "error");
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleNext = async () => {

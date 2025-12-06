@@ -208,7 +208,7 @@ export const Register = () => {
       </FormWrapper>
 
       <FormFooter>
-        <DividerWrapper>
+        {/*<DividerWrapper>
           <div className="hr" />
           <span>ou</span>
           <div className="hr" />
@@ -217,7 +217,7 @@ export const Register = () => {
         <SecondaryButton type="button">
           <img src={googleIcon} alt="Ícone do Google" />
           Cadastrar com o Google
-        </SecondaryButton>
+        </SecondaryButton>*/}
 
         <ActionFooter>
           <p>

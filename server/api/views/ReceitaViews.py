@@ -24,6 +24,7 @@ class ReceitaUpdateView(ReceitaBaseView):
         receita = get_object_or_404(Receita, id=receita_id)
         if receita.usuario != request.user:
             return Response({"error": "Você não tem permissão para editar esta receita."}, status=403)
+        
         serializer = ReceitaSerializer(receita, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()

@@ -93,12 +93,21 @@ class ReceitaSerializer(serializers.ModelSerializer):
         return value
     
     def validate(self, data):
-        """Validação cruzada de campos"""
-        # Se a precificação não estiver habilitada, zera markup
-        if not data.get('habilitar_precificacao', False):
+        habilitar_precificacao = data.get('habilitar_precificacao')
+        markup = data.get('markup')
+
+        if habilitar_precificacao is None and self.instance:
+            habilitar_precificacao = self.instance.habilitar_precificacao
+
+        if habilitar_precificacao is False:
             data['markup'] = None
-        # Se habilitada mas markup não informado, define None (ou você pode setar 0)
-        elif data.get('habilitar_precificacao') and data.get('markup') is None:
-            data['markup'] = None
+        elif habilitar_precificacao is True:
+            if 'markup' in data:
+                if markup is None or (isinstance(markup, str) and markup.strip() == ""):
+                    data['markup'] = None
+                else:
+                    pass
+            else:
+                data.pop('markup', None)
 
         return data

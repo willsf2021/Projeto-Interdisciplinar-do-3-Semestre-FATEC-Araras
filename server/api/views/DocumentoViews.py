@@ -467,13 +467,13 @@ class DocumentoPdfView(DocumentoBaseView):
                 if tempo_preparo_formatado:
                     tempo_preparo_formatado += " "
                 tempo_preparo_formatado += f"{receita.tempo_preparo_minutos}min"
-        
+        print(receita.markup)
         context = {
             'documento': documento,
-            'receita': receita,  # ← ADICIONE ESTA LINHA!
+            'receita': receita, 
             'cliente': documento.cliente,
             'ingredientes': receita.ingredientes.all(),
-            'tempo_preparo_formatado': tempo_preparo_formatado,  # ← Opcional: passar formatado
+            'tempo_preparo_formatado': tempo_preparo_formatado,
             'precificacao': {
                 'habilitada': receita.habilitar_precificacao,
                 'custo_total': receita.custo_total,

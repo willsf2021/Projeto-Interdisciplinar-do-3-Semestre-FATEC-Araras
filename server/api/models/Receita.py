@@ -125,6 +125,14 @@ class Receita(models.Model):
         return self.custo_total + self.lucro
     
     
+    @property
+    def preco_por_porcao(self):
+        """Preço sugerido dividido pelo número de porções"""
+        if not self.habilitar_precificacao or self.rendimento == 0:
+            return Decimal('0.00')
+        return self.preco_sugerido / self.rendimento
+    
+    
     def calcular_nutrientes_por_100g(self):
         """Calcula nutrientes por 100g da preparação completa"""
         nutrientes_totais = self.calcular_nutrientes_totais()

@@ -457,10 +457,23 @@ class DocumentoPdfView(DocumentoBaseView):
             return Response({"error": "Sem permissão"}, status=status.HTTP_403_FORBIDDEN)
 
         receita = documento.receita
+        
+        # Formatar tempo de preparo
+        tempo_preparo_formatado = ""
+        if receita.tempo_preparo_horas is not None and receita.tempo_preparo_minutos is not None:
+            if receita.tempo_preparo_horas > 0:
+                tempo_preparo_formatado += f"{receita.tempo_preparo_horas}h"
+            if receita.tempo_preparo_minutos > 0:
+                if tempo_preparo_formatado:
+                    tempo_preparo_formatado += " "
+                tempo_preparo_formatado += f"{receita.tempo_preparo_minutos}min"
+        
         context = {
             'documento': documento,
+            'receita': receita,  # ← ADICIONE ESTA LINHA!
             'cliente': documento.cliente,
             'ingredientes': receita.ingredientes.all(),
+            'tempo_preparo_formatado': tempo_preparo_formatado,  # ← Opcional: passar formatado
             'precificacao': {
                 'habilitada': receita.habilitar_precificacao,
                 'custo_total': receita.custo_total,
@@ -468,6 +481,7 @@ class DocumentoPdfView(DocumentoBaseView):
                 'preco_sugerido': receita.preco_sugerido,
                 'markup': receita.markup,
             } if receita.habilitar_precificacao else None,
+            'rotulo_nutricional': self._preparar_dados_rotulo(receita) if receita.habilitar_rotulo_nutricional else None,  # ← Adicione esta linha
         }
 
         html_string = render_to_string("documento_completo.html", context)
@@ -491,6 +505,25 @@ class DocumentoPdfView(DocumentoBaseView):
         response = HttpResponse(pdf_file, content_type='application/pdf')
         response['Content-Disposition'] = f'inline; filename="{filename}"'
         return response
+      
+    def _preparar_dados_rotulo(self, receita):
+        """Prepara dados específicos para o rótulo nutricional (reutilizando da outra view)"""
+        try:
+            nutrientes_totais = receita.calcular_nutrientes_totais()
+            nutrientes_por_100g = receita.calcular_nutrientes_por_100g()
+            nutrientes_porcao = receita.calcular_nutrientes_por_porcao()
+            valores_diarios = receita.calcular_valores_diarios(nutrientes_porcao)
+
+            return {
+                'porcoes_embalagem': int(receita.rendimento),
+                'porcao': f"{receita.porcao_individual:.0f}{receita.medida}",
+                'valores_100g': nutrientes_por_100g,
+                'valores_porcao': nutrientes_porcao,
+                'valores_diarios': valores_diarios,
+            }
+        except Exception as e:
+            print(f"DEBUG - Erro ao preparar dados do rótulo: {str(e)}")
+            return None
     
     def _get_css_generico(self):
         return """

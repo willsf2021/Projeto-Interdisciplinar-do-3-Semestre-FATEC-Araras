@@ -9,12 +9,38 @@ export const Container = styled.div`
   padding-bottom: 24px;
   height: 100vh;
   position: relative;
+  
+  @media (min-width: 768px) {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 80px 40px 40px;
+    height: auto;
+    min-height: 100vh;
+    justify-content: center;
+  }
+  
+  @media (min-width: 1024px) {
+    max-width: 800px;
+    padding: 100px 48px 48px;
+  }
 
   header {
     width: 100%;
     display: flex;
     justify-content: flex-start;
     margin-bottom: 16px;
+    
+    @media (min-width: 768px) {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      margin-bottom: 0;
+    }
+    
+    @media (min-width: 1024px) {
+      top: 48px;
+      left: 48px;
+    }
   }
 
   .profile-image {
@@ -22,15 +48,21 @@ export const Container = styled.div`
     margin-top: 20px;
     display: flex;
     justify-content: center;
+    
+    @media (min-width: 768px) {
+      margin-top: 0;
+    }
 
     #avatar-wrapper {
       position: relative;
       cursor: pointer;
-
-      &:hover .edit-icon {
-        transform: scale(1.1);
-        background-color: ${({ theme }) => theme.colors.primary};
-        color: white;
+      
+      @media (min-width: 768px) {
+        &:hover .edit-icon {
+          transform: scale(1.1);
+          background-color: ${({ theme }) => theme.colors.primary};
+          color: white;
+        }
       }
 
       .edit-icon {
@@ -48,6 +80,20 @@ export const Container = styled.div`
         border: 2px solid ${({ theme }) => theme.colors.primary};
         font-size: 16px;
         transition: all 0.3s ease;
+        
+        @media (min-width: 768px) {
+          padding: 8px;
+          font-size: 18px;
+          bottom: 5px;
+          right: 5px;
+        }
+        
+        @media (min-width: 1024px) {
+          padding: 10px;
+          font-size: 20px;
+          bottom: 8px;
+          right: 8px;
+        }
       }
 
       .upload-overlay {
@@ -88,12 +134,24 @@ export const Container = styled.div`
     border-radius: 50%;
     position: relative;
     transition: transform 0.3s ease;
+    
+    @media (min-width: 768px) {
+      width: 150px;
+      height: 150px;
+    }
+    
+    @media (min-width: 1024px) {
+      width: 180px;
+      height: 180px;
+    }
 
     ${(props) =>
       !props.disabled &&
       `
-      &:hover {
-        transform: scale(1.05);
+      @media (min-width: 768px) {
+        &:hover {
+          transform: scale(1.05);
+        }
       }
     `}
   }
@@ -106,11 +164,28 @@ export const Container = styled.div`
     margin: 32px 0;
     text-align: center;
     
+    @media (min-width: 768px) {
+      margin: 40px 0;
+    }
+    
+    @media (min-width: 1024px) {
+      margin: 48px 0;
+    }
+    
     h2 {
       font-size: ${({ theme }) => theme.fontSizes.lg};
       color: ${({ theme }) => theme.colors.textColor};
       margin-bottom: 24px;
       font-weight: ${({ theme }) => theme.fontWeights.semibold};
+      
+      @media (min-width: 768px) {
+        font-size: ${({ theme }) => theme.fontSizes.xl};
+        margin-bottom: 32px;
+      }
+      
+      @media (min-width: 1024px) {
+        font-size: ${({ theme }) => theme.fontSizes.xxl};
+      }
     }
 
     .info-grid {
@@ -119,6 +194,16 @@ export const Container = styled.div`
       gap: 16px;
       max-width: 300px;
       margin: 0 auto;
+      
+      @media (min-width: 768px) {
+        max-width: 500px;
+        gap: 20px;
+      }
+      
+      @media (min-width: 1024px) {
+        max-width: 600px;
+        gap: 24px;
+      }
     }
 
     .info-item {
@@ -127,16 +212,36 @@ export const Container = styled.div`
       align-items: center;
       padding: 12px 0;
       border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
+      
+      @media (min-width: 768px) {
+        padding: 16px 0;
+      }
 
       .label {
         font-weight: ${({ theme }) => theme.fontWeights.medium};
         color: ${({ theme }) => theme.colors.textColor};
         font-size: ${({ theme }) => theme.fontSizes.base};
+        
+        @media (min-width: 768px) {
+          font-size: ${({ theme }) => theme.fontSizes.md};
+        }
+        
+        @media (min-width: 1024px) {
+          font-size: ${({ theme }) => theme.fontSizes.lg};
+        }
       }
 
       .value {
         color: ${({ theme }) => theme.colors.textColorMuted};
         font-size: ${({ theme }) => theme.fontSizes.base};
+        
+        @media (min-width: 768px) {
+          font-size: ${({ theme }) => theme.fontSizes.md};
+        }
+        
+        @media (min-width: 1024px) {
+          font-size: ${({ theme }) => theme.fontSizes.lg};
+        }
       }
     }
   }
@@ -147,6 +252,31 @@ export const Container = styled.div`
     gap: 16px;
     margin-top: auto;
     padding-bottom: 40px;
+    
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 40px;
+      padding-bottom: 60px;
+    }
+    
+    @media (min-width: 1024px) {
+      gap: 32px;
+      margin-top: 48px;
+    }
+    
+    button {
+      @media (min-width: 768px) {
+        min-width: 200px;
+      }
+      
+      @media (min-width: 1024px) {
+        min-width: 220px;
+        height: 56px;
+        font-size: ${({ theme }) => theme.fontSizes.md} !important;
+      }
+    }
   }
 
   /* Modal Styles */
@@ -162,6 +292,10 @@ export const Container = styled.div`
     justify-content: center;
     z-index: 1000;
     padding: 20px;
+    
+    @media (min-width: 768px) {
+      padding: 40px;
+    }
   }
 
   .edit-modal,
@@ -173,6 +307,17 @@ export const Container = styled.div`
     width: 100%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: modalAppear 0.3s ease-out;
+    
+    @media (min-width: 768px) {
+      padding: 32px;
+      max-width: 500px;
+      border-radius: ${({ theme }) => theme.borderRadius.xl};
+    }
+    
+    @media (min-width: 1024px) {
+      padding: 40px;
+      max-width: 550px;
+    }
   }
 
   .edit-modal h3,
@@ -182,6 +327,15 @@ export const Container = styled.div`
     font-size: ${({ theme }) => theme.fontSizes.lg};
     text-align: center;
     font-weight: ${({ theme }) => theme.fontWeights.semibold};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.xl};
+      margin-bottom: 20px;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: ${({ theme }) => theme.fontSizes.xxl};
+    }
   }
 
   .edit-modal p,
@@ -191,10 +345,23 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.colors.textColorMuted};
     line-height: 1.5;
     font-size: ${({ theme }) => theme.fontSizes.base};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.md};
+      margin-bottom: 24px;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: ${({ theme }) => theme.fontSizes.lg};
+    }
   }
 
   .input-container {
     margin: 20px 0;
+    
+    @media (min-width: 768px) {
+      margin: 24px 0;
+    }
   }
 
   .consequences {
@@ -204,16 +371,35 @@ export const Container = styled.div`
     margin: 20px 0;
     font-size: ${({ theme }) => theme.fontSizes.sm};
     border-left: 4px solid ${({ theme }) => theme.colors.primary};
+    
+    @media (min-width: 768px) {
+      padding: 20px;
+      font-size: ${({ theme }) => theme.fontSizes.base};
+      margin: 24px 0;
+    }
+    
+    @media (min-width: 1024px) {
+      padding: 24px;
+    }
   }
 
   .consequences p {
     margin: 8px 0;
     text-align: left;
     color: ${({ theme }) => theme.colors.textColorMuted};
+    
+    @media (min-width: 768px) {
+      margin: 10px 0;
+      font-size: ${({ theme }) => theme.fontSizes.base};
+    }
   }
 
   .confirmation-input {
     margin: 25px 0;
+    
+    @media (min-width: 768px) {
+      margin: 30px 0;
+    }
   }
 
   .confirmation-input label {
@@ -223,6 +409,15 @@ export const Container = styled.div`
     color: ${({ theme }) => theme.colors.textColor};
     text-align: center;
     font-size: ${({ theme }) => theme.fontSizes.base};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.md};
+      margin-bottom: 12px;
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: ${({ theme }) => theme.fontSizes.lg};
+    }
   }
 
   .confirmation-input input {
@@ -235,6 +430,17 @@ export const Container = styled.div`
     text-align: center;
     font-weight: ${({ theme }) => theme.fontWeights.medium};
     letter-spacing: 1px;
+    
+    @media (min-width: 768px) {
+      padding: 16px 20px;
+      font-size: ${({ theme }) => theme.fontSizes.md};
+      border-radius: ${({ theme }) => theme.borderRadius.lg};
+    }
+    
+    @media (min-width: 1024px) {
+      padding: 18px 24px;
+      font-size: ${({ theme }) => theme.fontSizes.lg};
+    }
 
     &:focus {
       border-color: ${({ theme }) => theme.colors.primary};
@@ -254,6 +460,11 @@ export const Container = styled.div`
     margin-top: 8px;
     text-align: center;
     font-weight: ${({ theme }) => theme.fontWeights.medium};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.base};
+      margin-top: 10px;
+    }
   }
 
   .modal-actions {
@@ -261,6 +472,15 @@ export const Container = styled.div`
     gap: 12px;
     justify-content: center;
     margin-top: 24px;
+    
+    @media (min-width: 768px) {
+      gap: 16px;
+      margin-top: 32px;
+    }
+    
+    @media (min-width: 1024px) {
+      gap: 20px;
+    }
   }
 
   .cancel-btn,
@@ -278,6 +498,24 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
     gap: 8px;
+    
+    @media (min-width: 768px) {
+      padding: 16px 32px;
+      font-size: ${({ theme }) => theme.fontSizes.md};
+      border-radius: ${({ theme }) => theme.borderRadius.lg};
+      min-width: 140px;
+    }
+    
+    @media (min-width: 1024px) {
+      padding: 18px 36px;
+      font-size: ${({ theme }) => theme.fontSizes.lg};
+      min-width: 160px;
+    }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
   }
 
   .cancel-btn {
@@ -286,7 +524,6 @@ export const Container = styled.div`
 
     &:hover:not(:disabled) {
       background: #2a2a2a;
-      transform: translateY(-1px);
     }
   }
 
@@ -296,7 +533,6 @@ export const Container = styled.div`
 
     &:hover:not(:disabled) {
       background: ${({ theme }) => theme.colors.primaryHover};
-      transform: translateY(-1px);
     }
   }
 
@@ -306,7 +542,6 @@ export const Container = styled.div`
 
     &:hover:not(:disabled) {
       background: #c0392b;
-      transform: translateY(-1px);
     }
   }
 
@@ -316,6 +551,7 @@ export const Container = styled.div`
     opacity: 0.6;
     cursor: not-allowed;
     transform: none !important;
+    box-shadow: none !important;
   }
 
   .button-spinner {
@@ -325,6 +561,11 @@ export const Container = styled.div`
     border-top: 2px solid white;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    
+    @media (min-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
   }
 
   @keyframes spin {
@@ -369,6 +610,17 @@ export const BackButton = styled.button`
   align-items: center;
   color: ${({ theme }) => theme.colors.textColor};
   transition: color 0.2s ease;
+  padding: 8px;
+  border-radius: 50%;
+  
+  @media (min-width: 768px) {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
 
   &:hover:not(:disabled) {
     color: ${({ theme }) => theme.colors.primary};
@@ -381,5 +633,12 @@ export const BackButton = styled.button`
 
   svg {
     margin-right: 4px;
+    width: 32px;
+    height: 32px;
+    
+    @media (min-width: 768px) {
+      width: 28px;
+      height: 28px;
+    }
   }
 `;

@@ -5,14 +5,39 @@ export const Container = styled.section`
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
-  overflow-x:hidden;
+  overflow-x: hidden;
+  
+  @media (min-width: 768px) {
+    gap: 2rem;
+    padding: 20px 0;
+  }
+  
+  @media (min-width: 1024px) {
+    gap: 2.5rem;
+    padding: 30px 0;
+  }
 
   .container-porcoes {
     display: flex;
     gap: 8px;
+    
+    @media (min-width: 768px) {
+      gap: 16px;
+      align-items: center;
+    }
+    
     label {
       font-size: 0.8rem;
       max-width: 80px;
+      
+      @media (min-width: 768px) {
+        font-size: ${({ theme }) => theme.fontSizes.sm};
+        max-width: 100px;
+      }
+      
+      @media (min-width: 1024px) {
+        font-size: ${({ theme }) => theme.fontSizes.base};
+      }
     }
   }
 `;
@@ -22,6 +47,32 @@ export const InputFlexWrapperStep1 = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.sm} 0;
   font-weight: 500;
+  
+  @media (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
+  }
+  
+  /* Campos que devem ocupar 2 colunas */
+  .full-width {
+    @media (min-width: 768px) {
+      grid-column: span 2;
+    }
+  }
+  
+  /* Campos de porção que devem ficar lado a lado */
+  .porcao-field {
+    @media (min-width: 768px) {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 `;
 
 export const TextFieldWrapper = styled.div`
@@ -31,10 +82,21 @@ export const TextFieldWrapper = styled.div`
   gap: 4px 0;
   width: 100%;
   color: inherit;
+  
+  @media (min-width: 768px) {
+    gap: 8px 0;
+  }
 `;
 
 export const TextFieldLabel = styled.label`
   margin-left: 4px;
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    margin-left: 8px;
+    font-weight: 500;
+  }
 `;
 
 export const TextField = styled.textarea`
@@ -47,6 +109,23 @@ export const TextField = styled.textarea`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   transition: all 300ms ease-in-out;
   width: 100%;
+  resize: vertical;
+  
+  @media (min-width: 768px) {
+    padding: ${({ theme }) => theme.spacing.md};
+    height: 140px;
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    border-radius: ${({ theme }) => theme.borderRadius.lg};
+    min-height: 140px;
+    max-height: 200px;
+  }
+  
+  @media (min-width: 1024px) {
+    height: 160px;
+    min-height: 160px;
+    max-height: 250px;
+    padding: ${({ theme }) => theme.spacing.lg};
+  }
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary};
@@ -57,12 +136,22 @@ export const TextField = styled.textarea`
   &:active {
     border-color: ${({ theme }) => theme.colors.primary};
   }
+  
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.primaryLight};
+  }
 `;
 
 export const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 12px;
+  
+  @media (min-width: 768px) {
+    grid-column: span 2;
+    margin-bottom: 16px;
+    padding: 8px 0;
+  }
 `;
 
 export const CheckboxLabel = styled.label`
@@ -73,6 +162,15 @@ export const CheckboxLabel = styled.label`
   font-weight: 500;
   color: #333;
   margin-left: 8px;
+  
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.fontSizes.base};
+    margin-left: 12px;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: ${({ theme }) => theme.fontSizes.md};
+  }
   
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
@@ -90,6 +188,11 @@ export const CheckboxCustom = styled.input`
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
+  
+  @media (min-width: 768px) {
+    width: 24px;
+    height: 24px;
+  }
 
   &:checked {
     background-color: ${({ theme }) => theme.colors.primary};
@@ -105,6 +208,10 @@ export const CheckboxCustom = styled.input`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    
+    @media (min-width: 768px) {
+      font-size: 16px;
+    }
   }
 
   &:hover {
@@ -124,8 +231,13 @@ export const InputWithTooltip = styled.div`
     opacity: 0.6;
     pointer-events: none;
   }
+  
+  @media (min-width: 768px) {
+    &.field-markup {
+      max-width: 200px;
+    }
+  }
 `;
-
 
 export const TooltipIcon = styled.span`
   position: absolute;
@@ -146,10 +258,25 @@ export const TooltipIcon = styled.span`
   transition: all 0.2s ease;
   user-select: none;
   z-index: 2;
+  
+  @media (min-width: 768px) {
+    width: 20px;
+    height: 20px;
+    font-size: 13px;
+    top: 4px;
+    right: 8px;
+  }
+  
+  @media (min-width: 1024px) {
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+  }
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primary};
     color: white;
+    transform: scale(1.1);
   }
 
   &:hover > span {
@@ -167,6 +294,7 @@ export const TooltipIcon = styled.span`
     }
   }
 `;
+
 export const TooltipIconSpecific = styled.span`
   width: 18px;
   height: 18px;
@@ -183,10 +311,23 @@ export const TooltipIconSpecific = styled.span`
   transition: all 0.2s ease;
   user-select: none;
   z-index: 2;
+  
+  @media (min-width: 768px) {
+    width: 20px;
+    height: 20px;
+    font-size: 13px;
+  }
+  
+  @media (min-width: 1024px) {
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+  }
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.primary};
     color: white;
+    transform: scale(1.1);
   }
 
   &:hover > span {
@@ -226,6 +367,19 @@ export const TooltipText = styled.span`
   white-space: normal;
   word-wrap: break-word;
   transform: translateY(10px);
+  
+  @media (min-width: 768px) {
+    width: 280px;
+    font-size: ${({ theme }) => theme.fontSizes.sm};
+    padding: 12px 16px;
+    bottom: calc(100% + 10px);
+    right: -20px;
+  }
+  
+  @media (min-width: 1024px) {
+    width: 320px;
+    font-size: ${({ theme }) => theme.fontSizes.base};
+  }
 
   /* Seta do tooltip */
   &::after {
@@ -236,6 +390,10 @@ export const TooltipText = styled.span`
     border-width: 6px;
     border-style: solid;
     border-color: ${({ theme }) => theme.colors.textColor} transparent transparent transparent;
+    
+    @media (min-width: 768px) {
+      right: 20px;
+    }
   }
 
   /* Ajuste ESPECÍFICO para tooltips no legend - CORREÇÃO DO VAZAMENTO */
@@ -249,10 +407,19 @@ export const TooltipText = styled.span`
       left: 20px;
       right: auto;
     }
+    
+    @media (min-width: 768px) {
+      width: 300px;
+      bottom: calc(100% + 15px);
+      
+      &::after {
+        left: 30px;
+      }
+    }
   }
 
   /* Ajuste para mobile */
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     width: 200px;
     font-size: 11px;
     padding: 8px 10px;
@@ -266,5 +433,50 @@ export const TooltipText = styled.span`
         left: 60px;
       }
     }
+  }
+`;
+
+/* Adicione estes novos componentes para melhor organização em desktop */
+export const FieldRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+  
+  @media (min-width: 1024px) {
+    gap: 2rem;
+  }
+`;
+
+export const FieldGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  
+  @media (min-width: 768px) {
+    min-width: 0; /* Permite que os campos encolham se necessário */
+  }
+`;
+
+export const SectionTitle = styled.h3`
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  margin: 0 0 1rem 0;
+  color: ${({ theme }) => theme.colors.textColor};
+  font-weight: 600;
+  
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.fontSizes.xl};
+    margin: 0 0 1.5rem 0;
+  }
+  
+  @media (min-width: 1024px) {
+    font-size: ${({ theme }) => theme.fontSizes.xxl};
+    margin: 0 0 2rem 0;
   }
 `;

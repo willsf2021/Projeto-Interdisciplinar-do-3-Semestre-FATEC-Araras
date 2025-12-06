@@ -7,6 +7,21 @@ export const SectionFormWrapper = styled.section`
   gap: 32px 0;
   padding: 88px 24px 72px;
   height: 100dvh;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    max-width: 480px;
+    margin: 0 auto;
+    justify-content: center;
+    padding: 40px 24px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 500px;
+    padding: 60px 24px;
+  }
 `;
 
 export const FormWrapper = styled.form`
@@ -17,6 +32,10 @@ export const FormWrapper = styled.form`
   h1 {
     font-size: ${({ theme }) => theme.fontSizes.xl || "32px"};
     margin-bottom: ${({ theme }) => theme.spacing.md};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.xxl || "36px"};
+    }
   }
 
   .form-actions {
@@ -25,17 +44,30 @@ export const FormWrapper = styled.form`
     align-items: center;
     color: ${({ theme }) => theme.colors.textColor};
     font-size: ${({ theme }) => theme.fontSizes.sm};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.base};
+    }
   }
 
   .form-actions label {
     display: flex;
     align-items: flex-end;
     gap: 0 4px;
+    
+    @media (min-width: 768px) {
+      gap: 0 8px;
+    }
   }
 
   .form-actions a {
     color: ${({ theme }) => theme.colors.primary};
     text-decoration: underline;
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: ${({ theme }) => theme.colors.primaryHover};
+    }
   }
 
   .form-actions input[type="checkbox"] {
@@ -52,6 +84,11 @@ export const FormWrapper = styled.form`
     cursor: pointer;
     background-color: transparent;
     transition: all 0.2s ease;
+    
+    @media (min-width: 768px) {
+      width: 22px;
+      height: 22px;
+    }
   }
 
   .form-actions input[type="checkbox"]:checked {
@@ -77,6 +114,10 @@ export const DividerWrapper = styled.div`
     color: ${({ theme }) =>
       theme.colors.textSecondary || theme.colors.borderColor};
     font-size: ${({ theme }) => theme.fontSizes.sm};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.base};
+    }
   }
 `;
 
@@ -96,23 +137,29 @@ export const SecondaryButton = styled.button`
   gap: 0 16px;
   margin-bottom: 72px;
   cursor: pointer;
+  
+  @media (min-width: 768px) {
+    height: 52px;
+    margin-bottom: 40px;
+  }
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     background-color: ${({ theme }) =>
       theme.colors.backgroundHover || "#f9f9f9"};
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   img {
     width: 20px;
     height: 20px;
+    
+    @media (min-width: 768px) {
+      width: 22px;
+      height: 22px;
+    }
   }
-`;
-
-export const InnerContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
 `;
 
 export const FormFooter = styled.div`
@@ -120,12 +167,20 @@ export const FormFooter = styled.div`
   flex-direction: column;
   width: 100%;
   padding-bottom: ${({ theme }) => theme.spacing.lg};
+  
+  @media (min-width: 768px) {
+    padding-bottom: ${({ theme }) => theme.spacing.xl};
+  }
 `;
 
 export const ActionFooter = styled.div`
   text-align: center;
   font-size: ${({ theme }) => theme.fontSizes.sm};
   color: ${({ theme }) => theme.colors.textSecondary || theme.colors.textColor};
+  
+  @media (min-width: 768px) {
+    font-size: ${({ theme }) => theme.fontSizes.base};
+  }
 
   a {
     font-weight: ${({ theme }) => theme.fontWeights.medium};
@@ -151,13 +206,26 @@ export const LogoContainer = styled.div`
 
   img {
     height: 20px;
+    
+    @media (min-width: 768px) {
+      height: 24px;
+    }
+    
+    @media (min-width: 1024px) {
+      height: 28px;
+    }
   }
 
   h1 {
     font-family: ${({ theme }) => theme.fontFamilies.montserrat};
     font-weight: ${({ theme }) => theme.fontWeights.bold};
     color: ${({ theme }) => theme.colors.primary};
-    line-height: 0%;
+    line-height: 1;
+    font-size: ${({ theme }) => theme.fontSizes.xl};
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.xxl};
+    }
   }
 `;
 
@@ -165,6 +233,10 @@ export const InputFlexWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.md} 0;
+  
+  @media (min-width: 768px) {
+    gap: ${({ theme }) => theme.spacing.lg} 0;
+  }
 `;
 
 export const Fieldset = styled.fieldset`
@@ -173,9 +245,14 @@ export const Fieldset = styled.fieldset`
   border: 1px solid #d0d0d0;
   border-radius: ${({ theme }) => theme.borderRadius.md};
   position: relative;
+  
   label {
     font-size: 0.8rem;
     max-width: 102px;
+    
+    @media (min-width: 768px) {
+      font-size: ${({ theme }) => theme.fontSizes.sm};
+    }
   }
 `;
 

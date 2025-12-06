@@ -68,7 +68,7 @@ export const Login = () => {
       const result = await login(formData);
 
       if (result.success) {
-        notify("Login realizado com sucesso!", "success");
+       
       } else {
         notify("Erro ao fazer login", "error");
       }
